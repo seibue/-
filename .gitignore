@@ -8,5 +8,14 @@ deck-recipe-template.docx
 *-mockup-*.png
 *-preview.html
 *-preview.png
+*-desktop.png
+*-mobile.png
+*-mobile-*.png
+*-button.png
+*-on.png
+*-full.png
+*-360.png
+*-390.png
+*-iphoneua.png
 preview-out.log
 preview-err.log

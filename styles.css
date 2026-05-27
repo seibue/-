@@ -2908,24 +2908,16 @@ button:disabled {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
   gap: 12px;
-  align-items: stretch;
+  align-items: start;
 }
 
-.catalog-panel {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
+.catalog-panel,
 .deck-tray {
   min-width: 0;
-  min-height: min(60vh, 600px);
 }
 
 .catalog-grid {
-  flex: 1;
-  min-height: 0;
-  max-height: none;
+  max-height: min(62vh, 620px);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
@@ -3186,7 +3178,6 @@ button:disabled {
 }
 
 .hub-deck-list {
-  max-height: min(50vh, 460px);
   overflow-y: auto;
   padding-right: 2px;
 }

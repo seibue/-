@@ -1,8 +1,109 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="전적몬">
-  <rect width="512" height="512" rx="80" fill="#07101e"/>
-  <path fill="#19e7ff" d="M86 86h340v340H86z"/>
-  <path fill="#0a0e1a" d="M118 118h276v276H118z"/>
-  <path fill="#ffd21f" d="M154 154h52v52h-52zM230 154h52v52h-52zM306 154h52v52h-52zM154 230h52v52h-52zM230 230h52v52h-52zM306 230h52v52h-52zM154 306h52v52h-52zM230 306h52v52h-52zM306 306h52v52h-52z"/>
-  <path fill="#ff4d5f" d="M118 118h48v48h-48zM346 346h48v48h-48z"/>
-  <path fill="#ffffff" d="M206 230h100v52H206z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Jeonjeokmon card back app icon">
+  <defs>
+    <linearGradient id="appBg" x1="40" y1="36" x2="472" y2="476" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#03131f"/>
+      <stop offset=".56" stop-color="#07111e"/>
+      <stop offset="1" stop-color="#031827"/>
+    </linearGradient>
+    <linearGradient id="greenFrame" x1="76" y1="24" x2="436" y2="492" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d9ffe6"/>
+      <stop offset=".09" stop-color="#35d86a"/>
+      <stop offset=".36" stop-color="#13a24b"/>
+      <stop offset=".72" stop-color="#08733e"/>
+      <stop offset="1" stop-color="#063522"/>
+    </linearGradient>
+    <linearGradient id="bluePlate" x1="112" y1="70" x2="400" y2="434" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2398e8"/>
+      <stop offset=".45" stop-color="#1167bb"/>
+      <stop offset="1" stop-color="#063982"/>
+    </linearGradient>
+    <linearGradient id="foil" x1="94" y1="52" x2="418" y2="462" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity=".34"/>
+      <stop offset=".28" stop-color="#7dd3fc" stop-opacity=".08"/>
+      <stop offset=".7" stop-color="#001b2d" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity=".08"/>
+    </linearGradient>
+    <radialGradient id="core" cx="50%" cy="45%" r="58%">
+      <stop stop-color="#ffffff" stop-opacity=".96"/>
+      <stop offset=".25" stop-color="#80f5ff" stop-opacity=".9"/>
+      <stop offset=".64" stop-color="#1d4ed8" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#07194f" stop-opacity=".98"/>
+    </radialGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000814" flood-opacity=".58"/>
+    </filter>
+    <filter id="coreGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#ecfeff" flood-opacity=".78"/>
+      <feDropShadow dx="0" dy="9" stdDeviation="12" flood-color="#00112e" flood-opacity=".55"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="84" fill="url(#appBg)"/>
+
+  <g filter="url(#cardShadow)">
+    <rect x="72" y="18" width="368" height="476" rx="28" fill="#eafff1"/>
+    <rect x="82" y="28" width="348" height="456" rx="23" fill="#062e1f"/>
+    <rect x="94" y="40" width="324" height="432" rx="18" fill="url(#greenFrame)"/>
+    <rect x="108" y="58" width="296" height="396" rx="10" fill="url(#bluePlate)"/>
+    <rect x="108" y="58" width="296" height="396" rx="10" fill="url(#foil)"/>
+
+    <rect x="96" y="42" width="320" height="428" rx="16" fill="none" stroke="#d9ffe6" stroke-width="5" opacity=".72"/>
+    <rect x="122" y="84" width="268" height="336" rx="4" fill="none" stroke="#063522" stroke-width="9" opacity=".64"/>
+    <rect x="132" y="96" width="248" height="312" rx="3" fill="none" stroke="#f4ff7a" stroke-width="3" opacity=".75"/>
+
+    <path fill="#d9ffe6" opacity=".18" d="M108 58h86L108 144zM404 92v124L274 454H172z"/>
+    <path fill="#063522" opacity=".22" d="M94 318 218 194h200v278H176z"/>
+  </g>
+
+  <g opacity=".33" fill="none" stroke="#d7f7ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 138h72l30-30h62"/>
+    <path d="M126 184h66l30 28h68"/>
+    <path d="M122 330h86l36-36h78"/>
+    <path d="M314 112v52l-28 28v44"/>
+    <path d="M358 112v64l30 28v84"/>
+    <path d="M318 374h58l34-34v-78"/>
+    <path d="M138 390h96l34-34h72"/>
+  </g>
+  <g opacity=".42" fill="#d7f7ff">
+    <circle cx="230" cy="108" r="6"/>
+    <circle cx="200" cy="184" r="5"/>
+    <circle cx="314" cy="112" r="6"/>
+    <circle cx="358" cy="112" r="6"/>
+    <circle cx="388" cy="288" r="6"/>
+    <circle cx="318" cy="374" r="6"/>
+    <circle cx="234" cy="390" r="6"/>
+  </g>
+
+  <g transform="translate(256 79) rotate(180)" opacity=".96">
+    <text x="0" y="0" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="38" font-weight="900" letter-spacing="-2" fill="#f8fff8" stroke="#063522" stroke-width="3" paint-order="stroke">CARDGAME</text>
+  </g>
+
+  <g filter="url(#coreGlow)">
+    <circle cx="256" cy="252" r="94" fill="#eafff1"/>
+    <circle cx="256" cy="252" r="74" fill="#0b3d2c"/>
+    <path fill="none" stroke="#f8fff8" stroke-width="19" stroke-linecap="round" d="M229 178a84 84 0 1 0 0 148"/>
+    <circle cx="256" cy="252" r="56" fill="#0b3d2c"/>
+    <circle cx="256" cy="252" r="46" fill="url(#core)"/>
+    <circle cx="256" cy="252" r="25" fill="#ecfeff" opacity=".62"/>
+    <path fill="#e0fbff" opacity=".78" d="M222 240h68v9h-68zM216 262h80v10h-80zM234 219h44v8h-44zM238 284h36v8h-36z"/>
+    <path fill="#082967" opacity=".58" d="M252 203h8v100h-8zM232 214h8v78h-8zM274 216h8v74h-8z"/>
+    <path fill="#0b1f70" opacity=".74" d="M232 250h48v12h-48zM250 232h12v46h-12z"/>
+  </g>
+
+  <g opacity=".86">
+    <path fill="#f4ff7a" d="M142 221h50v10h-50zM142 246h70v10h-70zM142 271h50v10h-50zM320 221h50v10h-50zM300 246h70v10h-70zM320 271h50v10h-50z"/>
+    <circle cx="134" cy="226" r="6" fill="#f4ff7a"/>
+    <circle cx="134" cy="251" r="6" fill="#f4ff7a"/>
+    <circle cx="134" cy="276" r="6" fill="#f4ff7a"/>
+    <circle cx="378" cy="226" r="6" fill="#f4ff7a"/>
+    <circle cx="378" cy="251" r="6" fill="#f4ff7a"/>
+    <circle cx="378" cy="276" r="6" fill="#f4ff7a"/>
+  </g>
+
+  <g opacity=".98">
+    <text x="256" y="418" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="38" font-weight="900" letter-spacing="-2" fill="#f8fff8" stroke="#063522" stroke-width="3" paint-order="stroke">CARDGAME</text>
+    <text x="116" y="444" font-family="Arial, sans-serif" font-size="13" font-weight="900" letter-spacing=".3" fill="#d9ffe6">NOT FOR SALE</text>
+    <text x="256" y="444" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.8" fill="#d9ffe6">JEONJEOKMON BATTLE LOG</text>
+    <text x="352" y="444" font-family="Arial Black, Arial, sans-serif" font-size="20" font-weight="900" letter-spacing="1" fill="#052e1d" stroke="#d9ffe6" stroke-width="1.5" paint-order="stroke">JM-01</text>
+  </g>
 </svg>

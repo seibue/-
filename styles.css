@@ -2907,7 +2907,7 @@ button:disabled {
 
 .hub-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 500px);
   gap: 12px;
   align-items: start;
 }
@@ -2920,7 +2920,7 @@ button:disabled {
 .catalog-grid {
   max-height: min(62vh, 620px);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
   overflow: auto;
   padding: 2px 4px 2px 2px;
@@ -3181,7 +3181,120 @@ button:disabled {
 .hub-deck-list {
   overflow-y: auto;
   padding-right: 2px;
+  display: grid;
+  gap: 12px;
 }
+
+/* ===== 덱 이미지 그리드 ===== */
+.deck-thumb-section {
+  display: grid;
+  gap: 8px;
+}
+
+.deck-thumb-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.deck-thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.deck-thumb-item {
+  position: relative;
+  aspect-ratio: 5 / 7;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid rgba(119, 160, 201, 0.3);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.deck-thumb-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.deck-thumb-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.deck-thumb-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: var(--muted);
+  font-family: var(--pixel-font);
+}
+
+/* 수량 뱃지 */
+.deck-thumb-count {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  background: rgba(0, 0, 0, 0.78);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 3px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+/* 호버 오버레이 */
+.deck-thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.deck-thumb-item:hover .deck-thumb-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.deck-thumb-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: transform 0.1s, opacity 0.1s;
+}
+
+.deck-thumb-btn:hover  { opacity: 0.85; }
+.deck-thumb-btn:active { transform: scale(0.88); }
+
+.deck-thumb-btn.minus  { background: rgba(255, 94, 122, 0.92); color: #fff; }
+.deck-thumb-btn.plus   { background: rgba(25, 231, 255, 0.92); color: #000; }
+.deck-thumb-btn.remove { background: rgba(255, 50, 70, 0.92);  color: #fff; font-size: 12px; }
 
 .deck-list-row {
   display: grid;
@@ -4369,6 +4482,34 @@ button:disabled {
   .hub-deck-list {
     max-height: 65dvh;
     overscroll-behavior: contain;
+  }
+
+  /* 모바일 덱 썸네일 그리드 */
+  .deck-thumb-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  /* 모바일: 오버레이 항상 표시 (호버 없음) */
+  .deck-thumb-overlay {
+    opacity: 1;
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0);
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 3px;
+  }
+
+  .deck-thumb-btn.minus,
+  .deck-thumb-btn.plus {
+    display: none;
+  }
+
+  .deck-thumb-btn.remove {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    background: rgba(255, 50, 70, 0.85);
   }
 
   .deck-tool-button {

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260527-deck-2col";
+  const APP_VERSION = "20260528-deck-thumb-ui";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -5182,6 +5182,49 @@
     `;
   }
 
+  function renderDeckThumb(card) {
+    const imageSrc = deckCardImageSource(card);
+    const cardNo = normalizeCardNumber(card.cardNumber);
+    return `
+      <div class="deck-thumb-item">
+        <span class="deck-thumb-img" data-action="preview-catalog-card" data-card-no="${escapeHTML(cardNo)}">
+          ${imageSrc
+            ? `<img src="${escapeHTML(imageSrc)}" alt="${escapeHTML(card.name)}" loading="lazy" />`
+            : `<span class="deck-thumb-empty">${escapeHTML(cardNo.slice(0, 4) || "?")}</span>`}
+        </span>
+        <span class="deck-thumb-count">${card.count}</span>
+        <div class="deck-thumb-overlay">
+          <button class="deck-thumb-btn minus" type="button" data-action="decrement-deck-card" data-card-id="${escapeHTML(card.id)}" title="1장 빼기">−</button>
+          <button class="deck-thumb-btn remove" type="button" data-action="remove-deck-card" data-card-id="${escapeHTML(card.id)}" title="삭제">×</button>
+          <button class="deck-thumb-btn plus" type="button" data-action="increment-deck-card" data-card-id="${escapeHTML(card.id)}" title="1장 추가">+</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDeckThumbSections(cards) {
+    const mainCards = cards.filter((c) => c.type !== "digiEgg");
+    const eggCards  = cards.filter((c) => c.type === "digiEgg");
+    const parts = [];
+    if (mainCards.length) {
+      parts.push(`
+        <div class="deck-thumb-section">
+          <div class="deck-thumb-section-label">메인 덱 (${mainCards.reduce((s,c)=>s+Number(c.count||0),0)}장)</div>
+          <div class="deck-thumb-grid">${mainCards.map(renderDeckThumb).join("")}</div>
+        </div>
+      `);
+    }
+    if (eggCards.length) {
+      parts.push(`
+        <div class="deck-thumb-section">
+          <div class="deck-thumb-section-label">디지타마 (${eggCards.reduce((s,c)=>s+Number(c.count||0),0)}장)</div>
+          <div class="deck-thumb-grid">${eggCards.map(renderDeckThumb).join("")}</div>
+        </div>
+      `);
+    }
+    return parts.join("");
+  }
+
   function renderManualCardInput() {
     return `
       <details class="manual-card-panel">
@@ -5358,7 +5401,7 @@
             </div>
             ${
               cards.length
-                ? `<div class="deck-card-list hub-deck-list">${cards.map(renderDeckListRow).join("")}</div>`
+                ? `<div class="hub-deck-list">${renderDeckThumbSections(cards)}</div>`
                 : `<div class="builder-empty">카드를 누르면 이곳에 덱 리스트가 쌓입니다.</div>`
             }
             ${renderManualCardInput()}

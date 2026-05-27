@@ -2337,13 +2337,13 @@ button:disabled {
 
 .modal-panel {
   width: min(100%, 440px);
-  max-height: calc(100vh - 16px);
+  max-height: calc(100vh - 32px);
   overflow: auto;
   box-shadow: var(--shadow);
 }
 
 .deck-modal-panel {
-  width: min(96vw, 1200px);
+  width: min(96vw, 1020px);
 }
 
 .card-preview-backdrop {
@@ -2912,7 +2912,7 @@ button:disabled {
 }
 
 .catalog-grid {
-  max-height: min(68vh, 700px);
+  max-height: min(62vh, 620px);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
@@ -3173,7 +3173,7 @@ button:disabled {
 }
 
 .hub-deck-list {
-  max-height: min(55vh, 520px);
+  max-height: min(44vh, 380px);
   overflow: auto;
   padding-right: 2px;
 }

@@ -2687,6 +2687,7 @@ button:disabled {
 
 .deck-card-list {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 7px;
 }
 
@@ -3184,14 +3185,20 @@ button:disabled {
 
 .deck-list-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 112px 36px;
-  gap: 7px;
-  align-items: center;
+  grid-template-areas:
+    "card card"
+    "stepper delete";
+  grid-template-columns: 1fr auto;
+  gap: 6px 4px;
   border: 1px solid rgba(119, 160, 201, 0.2);
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.035);
   padding: 8px;
 }
+
+.deck-list-row > .deck-row-card   { grid-area: card; }
+.deck-list-row > .deck-count-stepper { grid-area: stepper; }
+.deck-list-row > .icon-button     { grid-area: delete; align-self: center; }
 
 .deck-row-card {
   min-width: 0;
@@ -4328,36 +4335,35 @@ button:disabled {
   }
 
   .deck-list-row {
-    grid-template-columns: minmax(0, 1fr) 148px 44px;
-    gap: 8px;
-    padding: 14px 12px;
+    gap: 6px 4px;
+    padding: 10px 8px;
   }
 
   .deck-row-thumb {
-    width: 64px;
+    width: 48px;
   }
 
   .deck-row-main strong {
-    font-size: 15px;
-  }
-
-  .deck-row-main span {
     font-size: 13px;
   }
 
-  .step-button {
-    width: 44px;
-    height: 48px;
-    font-size: 19px;
+  .deck-row-main span {
+    font-size: 11px;
   }
 
-  .count-input {
-    height: 48px;
+  .step-button {
+    width: 36px;
+    height: 40px;
     font-size: 16px;
   }
 
+  .count-input {
+    height: 40px;
+    font-size: 14px;
+  }
+
   .deck-count-stepper {
-    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
   }
 
   .hub-deck-list {
@@ -4552,10 +4558,6 @@ button:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
     max-height: 44dvh;
-  }
-
-  .deck-list-row {
-    grid-template-columns: 1fr;
   }
 
   .deck-count-stepper {

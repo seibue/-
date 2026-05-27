@@ -2908,16 +2908,24 @@ button:disabled {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
   gap: 12px;
-  align-items: start;
+  align-items: stretch;
 }
 
-.catalog-panel,
+.catalog-panel {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .deck-tray {
   min-width: 0;
+  min-height: min(60vh, 600px);
 }
 
 .catalog-grid {
-  max-height: min(62vh, 620px);
+  flex: 1;
+  min-height: 0;
+  max-height: none;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
@@ -3178,8 +3186,8 @@ button:disabled {
 }
 
 .hub-deck-list {
-  /* 데스크탑: max-height 없이 모달 전체 스크롤로 처리 */
-  overflow: visible;
+  max-height: min(50vh, 460px);
+  overflow-y: auto;
   padding-right: 2px;
 }
 

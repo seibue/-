@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260527-desktop-size-down";
+  const APP_VERSION = "20260527-deck-tray-height";
   const root = document.getElementById("app");
 
   const colorMap = {

@@ -3173,7 +3173,7 @@ button:disabled {
 }
 
 .hub-deck-list {
-  max-height: min(44vh, 380px);
+  max-height: min(58vh, 560px);
   overflow: auto;
   padding-right: 2px;
 }

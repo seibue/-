@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260526-tournament-ux-1";
+  const APP_VERSION = "20260527-round-badge";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3828,7 +3828,12 @@
 
   function renderMatchCard(match) {
     const deck = getDeck(match.deckId);
-    const tournamentText = tournamentMatchText(match);
+    // 대회 라운드 뱃지: roundText()로 "스위스 R2", "토너먼트 4강" 등 생성
+    const round = roundText(match);
+    const roundStage = match.roundStage && match.roundStage !== "none" ? match.roundStage : "";
+    const tournamentName = getTournament(match.tournamentId)?.name || "";
+    // 라운드 뱃지가 없을 때는 기존 방식(대회명 · 라운드)으로 폴백
+    const tournamentFallbackText = !roundStage ? tournamentMatchText(match) : "";
     return `
       <article class="match-card">
         ${
@@ -3846,9 +3851,16 @@
           <div class="match-meta">
             ${formatDate(match.date)} · ${escapeHTML(match.matchType || "대전")} · ${escapeHTML(playOrderLabel(match.playOrder))}
             · <span class="match-format-badge">${escapeHTML(matchFormatLabel(match))}</span>
-            ${tournamentText ? ` · <span class="match-format-badge tournament">${escapeHTML(tournamentText)}</span>` : ""}
+            ${round && roundStage
+              ? ` <span class="round-stage-badge ${escapeHTML(roundStage)}">${escapeHTML(round)}</span>`
+              : tournamentFallbackText
+                ? ` · <span class="match-format-badge tournament">${escapeHTML(tournamentFallbackText)}</span>`
+                : ""}
             ${match.opponent ? ` · 상대 ${escapeHTML(match.opponent)}` : ""}
           </div>
+          ${round && roundStage && tournamentName
+            ? `<p class="match-tournament-name">🏆 ${escapeHTML(tournamentName)}</p>`
+            : ""}
           ${match.memo ? `<p class="match-memo">${escapeHTML(match.memo)}</p>` : ""}
         </div>
         <div class="card-actions">

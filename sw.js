@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260526-tournament-ux-1";
+const CACHE_NAME = "jeonjeokmon-shell-20260527-round-badge";
 const CORE_ASSETS = [
   "/",
   "/index.html",

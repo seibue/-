@@ -4053,8 +4053,95 @@ button:disabled {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  /* ===== 덱 빌더 모달: 단일 스크롤 구조 ===== */
+  /* 외부 스크롤 없이 catalog/tray 만 독립 스크롤 */
   .deck-modal-panel {
     max-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .deck-modal-panel > .modal-head {
+    flex-shrink: 0;
+  }
+
+  .deck-modal-panel > .modal-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* flex 컨테이너에서 하단 고정 */
+  .deck-modal-panel > .modal-actions {
+    position: static;
+    flex-shrink: 0;
+  }
+
+  /* 빌더를 고정 높이 독립 섬(island)으로 */
+  .deck-modal-panel .deck-builder.hub-builder {
+    height: calc(100dvh - 300px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* sticky 불필요 — flex 부모가 이미 고정 */
+  .deck-modal-panel .builder-sticky-header {
+    position: static;
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  .deck-modal-panel .hub-search-row {
+    position: static;
+    margin: 0;
+  }
+
+  .deck-modal-panel .deck-advanced-search {
+    flex-shrink: 0;
+  }
+
+  /* hub-layout 이 남은 높이 모두 차지 */
+  .deck-modal-panel .hub-layout {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* 카탈로그 패널: 그리드가 남은 높이 채움 */
+  .deck-modal-panel .catalog-panel {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .deck-modal-panel .catalog-grid {
+    flex: 1;
+    min-height: 0;
+    max-height: none !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* 덱 트레이 전체를 단독 스크롤 */
+  .deck-modal-panel .deck-tray {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    max-height: none;
+  }
+
+  /* 트레이 안 덱 카드 목록: 별도 스크롤 제거 */
+  .deck-modal-panel .hub-deck-list {
+    max-height: none;
+    overflow: visible;
   }
 
   .deck-meta-grid {

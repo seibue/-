@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260527-round-badge";
+const CACHE_NAME = "jeonjeokmon-shell-20260527-home-trend";
 const CORE_ASSETS = [
   "/",
   "/index.html",

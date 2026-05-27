@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260527-round-badge";
+  const APP_VERSION = "20260527-home-trend";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3392,6 +3392,7 @@
           draws: 0,
           rate: 0,
           lastTime: 0,
+          matchEntries: [],
         });
       }
       const row = rows.get(deckId);
@@ -3400,10 +3401,19 @@
       if (match.result === "loss") row.losses += 1;
       if (match.result === "draw") row.draws += 1;
       row.lastTime = Math.max(row.lastTime, matchDateTime(match));
+      row.matchEntries.push({ result: match.result, time: matchDateTime(match) });
     });
 
     return [...rows.values()]
-      .map((row) => ({ ...row, rate: row.total ? Math.round((row.wins / row.total) * 100) : 0 }))
+      .map((row) => ({
+        ...row,
+        rate: row.total ? Math.round((row.wins / row.total) * 100) : 0,
+        // 가장 최근 5경기 결과 (왼쪽=오래된, 오른쪽=최신)
+        recentResults: row.matchEntries
+          .sort((a, b) => a.time - b.time)
+          .slice(-5)
+          .map((e) => e.result),
+      }))
       .sort((a, b) => b.lastTime - a.lastTime || b.total - a.total || a.name.localeCompare(b.name, "ko"))
       .slice(0, limit);
   }
@@ -3433,6 +3443,19 @@
     });
 
     return rows.map((row) => ({ ...row, rate: row.total ? Math.round((row.wins / row.total) * 100) : 0 }));
+  }
+
+  // 최근 N경기 결과 도트 렌더링 (승=초록, 패=빨강, 무=노랑, 빈칸=회색)
+  function recentResultDots(results) {
+    const TREND_SIZE = 5;
+    const empty = Array.from(
+      { length: Math.max(0, TREND_SIZE - results.length) },
+      () => `<span class="trend-dot empty"></span>`
+    ).join("");
+    const filled = results
+      .map((r) => `<span class="trend-dot ${escapeHTML(r)}"></span>`)
+      .join("");
+    return `<span class="trend-dots" aria-hidden="true">${empty}${filled}</span>`;
   }
 
   function renderHomeView() {
@@ -3488,7 +3511,7 @@
                           <div class="home-list-row">
                             <div>
                               <strong>${escapeHTML(row.name)}</strong>
-                              <span>${row.total}전 · 승률 ${row.rate}%</span>
+                              <span>최근 ${row.total}전 ${row.wins}승 ${recentResultDots(row.recentResults)}</span>
                             </div>
                             <b>${shareScoreText(row)}</b>
                           </div>

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260527-home-trend-clean";
+  const APP_VERSION = "20260527-deck-mobile-tabs";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -107,6 +107,7 @@
     deckCardSearch: "",
     deckCardType: "all",
     deckAdvancedOpen: false,
+    deckBuilderView: "catalog",
     deckCardFilters: createDefaultDeckCardFilters(),
     matchupDeckId: "",
     matchupOpponent: "",
@@ -5309,14 +5310,19 @@
         </div>
         ${renderDeckAdvancedSearch(catalogResultCount)}
 
+        <div class="deck-builder-tabs">
+          <button class="deck-tab-btn${state.deckBuilderView !== "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="catalog">카드 찾기</button>
+          <button class="deck-tab-btn${state.deckBuilderView === "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="tray">덱 목록 (${summary.total}장)</button>
+        </div>
+
         <div class="hub-layout">
-          <section class="catalog-panel" aria-label="카드 카탈로그">
+          <section class="catalog-panel${state.deckBuilderView === "tray" ? " mobile-hidden" : ""}" aria-label="카드 카탈로그">
             <div class="catalog-grid">
               ${renderCatalogGridContent()}
             </div>
           </section>
 
-          <section class="deck-tray" aria-label="구축 중인 덱">
+          <section class="deck-tray${state.deckBuilderView === "catalog" ? " mobile-hidden" : ""}" aria-label="구축 중인 덱">
             <div class="deck-count-pills">
               <span class="deck-pill main">메인 <strong>${summary.main}/${DECK_LIMITS.main}</strong></span>
               <span class="deck-pill egg">디지타마 <strong>${summary.digiEgg}/${DECK_LIMITS.digiEgg}</strong></span>
@@ -5439,6 +5445,7 @@
     state.deckCardSearch = "";
     state.deckCardType = "all";
     state.deckAdvancedOpen = false;
+    state.deckBuilderView = "catalog";
     state.deckCardFilters = createDefaultDeckCardFilters();
   }
 
@@ -5795,6 +5802,12 @@
     }
     if (action === "download-deck-draft-docx") {
       downloadDraftDeckRecipeDocx();
+      return;
+    }
+    if (action === "deck-builder-tab") {
+      cacheDeckDraftForm(target.closest(".modal-panel")?.querySelector("#deck-form"));
+      state.deckBuilderView = target.dataset.view === "tray" ? "tray" : "catalog";
+      renderKeepingDeckScroll();
       return;
     }
     if (action === "toggle-deck-advanced-search") {

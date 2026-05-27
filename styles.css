@@ -2889,6 +2889,11 @@ button:disabled {
   display: none;
 }
 
+/* 모바일 덱 빌더 탭 (데스크탑에서는 숨김) */
+.deck-builder-tabs {
+  display: none;
+}
+
 .hub-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
@@ -4068,6 +4073,39 @@ button:disabled {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
+  }
+
+  /* 모바일 덱 빌더 탭 */
+  .deck-builder-tabs {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .deck-tab-btn {
+    flex: 1;
+    padding: 11px 8px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  .deck-tab-btn + .deck-tab-btn {
+    border-left: 1px solid var(--border);
+  }
+
+  .deck-tab-btn.active {
+    background: rgba(25, 231, 255, 0.1);
+    color: var(--accent);
+  }
+
+  .mobile-hidden {
+    display: none !important;
   }
 
   .mobile-builder-summary span {

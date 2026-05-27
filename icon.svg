@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="전적몬">
+  <rect width="512" height="512" rx="80" fill="#07101e"/>
+  <path fill="#19e7ff" d="M86 86h340v340H86z"/>
+  <path fill="#0a0e1a" d="M118 118h276v276H118z"/>
+  <path fill="#ffd21f" d="M154 154h52v52h-52zM230 154h52v52h-52zM306 154h52v52h-52zM154 230h52v52h-52zM230 230h52v52h-52zM306 230h52v52h-52zM154 306h52v52h-52zM230 306h52v52h-52zM306 306h52v52h-52z"/>
+  <path fill="#ff4d5f" d="M118 118h48v48h-48zM346 346h48v48h-48z"/>
+  <path fill="#ffffff" d="M206 230h100v52H206z"/>
+</svg>

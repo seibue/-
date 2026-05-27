@@ -1,0 +1,12 @@
+*.log
+.vercel/
+deck-recipe-template.docx
+
+# 개발 중 생성된 목업·스크린샷 (배포 불필요)
+*-mockup.html
+*-mockup.png
+*-mockup-*.png
+*-preview.html
+*-preview.png
+preview-out.log
+preview-err.log

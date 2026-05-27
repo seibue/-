@@ -654,39 +654,6 @@ button:disabled {
   text-shadow: 1px 1px 0 #000;
 }
 
-/* 홈 덱 카드 최근 N전 트렌드 도트 */
-.trend-dots {
-  display: inline-flex;
-  gap: 3px;
-  align-items: center;
-  margin-left: 4px;
-  vertical-align: middle;
-}
-
-.trend-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.trend-dot.win {
-  background: var(--win);
-}
-
-.trend-dot.loss {
-  background: var(--loss);
-}
-
-.trend-dot.draw {
-  background: var(--draw);
-}
-
-.trend-dot.empty {
-  background: var(--border);
-  opacity: 0.55;
-}
-
 .home-empty {
   min-height: 82px;
   display: grid;

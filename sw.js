@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260527-home-trend";
+const CACHE_NAME = "jeonjeokmon-shell-20260527-home-trend-clean";
 const CORE_ASSETS = [
   "/",
   "/index.html",

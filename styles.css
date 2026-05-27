@@ -4071,12 +4071,30 @@ button:disabled {
     flex-shrink: 0;
   }
 
+  /* modal-body: 스크롤 완전 차단 — 빌더 영역이 꽉 채움 */
   .deck-modal-panel > .modal-body {
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    overflow: hidden;
+  }
+
+  /* 폼을 flex 컬럼으로 — 빌더가 남은 높이 모두 차지 */
+  .deck-modal-panel > .modal-body > form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* 이름·색상 필드는 고정 높이 */
+  .deck-modal-panel > .modal-body > form > .field {
+    flex-shrink: 0;
+    margin-bottom: 8px;
+  }
+
+  /* 메모 필드: 모바일에서 숨김 (덱 빌더 영역을 확보하기 위해) */
+  .deck-modal-panel > .modal-body > form > .field:last-child {
+    display: none;
   }
 
   /* flex 컨테이너에서 하단 고정 */
@@ -4085,9 +4103,11 @@ button:disabled {
     flex-shrink: 0;
   }
 
-  /* 빌더를 고정 높이 독립 섬(island)으로 */
+  /* 빌더가 남은 공간 모두 차지 */
   .deck-modal-panel .deck-builder.hub-builder {
-    height: calc(100dvh - 300px);
+    flex: 1;
+    min-height: 0;
+    height: auto;
     overflow: hidden;
     display: flex;
     flex-direction: column;

@@ -4217,32 +4217,40 @@ button:disabled {
   }
 
   .deck-list-row {
-    grid-template-columns: minmax(0, 1fr) 124px 44px;
+    grid-template-columns: minmax(0, 1fr) 136px 44px;
     gap: 8px;
-    padding: 9px;
+    padding: 12px 10px;
   }
 
   .deck-row-thumb {
-    width: 42px;
+    width: 54px;
   }
 
-  .step-button {
-    width: 38px;
-    height: 42px;
-    font-size: 17px;
-  }
-
-  .count-input {
-    height: 42px;
+  .deck-row-main strong {
     font-size: 14px;
   }
 
+  .deck-row-main span {
+    font-size: 12px;
+  }
+
+  .step-button {
+    width: 42px;
+    height: 46px;
+    font-size: 18px;
+  }
+
+  .count-input {
+    height: 46px;
+    font-size: 15px;
+  }
+
   .deck-count-stepper {
-    grid-template-columns: 38px minmax(0, 1fr) 38px;
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
   }
 
   .hub-deck-list {
-    max-height: 42dvh;
+    max-height: 62dvh;
     overscroll-behavior: contain;
   }
 

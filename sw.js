@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260527-deck-mobile-tabs";
+const CACHE_NAME = "jeonjeokmon-shell-20260527-deck-sticky-header";
 const CORE_ASSETS = [
   "/",
   "/index.html",

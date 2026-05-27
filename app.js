@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260527-deck-mobile-tabs";
+  const APP_VERSION = "20260527-deck-sticky-header";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -5281,39 +5281,40 @@
     const builderStatusTone = limitMessage ? "danger" : readiness.level;
     return `
       <div class="deck-builder hub-builder">
-        <div class="hub-search-row">
-          <label class="hub-search">
-            <span aria-hidden="true">⌕</span>
-            <input class="input" type="search" value="${escapeHTML(state.deckCardSearch)}" placeholder="카드명/효과/번호" data-deck-card-search autocomplete="off" />
-          </label>
-          <select class="select hub-type-select" data-deck-card-type aria-label="카드 종류 필터">
-            <option value="all"${selectedAttr(state.deckCardType, "all")}>전체</option>
-            ${Object.entries(cardTypeLabels)
-              .filter(([type]) => type !== "other")
-              .map(([type, label]) => `<option value="${type}"${selectedAttr(state.deckCardType, type)}>${label}</option>`)
-              .join("")}
-          </select>
-          <button class="control-button hub-detail-button ${state.deckAdvancedOpen || activeFilterCount ? "active" : ""}" type="button" data-action="toggle-deck-advanced-search">
-            상세${activeFilterCount ? ` ${activeFilterCount}` : ""}
-          </button>
-          <div class="mobile-builder-summary">
-            <span>메인 <strong>${summary.main}/${DECK_LIMITS.main}</strong></span>
-            <span>디지타마 <strong>${summary.digiEgg}/${DECK_LIMITS.digiEgg}</strong></span>
-            <span>총 <strong>${summary.total}/${DECK_LIMITS.total}</strong></span>
+        <div class="builder-sticky-header">
+          <div class="hub-search-row">
+            <label class="hub-search">
+              <span aria-hidden="true">⌕</span>
+              <input class="input" type="search" value="${escapeHTML(state.deckCardSearch)}" placeholder="카드명/효과/번호" data-deck-card-search autocomplete="off" />
+            </label>
+            <select class="select hub-type-select" data-deck-card-type aria-label="카드 종류 필터">
+              <option value="all"${selectedAttr(state.deckCardType, "all")}>전체</option>
+              ${Object.entries(cardTypeLabels)
+                .filter(([type]) => type !== "other")
+                .map(([type, label]) => `<option value="${type}"${selectedAttr(state.deckCardType, type)}>${label}</option>`)
+                .join("")}
+            </select>
+            <button class="control-button hub-detail-button ${state.deckAdvancedOpen || activeFilterCount ? "active" : ""}" type="button" data-action="toggle-deck-advanced-search">
+              상세${activeFilterCount ? ` ${activeFilterCount}` : ""}
+            </button>
+            <div class="mobile-builder-summary">
+              <span>메인 <strong>${summary.main}/${DECK_LIMITS.main}</strong></span>
+              <span>디지타마 <strong>${summary.digiEgg}/${DECK_LIMITS.digiEgg}</strong></span>
+              <span>총 <strong>${summary.total}/${DECK_LIMITS.total}</strong></span>
+            </div>
+          </div>
+          <div class="builder-flow-strip" aria-label="덱 구축 진행 상태">
+            <span data-builder-result-count>${catalogResultCount.toLocaleString("ko-KR")}종 검색됨</span>
+            <span>카드 클릭으로 +1장</span>
+            <span class="${escapeHTML(builderStatusTone)}">현재 ${summary.total}/${DECK_LIMITS.total}장</span>
+            <span>같은 카드 번호 최대 4장</span>
+          </div>
+          <div class="deck-builder-tabs">
+            <button class="deck-tab-btn${state.deckBuilderView !== "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="catalog">카드 찾기</button>
+            <button class="deck-tab-btn${state.deckBuilderView === "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="tray">덱 목록 (${summary.total}장)</button>
           </div>
         </div>
-        <div class="builder-flow-strip" aria-label="덱 구축 진행 상태">
-          <span data-builder-result-count>${catalogResultCount.toLocaleString("ko-KR")}종 검색됨</span>
-          <span>카드 클릭으로 +1장</span>
-          <span class="${escapeHTML(builderStatusTone)}">현재 ${summary.total}/${DECK_LIMITS.total}장</span>
-          <span>같은 카드 번호 최대 4장</span>
-        </div>
         ${renderDeckAdvancedSearch(catalogResultCount)}
-
-        <div class="deck-builder-tabs">
-          <button class="deck-tab-btn${state.deckBuilderView !== "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="catalog">카드 찾기</button>
-          <button class="deck-tab-btn${state.deckBuilderView === "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="tray">덱 목록 (${summary.total}장)</button>
-        </div>
 
         <div class="hub-layout">
           <section class="catalog-panel${state.deckBuilderView === "tray" ? " mobile-hidden" : ""}" aria-label="카드 카탈로그">

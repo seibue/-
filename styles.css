@@ -2894,6 +2894,11 @@ button:disabled {
   display: none;
 }
 
+/* 덱 빌더 검색창+탭 묶음 (모바일에서 sticky 처리) */
+.builder-sticky-header {
+  /* 데스크탑: 별도 sticky 없음 */
+}
+
 .hub-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
@@ -4073,6 +4078,16 @@ button:disabled {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
+  }
+
+  /* 모바일 덱 빌더 검색창+탭 상단 고정 */
+  .builder-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    padding-bottom: 4px;
+    margin-bottom: 4px;
   }
 
   /* 모바일 덱 빌더 탭 */

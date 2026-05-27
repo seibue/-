@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260527-deck-tray-height";
+  const APP_VERSION = "20260527-deck-list-fix";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3660,6 +3660,8 @@
         ${renderMobileQuickActions()}
       </div>
     `;
+    // 모달이 열려 있을 때 배경 페이지 스크롤 차단
+    document.body.classList.toggle("modal-open", !!(state.modal || state.previewCardNo));
   }
 
   function renderKeepingDeckScroll() {

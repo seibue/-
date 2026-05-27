@@ -43,6 +43,11 @@ body {
   overflow-x: hidden;
 }
 
+/* 모달 열릴 때 배경 스크롤 차단 */
+body.modal-open {
+  overflow: hidden;
+}
+
 button,
 input,
 select,
@@ -3173,8 +3178,8 @@ button:disabled {
 }
 
 .hub-deck-list {
-  max-height: min(58vh, 560px);
-  overflow: auto;
+  /* 데스크탑: max-height 없이 모달 전체 스크롤로 처리 */
+  overflow: visible;
   padding-right: 2px;
 }
 

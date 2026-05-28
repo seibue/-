@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260528-level-strip-layout";
+const CACHE_NAME = "jeonjeokmon-shell-20260528-wide-single-col";
 const CORE_ASSETS = [
   "/",
   "/index.html",

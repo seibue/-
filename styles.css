@@ -3139,9 +3139,9 @@ button:disabled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
-  padding: 7px 2px 6px;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0;
   border-right: 1px solid rgba(119, 160, 201, 0.1);
   position: relative;
   transition: opacity 0.15s;
@@ -3170,7 +3170,21 @@ button:disabled {
 .level-counter-strip span[data-lv="t"]::before  { background: #19e7ff; }
 .level-counter-strip span[data-lv="o"]::before  { background: #94a3b8; }
 
+/* 상단: 레벨·타입 라벨 */
+.level-counter-strip small {
+  width: 100%;
+  text-align: center;
+  padding: 6px 2px 5px;
+  border-bottom: 1px solid rgba(119, 160, 201, 0.18);
+  color: rgba(119, 160, 201, 0.65);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* 하단: 카드 수 */
 .level-counter-strip strong {
+  padding: 6px 2px 5px;
   font-family: var(--pixel-font);
   font-size: 13px;
   font-weight: 900;
@@ -3186,13 +3200,6 @@ button:disabled {
 .level-counter-strip span[data-lv="7"] strong  { color: #fbbf24; }
 .level-counter-strip span[data-lv="t"] strong  { color: #19e7ff; }
 .level-counter-strip span[data-lv="o"] strong  { color: #94a3b8; }
-
-.level-counter-strip small {
-  color: rgba(119, 160, 201, 0.6);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
 
 /* 0장인 레벨은 흐리게 */
 .level-counter-strip span.zero {

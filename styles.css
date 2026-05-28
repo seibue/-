@@ -4685,14 +4685,29 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+  /* 덱 모달에서 레벨 스트립 숨김 — 빌더 영역 공간 확보 */
+  .deck-modal-panel .color-level-row .level-counter-strip {
+    display: none;
+  }
+
   .deck-head {
     display: grid;
     grid-template-columns: 1fr;
   }
 
+  /* 보조 버튼 숨김: ⎙ 인쇄, DOCX, PNG, 내보내기 */
+  .deck-head .card-actions button:nth-child(2),
+  .deck-head .card-actions button:nth-child(3),
+  .deck-head .card-actions button:nth-child(4),
+  .deck-head .card-actions button:nth-child(5) {
+    display: none;
+  }
+
+  /* 남은 버튼(✎ ⧉ ×) 3열 그리드 + 터치 영역 확대 */
   .deck-head .card-actions {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
     width: 100%;
   }
 
@@ -4700,6 +4715,8 @@ button:disabled {
   .deck-head .icon-button.text-icon {
     width: 100%;
     min-width: 0;
+    min-height: 46px;
+    font-size: 18px;
   }
 
   .deck-name {

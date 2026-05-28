@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260528-deck-modal-overlap-fix";
+  const APP_VERSION = "20260528-tournament-card-balance";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3973,6 +3973,20 @@
     const nextAction = tournamentNextActionText(tournament);
     const progress = tournamentRoundProgress(tournament);
     const finalSummary = tournamentFinalSummaryText(tournament);
+    const roundList = recent.length
+      ? `<div class="tournament-round-list">
+          ${recent
+            .map(
+              (match) => `
+                <span>${escapeHTML(roundText(match) || "일반")} · vs ${escapeHTML(match.opponent || "상대 미기록")} · ${escapeHTML(
+                  match.matchFormat === "match" ? matchScoreValue(match) : resultLabel(match.result)
+                )}</span>
+              `
+            )
+            .join("")}
+        </div>`
+      : "";
+    const memo = tournament.memo ? `<p class="match-memo">${escapeHTML(tournament.memo)}</p>` : "";
     return `
       <article class="match-card tournament-card">
         <span class="result-pill draw">${stats.total ? `${stats.rate}%` : "대회"}</span>
@@ -3991,22 +4005,6 @@
             ${stageSummary ? `<span>${escapeHTML(stageSummary)}</span>` : `<span>연결된 라운드 전적 없음</span>`}
             <span>스위스 ${progress.swissCount}R · 토너먼트 ${progress.topCount}R</span>
           </div>
-          ${
-            recent.length
-              ? `<div class="tournament-round-list">
-                  ${recent
-                    .map(
-                      (match) => `
-                        <span>${escapeHTML(roundText(match) || "일반")} · vs ${escapeHTML(match.opponent || "상대 미기록")} · ${escapeHTML(
-                          match.matchFormat === "match" ? matchScoreValue(match) : resultLabel(match.result)
-                        )}</span>
-                      `
-                    )
-                    .join("")}
-                </div>`
-              : ""
-          }
-          ${tournament.memo ? `<p class="match-memo">${escapeHTML(tournament.memo)}</p>` : ""}
         </div>
         <div class="card-actions">
           <button class="icon-button text-icon" type="button" title="이 대회 전적 추가" data-action="open-match-for-tournament" data-id="${escapeHTML(tournament.id)}">${escapeHTML(nextAction)}</button>
@@ -4015,6 +4013,8 @@
           <button class="icon-button" type="button" title="수정" data-action="edit-tournament" data-id="${escapeHTML(tournament.id)}">✎</button>
           <button class="icon-button" type="button" title="삭제" data-action="delete-tournament" data-id="${escapeHTML(tournament.id)}">×</button>
         </div>
+        ${roundList}
+        ${memo}
       </article>
     `;
   }

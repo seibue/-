@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260528-deck-modal-overlap-fix";
+const CACHE_NAME = "jeonjeokmon-shell-20260528-tournament-card-balance";
 const CORE_ASSETS = [
   "/",
   "/index.html",

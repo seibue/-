@@ -3120,34 +3120,74 @@ button:disabled {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
   overflow: hidden;
-  border: 2px solid rgba(119, 160, 201, 0.2);
+  border: 1px solid rgba(119, 160, 201, 0.18);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(4, 10, 20, 0.55);
 }
 
 .level-counter-strip span {
   min-width: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 3px;
-  border-right: 1px solid rgba(119, 160, 201, 0.16);
-  padding: 8px 2px;
+  padding: 7px 2px 6px;
+  border-right: 1px solid rgba(119, 160, 201, 0.1);
+  position: relative;
+  transition: opacity 0.15s;
 }
 
 .level-counter-strip span:last-child {
   border-right: 0;
 }
 
-.level-counter-strip strong {
-  color: #ffffff;
-  font-family: var(--pixel-font);
-  font-size: 9px;
+/* 레벨별 상단 컬러 라인 */
+.level-counter-strip span::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
 }
 
-.level-counter-strip small {
-  color: var(--muted);
-  font-size: 10px;
+.level-counter-strip span[data-lv="2"]::before  { background: #f59e0b; }
+.level-counter-strip span[data-lv="3"]::before  { background: #34d399; }
+.level-counter-strip span[data-lv="4"]::before  { background: #60a5fa; }
+.level-counter-strip span[data-lv="5"]::before  { background: #a78bfa; }
+.level-counter-strip span[data-lv="6"]::before  { background: #f87171; }
+.level-counter-strip span[data-lv="7"]::before  { background: #fbbf24; }
+.level-counter-strip span[data-lv="t"]::before  { background: #19e7ff; }
+.level-counter-strip span[data-lv="o"]::before  { background: #94a3b8; }
+
+.level-counter-strip strong {
+  font-family: var(--pixel-font);
+  font-size: 13px;
   font-weight: 900;
+  line-height: 1;
+}
+
+/* 레벨별 숫자 색상 */
+.level-counter-strip span[data-lv="2"] strong  { color: #f59e0b; }
+.level-counter-strip span[data-lv="3"] strong  { color: #34d399; }
+.level-counter-strip span[data-lv="4"] strong  { color: #60a5fa; }
+.level-counter-strip span[data-lv="5"] strong  { color: #a78bfa; }
+.level-counter-strip span[data-lv="6"] strong  { color: #f87171; }
+.level-counter-strip span[data-lv="7"] strong  { color: #fbbf24; }
+.level-counter-strip span[data-lv="t"] strong  { color: #19e7ff; }
+.level-counter-strip span[data-lv="o"] strong  { color: #94a3b8; }
+
+.level-counter-strip small {
+  color: rgba(119, 160, 201, 0.6);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* 0장인 레벨은 흐리게 */
+.level-counter-strip span.zero {
+  opacity: 0.28;
 }
 
 .deck-list-toolbar {
@@ -3850,6 +3890,15 @@ button:disabled {
 }
 
 @media (max-width: 540px) {
+  .color-level-row {
+    flex-wrap: wrap;
+  }
+
+  .color-level-row .level-counter-strip {
+    width: 100%;
+    flex: none;
+  }
+
   .app-shell {
     min-height: 100dvh;
   }

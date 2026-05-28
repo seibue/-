@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260528-deck-color-level";
+  const APP_VERSION = "20260528-level-strip-visual";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -5081,7 +5081,7 @@
                 .join("")}
             </div>
             <div class="level-counter-strip">
-              ${levelLabels.map((label) => `<span><strong>${levelCounts[label]}</strong><small>${label}</small></span>`).join("")}
+              ${levelLabels.map((label) => { const cnt = levelCounts[label] || 0; return `<span data-lv="${label.toLowerCase()}"${cnt === 0 ? ' class="zero"' : ""}><strong>${cnt}</strong><small>${label}</small></span>`; }).join("")}
             </div>
           </div>
         </div>

@@ -4338,16 +4338,19 @@ button:disabled {
     flex-shrink: 0;
   }
 
-  /* hub-layout 이 남은 높이 모두 차지 */
+  /* hub-layout: flex column으로 전환 — grid row 높이 미확정 문제 해결 */
   .deck-modal-panel .hub-layout {
     flex: 1;
     min-height: 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* 카탈로그 패널: 그리드가 남은 높이 채움 */
+  /* 카탈로그 패널: flex:1 로 부모 높이 승계 */
   .deck-modal-panel .catalog-panel {
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -4364,7 +4367,8 @@ button:disabled {
 
   /* 덱 트레이 전체를 단독 스크롤 */
   .deck-modal-panel .deck-tray {
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;

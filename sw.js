@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260528-level-label-bg";
+const CACHE_NAME = "jeonjeokmon-shell-20260528-level-strip-compact";
 const CORE_ASSETS = [
   "/",
   "/index.html",

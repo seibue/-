@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260528-level-strip-size";
+  const APP_VERSION = "20260528-level-labels";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -5058,6 +5058,7 @@
     };
     const selectedColors = new Set(draft.colors?.length ? draft.colors : ["blue"]);
     const levelLabels = ["2", "3", "4", "5", "6", "7", "T", "O"];
+    const levelDisplayLabels = { "2": "LV.2", "3": "LV.3", "4": "LV.4", "5": "LV.5", "6": "LV.6", "7": "LV.7", "T": "Tamer", "O": "옵션" };
     const levelCounts = deckLevelCounts(normalizeCards(state.deckDraftCards || []));
     const body = `
       <form class="form-grid" id="deck-form">
@@ -5081,7 +5082,7 @@
                 .join("")}
             </div>
             <div class="level-counter-strip">
-              ${levelLabels.map((label) => { const cnt = levelCounts[label] || 0; return `<span data-lv="${label.toLowerCase()}"${cnt === 0 ? ' class="zero"' : ""}><small>${label}</small><strong>${cnt}</strong></span>`; }).join("")}
+              ${levelLabels.map((label) => { const cnt = levelCounts[label] || 0; return `<span data-lv="${label.toLowerCase()}"${cnt === 0 ? ' class="zero"' : ""}><small>${escapeHTML(levelDisplayLabels[label])}</small><strong>${cnt}</strong></span>`; }).join("")}
             </div>
           </div>
         </div>

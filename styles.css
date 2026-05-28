@@ -1279,6 +1279,21 @@ button:disabled {
 }
 
 .color-dots,
+.color-level-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-level-row .swatch-row {
+  flex-shrink: 0;
+}
+
+.color-level-row .level-counter-strip {
+  flex: 1;
+  min-width: 0;
+}
+
 .swatch-row {
   display: flex;
   gap: 4px;

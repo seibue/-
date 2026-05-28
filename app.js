@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260528-deck-wide-grid";
+  const APP_VERSION = "20260528-deck-color-level";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -5057,6 +5057,8 @@
       colors: deck?.colors?.length ? deck.colors : ["blue"],
     };
     const selectedColors = new Set(draft.colors?.length ? draft.colors : ["blue"]);
+    const levelLabels = ["2", "3", "4", "5", "6", "7", "T", "O"];
+    const levelCounts = deckLevelCounts(normalizeCards(state.deckDraftCards || []));
     const body = `
       <form class="form-grid" id="deck-form">
         <label class="field">
@@ -5065,17 +5067,22 @@
         </label>
         <div class="field">
           <span>색상</span>
-          <div class="swatch-row">
-            ${Object.entries(colorMap)
-              .map(
-                ([color, hex]) => `
-                  <label class="swatch-option" title="${color}">
-                    <input type="checkbox" name="colors" value="${color}"${selectedColors.has(color) ? " checked" : ""} />
-                    <span style="--dot-color: ${hex}"></span>
-                  </label>
-                `
-              )
-              .join("")}
+          <div class="color-level-row">
+            <div class="swatch-row">
+              ${Object.entries(colorMap)
+                .map(
+                  ([color, hex]) => `
+                    <label class="swatch-option" title="${color}">
+                      <input type="checkbox" name="colors" value="${color}"${selectedColors.has(color) ? " checked" : ""} />
+                      <span style="--dot-color: ${hex}"></span>
+                    </label>
+                  `
+                )
+                .join("")}
+            </div>
+            <div class="level-counter-strip">
+              ${levelLabels.map((label) => `<span><strong>${levelCounts[label]}</strong><small>${label}</small></span>`).join("")}
+            </div>
           </div>
         </div>
         ${renderDeckBuilder()}
@@ -5316,11 +5323,8 @@
   function renderDeckBuilder() {
     const cards = normalizeCards(state.deckDraftCards);
     const summary = deckCountSummary(cards);
-    const levelCounts = deckLevelCounts(cards);
-    const deckTitle = state.deckDraftForm?.name?.trim() || "My Deck";
     const limitMessage = deckLimitViolation(cards);
     const readiness = deckReadiness(cards);
-    const levelLabels = ["2", "3", "4", "5", "6", "7", "T", "O"];
     const activeFilterCount = activeDeckAdvancedFilterCount();
     const catalogResultCount = filteredCatalogCardPool().length;
     const builderStatusTone = limitMessage ? "danger" : readiness.level;
@@ -5379,13 +5383,6 @@
               <span>${escapeHTML(readiness.detail)}</span>
             </div>
             ${limitMessage ? `<div class="builder-rule danger">${escapeHTML(limitMessage)}</div>` : ""}
-            <div class="deck-title-card">
-              <span>✎</span>
-              <strong>${escapeHTML(deckTitle)}</strong>
-            </div>
-            <div class="level-counter-strip">
-              ${levelLabels.map((label) => `<span><strong>${levelCounts[label]}</strong><small>${label}</small></span>`).join("")}
-            </div>
             <div class="deck-list-toolbar">
               <strong>덱 목록</strong>
               <span>${cards.length}종 · ${summary.total}장</span>

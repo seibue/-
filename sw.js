@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260528-mobile-scroll-fix";
+const CACHE_NAME = "jeonjeokmon-shell-20260528-rollback";
 const CORE_ASSETS = [
   "/",
   "/index.html",

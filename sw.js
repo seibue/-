@@ -1,11 +1,11 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260528-new-icon";
+const CACHE_NAME = "jeonjeokmon-shell-20260528-deck-modal-backdrop-scroll";
 const CORE_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
   "/app.js",
   "/manifest.webmanifest",
-  "/icon.svg"
+  "/icon-d-cardback.png"
 ];
 
 self.addEventListener("install", (event) => {

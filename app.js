@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260528-new-icon";
+  const APP_VERSION = "20260528-deck-modal-backdrop-scroll";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3662,6 +3662,7 @@
     `;
     // 모달이 열려 있을 때 배경 페이지 스크롤 차단
     document.body.classList.toggle("modal-open", !!(state.modal || state.previewCardNo));
+    document.body.classList.toggle("deck-modal-open", state.modal === "deck");
   }
 
   function renderKeepingDeckScroll() {
@@ -4747,8 +4748,9 @@
   }
 
   function modalFrame(title, body, actions, className = "") {
+    const backdropClass = className.includes("deck-modal-panel") ? " deck-modal-backdrop" : "";
     return `
-      <div class="modal-backdrop">
+      <div class="modal-backdrop${backdropClass}">
         <section class="modal-panel ${escapeHTML(className)}" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}">
           <div class="modal-head">
             <h2 class="modal-title">${escapeHTML(title)}</h2>
@@ -5105,23 +5107,36 @@
     const count = Number(existing?.count) || 0;
     const canAdd = availableCopiesForCard(state.deckDraftCards, catalogCardToDraft(card, 1)) > 0;
     const imageSrc = catalogImageSource(card);
+    const no = escapeHTML(card.no);
+    const stepper = count
+      ? `
+        <div class="catalog-stepper" aria-label="${no} 수량 조절">
+          <button class="catalog-step-btn" type="button" data-action="decrement-deck-card" data-card-id="${escapeHTML(existing.id)}" aria-label="${no} 1장 빼기">-</button>
+          <span class="catalog-step-count">${count}<small>/4</small></span>
+          <button class="catalog-step-btn" type="button" data-action="add-catalog-card" data-card-no="${no}"${canAdd ? "" : " disabled"} aria-label="${no} 1장 추가">+</button>
+        </div>
+      `
+      : `
+        <div class="catalog-stepper">
+          <button class="catalog-step-btn add-only" type="button" data-action="add-catalog-card" data-card-no="${no}"${canAdd ? "" : " disabled"}>+ 추가</button>
+        </div>
+      `;
     return `
-      <button class="catalog-card${count ? " in-deck" : ""}" type="button" data-action="add-catalog-card" data-card-no="${escapeHTML(
-        card.no
-      )}"${canAdd ? "" : " disabled"} title="${escapeHTML(card.no)} ${escapeHTML(card.name)}">
-        <span class="catalog-image" data-action="preview-catalog-card" data-card-no="${escapeHTML(card.no)}">
+      <article class="catalog-card${count ? " in-deck" : ""}${canAdd || count ? "" : " disabled"}" title="${escapeHTML(card.no)} ${escapeHTML(card.name)}">
+        <button class="catalog-image" type="button" data-action="preview-catalog-card" data-card-no="${no}" aria-label="${no} 카드 미리보기">
           ${
             imageSrc
-              ? `<img src="${escapeHTML(imageSrc)}" alt="${escapeHTML(card.name)}" data-card-no="${escapeHTML(card.no)}" loading="lazy" />`
-              : `<span class="catalog-image-empty">${escapeHTML(card.no)}</span>`
+              ? `<img src="${escapeHTML(imageSrc)}" alt="${escapeHTML(card.name)}" data-card-no="${no}" loading="lazy" />`
+              : `<span class="catalog-image-empty">${no}</span>`
           }
-        </span>
+        </button>
         ${count ? `<span class="catalog-count">${count}</span>` : ""}
-        <span class="catalog-info">
+        <button class="catalog-info" type="button" data-action="add-catalog-card" data-card-no="${no}"${canAdd ? "" : " disabled"} aria-label="${no} 1장 추가">
           <strong>${escapeHTML(card.name)}</strong>
-          <small>${escapeHTML(card.no)} · ${escapeHTML(catalogMetaText(card))}</small>
-        </span>
-      </button>
+          <small>${no} · ${escapeHTML(catalogMetaText(card))}</small>
+        </button>
+        ${stepper}
+      </article>
     `;
   }
 
@@ -5265,8 +5280,8 @@
     `;
   }
 
-  function renderDeckAdvancedSearch(resultCount) {
-    if (!state.deckAdvancedOpen) return "";
+  function renderDeckAdvancedSearch(resultCount, forceOpen = false) {
+    if (!forceOpen && !state.deckAdvancedOpen) return "";
     const filters = deckCardFilters();
     const setPrefixes = catalogSetPrefixes();
     const levelOptions = ["2", "3", "4", "5", "6", "7"];
@@ -5329,6 +5344,8 @@
     const activeFilterCount = activeDeckAdvancedFilterCount();
     const catalogResultCount = filteredCatalogCardPool().length;
     const builderStatusTone = limitMessage ? "danger" : readiness.level;
+    const builderView = ["catalog", "advanced", "tray"].includes(state.deckBuilderView) ? state.deckBuilderView : "catalog";
+    const builderStatusLabel = limitMessage ? "제한 초과" : readiness.label;
     return `
       <div class="deck-builder hub-builder">
         <div class="builder-sticky-header">
@@ -5347,7 +5364,8 @@
             <button class="control-button hub-detail-button ${state.deckAdvancedOpen || activeFilterCount ? "active" : ""}" type="button" data-action="toggle-deck-advanced-search">
               상세${activeFilterCount ? ` ${activeFilterCount}` : ""}
             </button>
-            <div class="mobile-builder-summary">
+            <div class="mobile-builder-summary ${escapeHTML(builderStatusTone)}">
+              <span class="mobile-builder-status">${escapeHTML(builderStatusLabel)}</span>
               <span>메인 <strong>${summary.main}/${DECK_LIMITS.main}</strong></span>
               <span>디지타마 <strong>${summary.digiEgg}/${DECK_LIMITS.digiEgg}</strong></span>
               <span>총 <strong>${summary.total}/${DECK_LIMITS.total}</strong></span>
@@ -5355,25 +5373,30 @@
           </div>
           <div class="builder-flow-strip" aria-label="덱 구축 진행 상태">
             <span data-builder-result-count>${catalogResultCount.toLocaleString("ko-KR")}종 검색됨</span>
-            <span>카드 클릭으로 +1장</span>
+            <span>카드에서 바로 수량 조절</span>
             <span class="${escapeHTML(builderStatusTone)}">현재 ${summary.total}/${DECK_LIMITS.total}장</span>
             <span>같은 카드 번호 최대 4장</span>
           </div>
           <div class="deck-builder-tabs">
-            <button class="deck-tab-btn${state.deckBuilderView !== "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="catalog">카드 찾기</button>
-            <button class="deck-tab-btn${state.deckBuilderView === "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="tray">덱 목록 (${summary.total}장)</button>
+            <button class="deck-tab-btn${builderView === "catalog" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="catalog">검색</button>
+            <button class="deck-tab-btn${builderView === "advanced" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="advanced">상세${activeFilterCount ? ` ${activeFilterCount}` : ""}</button>
+            <button class="deck-tab-btn${builderView === "tray" ? " active" : ""}" type="button" data-action="deck-builder-tab" data-view="tray">덱 목록 (${summary.total}장)</button>
           </div>
         </div>
-        ${renderDeckAdvancedSearch(catalogResultCount)}
+        <div class="desktop-advanced-panel">${renderDeckAdvancedSearch(catalogResultCount)}</div>
 
         <div class="hub-layout">
-          <section class="catalog-panel${state.deckBuilderView === "tray" ? " mobile-hidden" : ""}" aria-label="카드 카탈로그">
+          <section class="mobile-advanced-panel${builderView === "advanced" ? "" : " mobile-hidden"}" aria-label="상세 검색">
+            ${renderDeckAdvancedSearch(catalogResultCount, true)}
+          </section>
+
+          <section class="catalog-panel${builderView === "catalog" ? "" : " mobile-hidden"}" aria-label="카드 카탈로그">
             <div class="catalog-grid">
               ${renderCatalogGridContent()}
             </div>
           </section>
 
-          <section class="deck-tray${state.deckBuilderView === "catalog" ? " mobile-hidden" : ""}" aria-label="구축 중인 덱">
+          <section class="deck-tray${builderView === "tray" ? "" : " mobile-hidden"}" aria-label="구축 중인 덱">
             <div class="deck-count-pills">
               <span class="deck-pill main">메인 <strong>${summary.main}/${DECK_LIMITS.main}</strong></span>
               <span class="deck-pill egg">디지타마 <strong>${summary.digiEgg}/${DECK_LIMITS.digiEgg}</strong></span>
@@ -5850,7 +5873,8 @@
     }
     if (action === "deck-builder-tab") {
       cacheDeckDraftForm(target.closest(".modal-panel")?.querySelector("#deck-form"));
-      state.deckBuilderView = target.dataset.view === "tray" ? "tray" : "catalog";
+      state.deckBuilderView = ["catalog", "advanced", "tray"].includes(target.dataset.view) ? target.dataset.view : "catalog";
+      if (state.deckBuilderView === "advanced") state.deckAdvancedOpen = false;
       renderKeepingDeckScroll();
       return;
     }

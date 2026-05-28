@@ -2915,6 +2915,14 @@ button:disabled {
   display: none;
 }
 
+.desktop-advanced-panel {
+  display: block;
+}
+
+.mobile-advanced-panel {
+  display: none;
+}
+
 /* 모바일 덱 빌더 탭 (데스크탑에서는 숨김) */
 .deck-builder-tabs {
   display: none;
@@ -2960,7 +2968,7 @@ button:disabled {
   text-align: left;
 }
 
-.catalog-card:disabled {
+.catalog-card.disabled {
   cursor: not-allowed;
   filter: grayscale(0.65);
   opacity: 0.48;
@@ -2968,6 +2976,7 @@ button:disabled {
 
 .catalog-image {
   position: relative;
+  width: 100%;
   aspect-ratio: 5 / 7;
   display: block;
   overflow: hidden;
@@ -2978,6 +2987,8 @@ button:disabled {
     #07101e;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.46);
   cursor: zoom-in;
+  padding: 0;
+  appearance: none;
 }
 
 .catalog-image img {
@@ -3023,7 +3034,19 @@ button:disabled {
   min-width: 0;
   display: grid;
   gap: 2px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
   padding: 0 2px 2px;
+  text-align: left;
+}
+
+.catalog-info:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 
 .catalog-info strong,
@@ -3041,6 +3064,36 @@ button:disabled {
 .catalog-info small {
   color: var(--muted);
   font-size: 9px;
+}
+
+.catalog-stepper {
+  display: none;
+}
+
+.catalog-step-btn {
+  border: 1px solid rgba(25, 231, 255, 0.36);
+  border-radius: 4px;
+  background: rgba(25, 231, 255, 0.12);
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.catalog-step-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.32;
+}
+
+.catalog-step-count {
+  color: var(--gold);
+  font-weight: 900;
+  text-align: center;
+}
+
+.catalog-step-count small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
 }
 
 .deck-tray {
@@ -4338,6 +4391,19 @@ button:disabled {
     flex-shrink: 0;
   }
 
+  .desktop-advanced-panel {
+    display: none;
+  }
+
+  .mobile-advanced-panel {
+    display: block;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
   /* hub-layout: flex column으로 전환 — grid row 높이 미확정 문제 해결 */
   .deck-modal-panel .hub-layout {
     flex: 1;
@@ -4399,9 +4465,16 @@ button:disabled {
   }
 
   .mobile-builder-summary {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    align-items: center;
     gap: 6px;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .mobile-builder-summary::-webkit-scrollbar {
+    display: none;
   }
 
   /* 모바일 덱 빌더 검색창+탭 상단 고정 */
@@ -4448,7 +4521,8 @@ button:disabled {
   }
 
   .mobile-builder-summary span {
-    min-width: 0;
+    flex: 0 0 auto;
+    min-width: max-content;
     border: 1px solid rgba(119, 160, 201, 0.28);
     border-radius: 4px;
     background: rgba(4, 10, 20, 0.68);
@@ -4457,6 +4531,34 @@ button:disabled {
     font-weight: 800;
     padding: 6px 4px;
     text-align: center;
+  }
+
+  .mobile-builder-summary span:not(.mobile-builder-status) {
+    min-width: 74px;
+  }
+
+  .mobile-builder-summary .mobile-builder-status {
+    border-color: rgba(255, 210, 31, 0.42);
+    background: rgba(255, 210, 31, 0.12);
+    color: var(--gold);
+  }
+
+  .mobile-builder-summary.ready .mobile-builder-status {
+    border-color: rgba(0, 255, 153, 0.42);
+    background: rgba(0, 255, 153, 0.12);
+    color: var(--win);
+  }
+
+  .mobile-builder-summary.danger .mobile-builder-status {
+    border-color: rgba(255, 94, 122, 0.46);
+    background: rgba(255, 94, 122, 0.14);
+    color: var(--loss);
+  }
+
+  .mobile-builder-summary.empty .mobile-builder-status {
+    border-color: rgba(119, 160, 201, 0.32);
+    background: rgba(119, 160, 201, 0.1);
+    color: var(--muted);
   }
 
   .mobile-builder-summary strong {
@@ -4474,7 +4576,7 @@ button:disabled {
   }
 
   .hub-detail-button {
-    min-height: 46px;
+    display: none;
   }
 
   .deck-advanced-head {
@@ -4502,26 +4604,81 @@ button:disabled {
   }
 
   .catalog-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     max-height: 48dvh;
-    gap: 10px;
+    gap: 9px;
     overscroll-behavior: contain;
   }
 
   .catalog-card {
     touch-action: manipulation;
+    gap: 0;
   }
 
   .catalog-image {
-    border-radius: 4px;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .catalog-count {
+    display: none;
+  }
+
+  .catalog-info {
+    min-height: 43px;
+    border-inline: 1px solid rgba(119, 160, 201, 0.24);
+    background: rgba(4, 10, 20, 0.74);
+    padding: 5px 6px 4px;
+  }
+
+  .catalog-card.in-deck .catalog-info {
+    border-color: rgba(255, 210, 31, 0.28);
+    background: rgba(255, 210, 31, 0.07);
   }
 
   .catalog-info strong {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .catalog-info small {
-    font-size: 9px;
+    font-size: 10px;
+  }
+
+  .catalog-stepper {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid rgba(119, 160, 201, 0.24);
+    border-top: 0;
+    border-radius: 0 0 6px 6px;
+    background: rgba(4, 10, 20, 0.8);
+    padding: 5px;
+  }
+
+  .catalog-card.in-deck .catalog-stepper {
+    border-color: rgba(255, 210, 31, 0.34);
+    background: rgba(255, 210, 31, 0.08);
+  }
+
+  .catalog-step-btn {
+    width: 38px;
+    height: 34px;
+    display: inline-grid;
+    place-items: center;
+    font-size: 19px;
+    line-height: 1;
+  }
+
+  .catalog-step-btn.add-only {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .catalog-step-count {
+    min-width: 36px;
+    font-size: 15px;
+    line-height: 1;
   }
 
   .deck-tray {
@@ -4743,6 +4900,64 @@ button:disabled {
     width: min(100%, 430px);
     max-height: calc(100dvh - 16px);
   }
+
+  /* Mobile deck builder uses the whole modal as the scroll container. */
+  .deck-modal-panel {
+    min-height: 100dvh;
+    max-height: 100dvh;
+    display: block;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .deck-modal-panel > .modal-body {
+    flex: none;
+    min-height: auto;
+    overflow: visible;
+    padding-bottom: 12px;
+  }
+
+  .deck-modal-panel > .modal-body > form {
+    height: auto;
+    display: grid;
+    gap: 10px;
+  }
+
+  .deck-modal-panel > .modal-body > form > .field {
+    margin-bottom: 0;
+  }
+
+  .deck-modal-panel > .modal-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+  }
+
+  .deck-modal-panel .deck-builder.hub-builder,
+  .deck-modal-panel .hub-layout,
+  .deck-modal-panel .catalog-panel,
+  .deck-modal-panel .mobile-advanced-panel,
+  .deck-modal-panel .deck-tray {
+    flex: none;
+    min-height: auto;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .deck-modal-panel .hub-layout {
+    display: block;
+  }
+
+  .deck-modal-panel .mobile-builder-summary {
+    display: flex;
+    grid-template-columns: none;
+  }
+
+  .deck-modal-panel .catalog-grid {
+    max-height: none !important;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 380px) {
@@ -4834,5 +5049,61 @@ button:disabled {
   .backup-row > *,
   .sync-actions > * {
     width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  .deck-modal-backdrop {
+    align-items: start;
+    justify-items: stretch;
+    display: block;
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+  }
+
+  .deck-modal-backdrop .deck-modal-panel {
+    width: 100%;
+    min-height: auto;
+    max-height: none;
+    display: block;
+    overflow: visible;
+    padding-bottom: calc(132px + env(safe-area-inset-bottom));
+  }
+
+  .deck-modal-backdrop .modal-body {
+    overflow: visible;
+  }
+
+  .deck-modal-backdrop .modal-actions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 160;
+  }
+
+  .deck-modal-backdrop .deck-builder.hub-builder,
+  .deck-modal-backdrop .hub-layout,
+  .deck-modal-backdrop .catalog-panel,
+  .deck-modal-backdrop .mobile-advanced-panel,
+  .deck-modal-backdrop .deck-tray,
+  .deck-modal-backdrop .catalog-grid {
+    height: auto;
+    min-height: 0;
+    max-height: none !important;
+    overflow: visible;
+  }
+
+  .deck-modal-backdrop .builder-flow-strip {
+    display: none;
+  }
+
+  .deck-modal-backdrop .deck-builder-tabs {
+    margin-top: 8px;
   }
 }

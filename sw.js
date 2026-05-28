@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260528-tamer-ko";
+const CACHE_NAME = "jeonjeokmon-shell-20260528-label-30px";
 const CORE_ASSETS = [
   "/",
   "/index.html",

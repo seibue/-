@@ -5075,6 +5075,11 @@ button:disabled {
     padding-bottom: calc(132px + env(safe-area-inset-bottom));
   }
 
+  .deck-modal-backdrop .modal-head {
+    position: static;
+    z-index: auto;
+  }
+
   .deck-modal-backdrop .modal-body {
     overflow: visible;
   }
@@ -5097,6 +5102,17 @@ button:disabled {
     min-height: 0;
     max-height: none !important;
     overflow: visible;
+  }
+
+  .deck-modal-backdrop .builder-sticky-header,
+  .deck-modal-backdrop .hub-search-row {
+    position: static;
+    top: auto;
+    z-index: auto;
+  }
+
+  .deck-modal-backdrop .hub-search-row {
+    margin-top: 0;
   }
 
   .deck-modal-backdrop .builder-flow-strip {

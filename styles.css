@@ -3172,7 +3172,7 @@ button:disabled {
   text-align: center;
   padding: 8px 3px 7px;
   border-bottom: 2px solid rgba(119, 160, 201, 0.45);
-  color: rgba(119, 160, 201, 0.8);
+  color: #ffffff;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -3199,6 +3199,16 @@ button:disabled {
 .level-counter-strip span[data-lv="7"] strong  { color: #fbbf24; }
 .level-counter-strip span[data-lv="t"] strong  { color: #19e7ff; }
 .level-counter-strip span[data-lv="o"] strong  { color: #94a3b8; }
+
+/* 레벨별 상단 라벨 배경색 + 흰 글씨 */
+.level-counter-strip span[data-lv="2"] small  { background: #f59e0b; color: #fff; }
+.level-counter-strip span[data-lv="3"] small  { background: #34d399; color: #fff; }
+.level-counter-strip span[data-lv="4"] small  { background: #60a5fa; color: #fff; }
+.level-counter-strip span[data-lv="5"] small  { background: #a78bfa; color: #fff; }
+.level-counter-strip span[data-lv="6"] small  { background: #f87171; color: #fff; }
+.level-counter-strip span[data-lv="7"] small  { background: #fbbf24; color: #fff; }
+.level-counter-strip span[data-lv="t"] small  { background: #19e7ff; color: #fff; }
+.level-counter-strip span[data-lv="o"] small  { background: #94a3b8; color: #fff; }
 
 /* 0장인 레벨은 흐리게 */
 .level-counter-strip span.zero {

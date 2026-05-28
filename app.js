@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260528-level-strip-visual";
+  const APP_VERSION = "20260528-wide-content";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3652,7 +3652,7 @@
             )
             .join("")}
         </nav>
-        <main class="content ${state.tab === "home" ? "home-content" : ""}">${renderCurrentTab()}</main>
+        <main class="content ${state.tab === "home" ? "home-content" : ""} ${["tournaments", "matches", "stats"].includes(state.tab) ? "wide-content" : ""}">${renderCurrentTab()}</main>
         ${renderCloudConflictBanner()}
         ${renderModal()}
         ${renderCardPreview()}

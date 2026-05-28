@@ -2348,7 +2348,7 @@ button:disabled {
 }
 
 .deck-modal-panel {
-  width: min(96vw, 1020px);
+  width: min(98vw, 1700px);
 }
 
 .card-preview-backdrop {
@@ -2907,8 +2907,8 @@ button:disabled {
 
 .hub-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(420px, 500px);
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
   align-items: start;
 }
 
@@ -2918,10 +2918,10 @@ button:disabled {
 }
 
 .catalog-grid {
-  max-height: min(62vh, 620px);
+  max-height: min(70vh, 760px);
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 5px;
   overflow: auto;
   padding: 2px 4px 2px 2px;
   scrollbar-color: var(--accent) rgba(4, 10, 20, 0.6);
@@ -3202,8 +3202,8 @@ button:disabled {
 
 .deck-thumb-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 4px;
 }
 
 .deck-thumb-item {

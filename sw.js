@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260528-rollback";
+const CACHE_NAME = "jeonjeokmon-shell-20260528-new-icon";
 const CORE_ASSETS = [
   "/",
   "/index.html",

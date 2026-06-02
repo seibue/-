@@ -26,6 +26,7 @@ updateFile("index.html", [
   [/card-catalog\.js\?v=[^"]+/g, `card-catalog.js?v=${version}`],
   [/korean-card-effects\.js\?v=[^"]+/g, `korean-card-effects.js?v=${version}`],
   [/js\/format\.js\?v=[^"]+/g, `js/format.js?v=${version}`],
+  [/js\/docx-export\.js\?v=[^"]+/g, `js/docx-export.js?v=${version}`],
   [/app\.js\?v=[^"]+/g, `app.js?v=${version}`],
 ]);
 

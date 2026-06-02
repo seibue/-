@@ -1,9 +1,10 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a1-format";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a2-docx";
 const CORE_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
   "/js/format.js",
+  "/js/docx-export.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

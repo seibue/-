@@ -143,6 +143,37 @@ test("opponentMetaRows: limit 적용", () => {
   assert.equal(api.opponentMetaRows(matches, 2).length, 2);
 });
 
+test("deckVersionRecords: 시간 기반으로 버전 window에 전적 귀속", () => {
+  const api = makeApi();
+  const versions = [
+    { id: "v1", label: "v1", cards: [{ count: 4 }, { count: 4 }], createdAt: "2026-06-01T00:00:00.000Z" },
+    { id: "v2", label: "v2", cards: [{ count: 3 }], createdAt: "2026-06-10T00:00:00.000Z" },
+  ];
+  const matches = [
+    { date: "2026-05-20", result: "win" }, // v1 이전 → pre
+    { date: "2026-06-03", result: "win" }, // v1 window [06-01, 06-10)
+    { date: "2026-06-05", result: "loss" }, // v1
+    { date: "2026-06-12", result: "win" }, // v2 window [06-10, ∞)
+  ];
+  const { records, pre } = api.deckVersionRecords(versions, matches);
+  assert.equal(records.length, 2);
+  assert.equal(records[0].version.label, "v1");
+  assert.equal(records[0].stats.total, 2); // 06-03, 06-05
+  assert.equal(records[0].stats.wins, 1);
+  assert.equal(records[0].cardTotal, 8); // 4 + 4
+  assert.equal(records[1].version.label, "v2");
+  assert.equal(records[1].isCurrent, true);
+  assert.equal(records[1].stats.total, 1); // 06-12
+  assert.equal(pre.total, 1); // 05-20
+});
+
+test("deckVersionRecords: 버전 없으면 모든 전적이 pre", () => {
+  const api = makeApi();
+  const { records, pre } = api.deckVersionRecords([], [{ date: "2026-06-01", result: "win" }]);
+  assert.equal(records.length, 0);
+  assert.equal(pre.total, 1);
+});
+
 test("validMatchupDeckId / validMatchupOpponent: 선택값 유효성 폴백", () => {
   const api = makeApi({ matches: [], decks: [] }, { matchupDeckId: "x", matchupOpponent: "블루" });
   const deckRows = [{ deck: { id: "a" } }, { deck: { id: "b" } }];

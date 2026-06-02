@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-stats-period-meta";
+  const APP_VERSION = "20260603-deck-versions";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -266,6 +266,7 @@
     matchesForMatchup,
     matchupBreakdownRows,
     opponentMetaRows,
+    deckVersionRecords,
   } = window.JJM.stats.createStats({
     getData: () => data,
     state,
@@ -625,6 +626,19 @@
     };
   }
 
+  function normalizeDeckVersions(versions) {
+    if (!Array.isArray(versions)) return [];
+    return versions
+      .filter((version) => version && typeof version === "object")
+      .map((version) => ({
+        id: version.id || uid("dver"),
+        label: String(version.label || "").trim(),
+        cards: normalizeCards(version.cards),
+        createdAt: version.createdAt || new Date().toISOString(),
+      }))
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }
+
   function normalizeDeck(deck) {
     return {
       id: deck.id || uid("deck"),
@@ -632,6 +646,7 @@
       colors: Array.isArray(deck.colors) && deck.colors.length ? deck.colors : ["blue"],
       note: deck.note || "",
       cards: normalizeCards(deck.cards),
+      versions: normalizeDeckVersions(deck.versions),
       createdAt: deck.createdAt || new Date().toISOString(),
       updatedAt: deck.updatedAt || deck.createdAt || new Date().toISOString(),
     };
@@ -2707,6 +2722,7 @@
             <button class="icon-button text-icon" type="button" title="덱 이미지 저장" data-action="download-deck-image" data-id="${escapeHTML(deck.id)}">PNG</button>
             <button class="icon-button text-icon" type="button" title="덱 내보내기 (JSON 파일)" data-action="export-deck" data-id="${escapeHTML(deck.id)}">내보내기</button>
             <button class="icon-button text-icon" type="button" title="덱 코드 복사 (다른 프로그램용)" data-action="copy-deck-code" data-id="${escapeHTML(deck.id)}">코드복사</button>
+            <button class="icon-button text-icon" type="button" title="현재 구성을 버전으로 기록 (이후 전적이 이 버전에 집계)" data-action="save-deck-version" data-id="${escapeHTML(deck.id)}">버전</button>
             <button class="icon-button" type="button" title="복사" data-action="clone-deck" data-id="${escapeHTML(deck.id)}">⧉</button>
             <button class="icon-button" type="button" title="삭제" data-action="delete-deck" data-id="${escapeHTML(deck.id)}">×</button>
           </div>
@@ -2717,8 +2733,54 @@
           <div class="deck-stat"><strong>${stats.losses}</strong><span>패</span></div>
           <div class="deck-stat"><strong>${stats.rate}%</strong><span>승률</span></div>
         </div>
+        ${renderDeckVersionsSection(deck)}
         ${cards.length ? renderDeckCardList(deck, cards) : ""}
       </article>
+    `;
+  }
+
+  function renderDeckVersionsSection(deck) {
+    const versions = deck.versions || [];
+    if (!versions.length) return "";
+    const deckMatches = data.matches.filter((match) => match.deckId === deck.id);
+    const { records, pre } = deckVersionRecords(versions, deckMatches);
+    const ordered = [...records].reverse(); // 최신 버전을 위로
+    const dateText = (value) => (value ? formatDate(String(value).slice(0, 10)) : "");
+    const recordLine = (s) => `${s.total}전 ${s.wins}승 ${s.losses}패${s.draws ? ` ${s.draws}무` : ""}`;
+    return `
+      <details class="deck-build-preview deck-version-details">
+        <summary class="card-rate-summary">
+          <span class="card-rate-title">버전별 성적</span>
+          <span class="card-rate-count">${versions.length}버전</span>
+        </summary>
+        <div class="version-record-list">
+          ${ordered
+            .map((rec) => {
+              const range = rec.isCurrent ? `${dateText(rec.startAt)} ~ 현재` : `${dateText(rec.startAt)} ~ ${dateText(rec.endAt)}`;
+              return `
+                <div class="version-record-row${rec.isCurrent ? " current" : ""}">
+                  <div class="version-record-head">
+                    <strong>${escapeHTML(rec.version.label || "버전")}${rec.isCurrent ? " · 현재" : ""}</strong>
+                    <span>${rec.cardTotal}장 · ${escapeHTML(range)}</span>
+                  </div>
+                  <div class="version-record-stat">
+                    <span>${escapeHTML(recordLine(rec.stats))}</span>
+                    <span class="version-rate">승률 ${rec.stats.rate}%</span>
+                  </div>
+                </div>
+              `;
+            })
+            .join("")}
+          ${
+            pre.total
+              ? `<div class="version-record-row pre">
+                  <div class="version-record-head"><strong>버전 기록 전</strong><span>스냅샷 이전 전적</span></div>
+                  <div class="version-record-stat"><span>${escapeHTML(recordLine(pre))}</span><span class="version-rate">승률 ${pre.rate}%</span></div>
+                </div>`
+              : ""
+          }
+        </div>
+      </details>
     `;
   }
 
@@ -4566,6 +4628,28 @@
     if (action === "copy-deck-code") {
       const deck = getDeck(target.dataset.id);
       if (deck) copyDeckExportCode(deck);
+      return;
+    }
+    if (action === "save-deck-version") {
+      const deck = getDeck(target.dataset.id);
+      if (!deck) return;
+      const currentCards = deckCards(deck);
+      if (!currentCards.length) {
+        alert("카드가 없는 덱은 버전으로 기록할 수 없습니다. 먼저 덱을 구성해 주세요.");
+        return;
+      }
+      const versionCount = (deck.versions?.length || 0) + 1;
+      const snapshot = {
+        id: uid("dver"),
+        label: `v${versionCount}`,
+        cards: currentCards.map((card) => ({ ...card })),
+        createdAt: new Date().toISOString(),
+      };
+      deck.versions = [...(deck.versions || []), snapshot];
+      deck.updatedAt = new Date().toISOString();
+      saveData();
+      notifyToast("버전 기록됨", `${deck.name} ${snapshot.label} · 지금부터의 전적이 이 버전으로 집계됩니다.`, "success");
+      render();
       return;
     }
     if (action === "print-deck") {

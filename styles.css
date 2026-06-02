@@ -1532,6 +1532,55 @@ button:disabled {
   margin-top: 12px;
 }
 
+.version-record-list {
+  display: grid;
+  gap: 7px;
+  padding: 0 10px 10px;
+}
+
+.version-record-row {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: rgba(4, 10, 20, 0.42);
+}
+
+.version-record-row.current {
+  border-color: rgba(25, 231, 255, 0.42);
+}
+
+.version-record-row.pre {
+  opacity: 0.78;
+}
+
+.version-record-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.version-record-head strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.version-record-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.version-record-stat .version-rate {
+  color: var(--accent);
+}
+
 .deck-rate-details .card-rate-list {
   margin-top: 0;
   padding: 0 10px 10px;

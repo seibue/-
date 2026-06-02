@@ -157,6 +157,33 @@
         .sort((a, b) => b.stats.total - a.stats.total || b.stats.rate - a.stats.rate || a.label.localeCompare(b.label, "ko"));
     }
 
+    // 덱 버전별 성적: 시간 기반 자동 귀속.
+    // 각 버전 window = [version.createdAt, 다음 version.createdAt) — 마지막은 ∞(현재).
+    // 첫 버전 이전 전적은 pre 버킷("버전 기록 전").
+    function deckVersionRecords(versions, matches) {
+      const sorted = [...(versions || [])].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      const records = sorted.map((version, index) => {
+        const start = new Date(version.createdAt).getTime();
+        const end = index + 1 < sorted.length ? new Date(sorted[index + 1].createdAt).getTime() : Infinity;
+        const versionMatches = matches.filter((match) => {
+          const t = matchDateTime(match);
+          return t >= start && t < end;
+        });
+        const cardTotal = (version.cards || []).reduce((sum, card) => sum + (Number(card.count) || 0), 0);
+        return {
+          version,
+          startAt: version.createdAt,
+          endAt: index + 1 < sorted.length ? sorted[index + 1].createdAt : "",
+          isCurrent: index === sorted.length - 1,
+          cardTotal,
+          stats: statsFromMatches(versionMatches),
+        };
+      });
+      const firstStart = sorted.length ? new Date(sorted[0].createdAt).getTime() : Infinity;
+      const preMatches = matches.filter((match) => matchDateTime(match) < firstStart);
+      return { records, pre: statsFromMatches(preMatches) };
+    }
+
     return {
       statsFromMatches,
       statsForDeckCard,
@@ -172,6 +199,7 @@
       matchesForMatchup,
       matchupBreakdownRows,
       opponentMetaRows,
+      deckVersionRecords,
     };
   }
 

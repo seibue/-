@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260603-stats-period-meta";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-deck-versions";
 const CORE_ASSETS = [
   "/",
   "/index.html",

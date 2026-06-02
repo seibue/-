@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-deck-module";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-cloud-module";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -11,6 +11,7 @@ const CORE_ASSETS = [
   "/js/deck-import.js",
   "/js/stats.js",
   "/js/deck.js",
+  "/js/cloud.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

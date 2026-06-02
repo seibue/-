@@ -18,16 +18,29 @@
 
 ```
 DegiLog/
-├── index.html               # 진입점. <div id="app"> 하나만 있음
-├── app.js                   # 앱 전체 로직 (~7,500줄, IIFE 단일 파일)
+├── index.html               # 진입점. <div id="app"> + js/* 와 app.js 를 defer 로드
+├── app.js                   # 앱 코어 (~5,400줄, IIFE 단일 파일) — 상태/렌더/이벤트/데이터레이어
 ├── styles.css               # 전체 스타일 (다크 테마, CSS 변수 기반)
-├── sw.js                    # 서비스워커 (PWA 캐시)
+├── sw.js                    # 서비스워커 (PWA 캐시) — CORE_ASSETS 에 js/* 전부 포함
 ├── manifest.webmanifest     # PWA 메타
 ├── icon.svg                 # 앱 아이콘
 ├── card-catalog.js          # 카드 목록 데이터 (빌드 생성)
 ├── korean-card-effects.js   # 한글 카드 효과 데이터 (빌드 생성)
 ├── deck-recipe-template.js  # 덱 레시피 Word 출력 라이브러리
-├── preview-server.cjs       # 로컬 개발용 프리뷰 서버
+├── preview-server.cjs       # 로컬 개발용 프리뷰 서버 (포트 8787)
+├── package.json             # node:test 기반 테스트 스크립트 (의존성 0)
+├── js/                      # app.js 에서 분리한 도메인 모듈 (빌드 없음, window.JJM.* 노출)
+│   ├── format.js            # 순수 포매팅/결과 헬퍼 (uid, escapeHTML, 승률 등)
+│   ├── docx-export.js       # 덱 레시피 인쇄/DOCX 생성 (createDeckRecipeExport)
+│   ├── share-image.js       # 공유 이미지 캔버스 렌더/PNG 저장 (createShareImage)
+│   ├── card-effects.js      # 카드 효과 번역/조회/캐시 (createCardEffects)
+│   ├── diagnostics.js       # 진단 기록/표시/저장 (createDiagnostics) — 가장 먼저 생성
+│   ├── deck-import.js        # 덱 텍스트/JSON 가져오기 파서 (createDeckImport)
+│   ├── stats.js             # 통계/매치업 계산 (createStats)
+│   ├── deck.js              # 덱 편집(draft) 로직 (createDeck)
+│   └── cloud.js             # Supabase 클라우드 동기화 (createCloud)
+├── tests/                   # node --test 단위 테스트 (모듈별, npm test 로 실행)
+│   └── *.test.js
 ├── api/
 │   ├── korean-card.js       # Vercel 서버리스: 한국 공식 카드 크롤링
 │   └── card-image.js        # Vercel 서버리스: 카드 이미지 프록시
@@ -36,7 +49,7 @@ DegiLog/
     ├── update-card-data.js       # card-catalog.js, korean-card-effects.js 재생성
     ├── build-card-catalog-cache.js
     ├── build-korean-card-effects-cache.js
-    └── bump-cache-version.js     # 캐시 버전 문자열 일괄 갱신
+    └── bump-cache-version.js     # 캐시 버전 문자열 일괄 갱신 (js/* 포함)
 ```
 
 ---
@@ -51,7 +64,7 @@ DegiLog/
 버전 문자열 형식: `YYYYMMDD-short-note` (예: `20260526-tournament-ux-1`)
 
 버전이 연동된 위치:
-- `index.html` — `?v=` 쿼리스트링 (styles.css, card-catalog.js, korean-card-effects.js, app.js, manifest)
+- `index.html` — `?v=` 쿼리스트링 (styles.css, **js/*.js**, card-catalog.js, korean-card-effects.js, app.js, manifest)
 - `app.js` — `const APP_VERSION = "..."` + `sw.js?v=...`
 - `sw.js` — `const CACHE_NAME = "jeonjeokmon-shell-..."`
 
@@ -59,11 +72,13 @@ DegiLog/
 ```powershell
 node tools/bump-cache-version.js 20260527-my-feature
 ```
+> `js/` 에 **새 모듈 파일을 추가하면** ① `index.html`에 `<script defer>` 태그(app.js 앞), ② `sw.js`의 `CORE_ASSETS`, ③ `tools/bump-cache-version.js`의 치환 규칙 세 곳에 직접 등록해야 합니다.
 
-### 3. 수정 후 문법 체크 필수
+### 3. 수정 후 문법 체크 + 테스트 필수
 ```powershell
 node --check app.js
 node --check sw.js
+npm test          # node:test 기반, 의존성 0 — 모듈 회귀 검증
 ```
 
 ### 4. 기존 기능 삭제·구조 변경 전 설명 먼저
@@ -71,9 +86,47 @@ node --check sw.js
 
 ---
 
+## 모듈 구조 (js/ + app.js)
+
+원래 `app.js` 단일 파일(~7,500줄)이었으나, **빌드 단계 없이** 도메인별 모듈로 분리했습니다.
+- 각 모듈은 IIFE로 `window.JJM.<name>` 에 노출되고, **`app.js`보다 먼저 `<script defer>`로 로드**됩니다.
+- Node에서는 `module.exports`로도 노출되어 `tests/`에서 `require`로 단위 테스트합니다 (브라우저/Node 겸용 UMD 패턴).
+
+### 의존성 주입(DI) 패턴 — 가장 중요
+`data`/`state`/DOM 에 의존하는 모듈은 **순수 함수가 아니므로** `createXxx(deps)` 팩토리로 만들고, `app.js`가 의존성을 주입합니다.
+```js
+const { addDraftCard, deckReadiness } = window.JJM.deck.createDeck({ state, getData: () => data, ... });
+```
+- **`data`는 재할당되는 변수**(`loadData`, `setDataFromCloud` 등) → 반드시 `getData: () => data` 게터로 주입. 절대 `data`를 직접 넘기지 말 것(스냅샷이 됨).
+- **`state`는 재할당되지 않음**(프로퍼티만 변경) → 참조로 직접 주입 OK.
+- 순수 함수(예: `format.js`, `normalizeEffectText`)는 모듈 레벨에 두고 직접 노출 → 그대로 테스트 가능.
+
+### 팩토리 생성 순서 (app.js 상단)
+`diagnostics → share-image → card-effects → deck-import → stats → deck → cloud` 순으로 `state` 정의 직후 생성합니다.
+- `recordDiagnostic`(diagnostics)이 다른 모듈에 주입되므로 **diagnostics를 가장 먼저** 생성.
+- `cloud`는 `cloudClient`(let)·`cloudStatusText`·`syncTone`을 app.js에 남겨 **diagnostics와의 순환 의존을 차단**하고, `getCloudClient/setCloudClient`·`setData`로 연결.
+- 공용 유틸(`deckCards`/`deckCountSummary`/`deckLimitViolation`/`sortDeckCards` 등)은 여러 모듈에 주입되므로 **app.js에 잔류**.
+
+### 모듈별 노출 API
+| 모듈 | 노출 | app.js가 쓰는 주요 함수 |
+|------|------|------|
+| `format` | 함수 직접 | uid, escapeHTML, formatDate, resultLabel, normalizeGameStats, finalizeRecordStats … |
+| `docx-export` | `createDeckRecipeExport` | printDeckRecipe, downloadDeckRecipeDocx |
+| `share-image` | `createShareImage` | downloadDeckImage, downloadDailyShareImage, openDailyShareX |
+| `card-effects` | `createCardEffects` + 순수 2종 | staticKoreanOfficialEffect, fetchAndCacheCardEffect |
+| `diagnostics` | `createDiagnostics` + safeDiagnosticDetail | recordDiagnostic, diagnosticStatusInfo, downloadDiagnostics, clearDiagnostics |
+| `deck-import` | `createDeckImport` + apiCardType | parseDeckImportSource, enrichImportedDecks, normalizeImportedDeck |
+| `stats` | `createStats` | statsFromMatches, statsForDeck, deckMatchupRows, tournamentStageSummary … (13종) |
+| `deck` | `createDeck` | addDraftCard, changeDraftCardCount, deckReadiness, cloneDeck … (9종) |
+| `cloud` | `createCloud` | initializeCloudAuth, saveCloudData, scheduleCloudSave, loginWithGoogle … |
+
+> ⚠️ 분리는 "함수 이동 + 동작 보존"이 원칙입니다. 로직 변경은 별도 커밋으로. 모듈 옮길 때 `node --check` + `npm test`로 회귀 확인 필수.
+
+---
+
 ## 앱 구조 (app.js)
 
-단일 IIFE(`(function() { ... })()`) 안에 모든 로직이 있습니다.
+단일 IIFE(`(function() { ... })()`) 안에 코어 로직(상태, 렌더, 이벤트, 데이터 레이어, 공용 유틸)이 있고, 도메인 로직은 `js/` 모듈에서 주입받습니다.
 
 ### 상태 관리
 - `data` — localStorage에서 불러온 영구 데이터 (decks, matches, tournaments, settings)
@@ -158,7 +211,7 @@ node tools/refresh-card-data.js
 node tools/refresh-card-data.js --version=20260527-card-data
 ```
 
-GitHub에 올릴 파일: `index.html`, `app.js`, `styles.css`, `card-catalog.js`, `korean-card-effects.js`, `sw.js`, `tools/`
+GitHub에 올릴 파일: `index.html`, `app.js`, `js/`, `styles.css`, `card-catalog.js`, `korean-card-effects.js`, `sw.js`, `tools/`, `tests/`, `package.json`
 
 ---
 
@@ -184,6 +237,10 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 ## 이미 구현된 것 (제안 전 확인)
 
 - 덱 카드 수량 +/- 버튼 — `renderDeckListRow()`의 `deck-count-stepper` 완전 구현됨
+- 덱 코드 복사 (digimonmeta 호환 배열) — 덱 카드 `copy-deck-code` 버튼 / `deckExportCodeText()`
+- 덱 JSON 내보내기/가져오기 — `export-deck`(다운로드), 가져오기 모달(텍스트·JSON·파일)
+- 대회 카드 라운드 전적 인라인 수정 — `renderTournamentCard()`의 행별 ✎ (`edit-match`)
+- 설정 → X(트위터) 문의 카드 — `renderContactSettingsCard()`
 
 ---
 
@@ -192,3 +249,12 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - `api/` 폴더가 git에서 누락되면 카드 이미지 프록시(`/api/card-image`)가 깨집니다.
 - `deck-recipe-template.js`는 버전 쿼리가 `20260516-docx`로 고정되어 있습니다 (내용 변경 시만 갱신).
 - Supabase publishable key는 공개 키이므로 커밋해도 무방합니다.
+- `js/` 모듈은 **`app.js`보다 먼저 로드**되어야 합니다(`window.JJM.*` 의존). `index.html`의 `<script>` 순서를 깨지 말 것.
+- 모듈에 `data`를 직접 주입하면 재할당 시 stale 스냅샷이 됩니다 — 반드시 `getData: () => data` 게터 사용.
+- node 테스트는 브라우저 API(canvas/네트워크/OAuth)를 못 잡습니다. 덱 레시피·공유 이미지·클라우드 로그인은 **배포 후 실기기 확인** 필요. 로컬 점검은 `node preview-server.cjs` (포트 8787).
+
+---
+
+## 향후 분리 후보 (트랙 B 잔여, 고위험)
+
+`store`(데이터 레이어: loadData/saveData/normalize*/recovery/undo), views(렌더 함수군), controller(`handleAction` + 이벤트 리스너)는 `data`/`state` 컨테이너 전면 도입이 필요한 최고난도 영역입니다. 별도 세션에서 신중히 진행 권장(`render`↔`handleAction` 상호 호출 + 528곳의 data/state 참조).

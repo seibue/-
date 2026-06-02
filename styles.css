@@ -1170,7 +1170,7 @@ button:disabled {
 
 .tournament-summary strong,
 .tournament-summary span,
-.tournament-round-list span {
+.tournament-round-item {
   display: inline-flex;
   align-items: center;
   min-height: 24px;
@@ -1196,11 +1196,38 @@ button:disabled {
   margin-top: 8px;
 }
 
-.tournament-round-list span {
+.tournament-round-item {
+  gap: 6px;
+  padding-right: 3px;
+}
+
+.tournament-round-item .round-item-text {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.tournament-round-item .round-item-edit {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid rgba(25, 231, 255, 0.32);
+  border-radius: 4px;
+  background: rgba(25, 231, 255, 0.08);
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tournament-round-item .round-item-edit:hover {
+  background: rgba(25, 231, 255, 0.18);
 }
 
 .tournament-card > .match-memo {

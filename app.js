@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260602-remove-newdeck-input";
+  const APP_VERSION = "20260602-tournament-match-edit";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3978,9 +3978,12 @@
           ${recent
             .map(
               (match) => `
-                <span>${escapeHTML(roundText(match) || "일반")} · vs ${escapeHTML(match.opponent || "상대 미기록")} · ${escapeHTML(
-                  match.matchFormat === "match" ? matchScoreValue(match) : resultLabel(match.result)
-                )}</span>
+                <div class="tournament-round-item">
+                  <span class="round-item-text">${escapeHTML(roundText(match) || "일반")} · vs ${escapeHTML(match.opponent || "상대 미기록")} · ${escapeHTML(
+                    match.matchFormat === "match" ? matchScoreValue(match) : resultLabel(match.result)
+                  )}</span>
+                  <button class="round-item-edit" type="button" title="이 전적 수정" data-action="edit-match" data-id="${escapeHTML(match.id)}">✎</button>
+                </div>
               `
             )
             .join("")}

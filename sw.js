@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-remove-newdeck-input";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-tournament-match-edit";
 const CORE_ASSETS = [
   "/",
   "/index.html",

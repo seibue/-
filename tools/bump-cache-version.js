@@ -32,6 +32,7 @@ updateFile("index.html", [
   [/js\/card-effects\.js\?v=[^"]+/g, `js/card-effects.js?v=${version}`],
   [/js\/deck-import\.js\?v=[^"]+/g, `js/deck-import.js?v=${version}`],
   [/js\/stats\.js\?v=[^"]+/g, `js/stats.js?v=${version}`],
+  [/js\/deck\.js\?v=[^"]+/g, `js/deck.js?v=${version}`],
   [/app\.js\?v=[^"]+/g, `app.js?v=${version}`],
 ]);
 

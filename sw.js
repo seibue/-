@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a3-share";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a4-effects";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -6,6 +6,7 @@ const CORE_ASSETS = [
   "/js/format.js",
   "/js/docx-export.js",
   "/js/share-image.js",
+  "/js/card-effects.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

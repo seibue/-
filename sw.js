@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-deck-export-code";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-deck-import-module";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -8,6 +8,7 @@ const CORE_ASSETS = [
   "/js/docx-export.js",
   "/js/share-image.js",
   "/js/card-effects.js",
+  "/js/deck-import.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

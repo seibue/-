@@ -30,6 +30,7 @@ updateFile("index.html", [
   [/js\/docx-export\.js\?v=[^"]+/g, `js/docx-export.js?v=${version}`],
   [/js\/share-image\.js\?v=[^"]+/g, `js/share-image.js?v=${version}`],
   [/js\/card-effects\.js\?v=[^"]+/g, `js/card-effects.js?v=${version}`],
+  [/js\/deck-import\.js\?v=[^"]+/g, `js/deck-import.js?v=${version}`],
   [/app\.js\?v=[^"]+/g, `app.js?v=${version}`],
 ]);
 

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260602-tournament-all-records";
+  const APP_VERSION = "20260602-contact-x";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -4417,6 +4417,7 @@
         </article>
         ${isAdminUser() ? renderCardDataSettingsCard() : ""}
         ${renderInstallSettingsCard()}
+        ${renderContactSettingsCard()}
         <article class="settings-card">
           <h2 class="settings-title" style="color: var(--danger);">위험 구역</h2>
           <div class="mini-text">${state.authUser ? "저장된 모든 전적, 덱, 설정을 이 기기와 클라우드에서 초기화합니다." : "저장된 모든 전적, 덱, 설정을 초기화합니다."}</div>
@@ -4425,6 +4426,18 @@
           </div>
         </article>
       </section>
+    `;
+  }
+
+  function renderContactSettingsCard() {
+    return `
+      <article class="settings-card">
+        <h2 class="settings-title">문의하기</h2>
+        <div class="mini-text">앱을 쓰면서 불편한 점이나 버그, 건의사항이 있으면 운영자 X(트위터)로 알려 주세요. 프로필에서 DM 또는 멘션으로 문의할 수 있습니다.</div>
+        <div class="backup-row">
+          <a class="control-button active" href="https://x.com/Jindory_K_YP" target="_blank" rel="noopener noreferrer" style="display: grid; place-items: center; text-decoration: none;">X로 문의하기 (@Jindory_K_YP)</a>
+        </div>
+      </article>
     `;
   }
 

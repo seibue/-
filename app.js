@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260602-module-a4-effects";
+  const APP_VERSION = "20260602-module-a5-diagnostics";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -170,6 +170,25 @@
   let deckSearchTimer = null;
   let cloudSaveTimer = null;
   const effectLoadingCards = new Set();
+
+  // 모듈 분리 A5: 진단(diagnostics)은 js/diagnostics.js 로 이동.
+  // recordDiagnostic 은 다른 모듈/전역에서도 쓰여 가장 먼저 생성해 주입합니다.
+  // data 는 재할당되므로 getData() 게터로 넘깁니다 (state 는 참조 주입).
+  const { recordDiagnostic, diagnosticStatusInfo, downloadDiagnostics, clearDiagnostics } = window.JJM.diagnostics.createDiagnostics({
+    DIAGNOSTIC_KEY,
+    APP_VERSION,
+    getData: () => data,
+    state,
+    formatSyncTime,
+    userEmail,
+    cloudStatusText,
+    dataSummary,
+    safeJsonSize,
+    cardDataSummary,
+    todayISO,
+    notifyToast,
+    render,
+  });
 
   // 모듈 분리 A3: 공유 이미지(캔버스) 생성/다운로드는 js/share-image.js 로 이동.
   // 캔버스/DOM/네트워크/상태 의존이 많아 의존성 주입으로 연결합니다 (동작 변경 없음).
@@ -710,83 +729,6 @@
     } catch (error) {
       return 0;
     }
-  }
-
-  function diagnosticEntries() {
-    try {
-      const entries = JSON.parse(localStorage.getItem(DIAGNOSTIC_KEY) || "[]");
-      return Array.isArray(entries) ? entries.slice(0, 40) : [];
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function safeDiagnosticDetail(detail) {
-    if (!detail || typeof detail !== "object") return {};
-    try {
-      return JSON.parse(JSON.stringify(detail));
-    } catch (error) {
-      return { note: "detail serialization failed" };
-    }
-  }
-
-  function recordDiagnostic(type, message = "", detail = {}) {
-    try {
-      const entry = {
-        at: new Date().toISOString(),
-        type: String(type || "event").slice(0, 80),
-        message: String(message || "").slice(0, 500),
-        detail: safeDiagnosticDetail(detail),
-        appVersion: APP_VERSION,
-        url: window.location.href,
-        userAgent: navigator.userAgent,
-      };
-      const entries = [entry, ...diagnosticEntries()].slice(0, 40);
-      localStorage.setItem(DIAGNOSTIC_KEY, JSON.stringify(entries));
-    } catch (error) {
-      console.warn("Diagnostic record failed", error);
-    }
-  }
-
-  function diagnosticStatusInfo() {
-    const entries = diagnosticEntries();
-    if (!entries.length) return { tone: "ok", label: "정상", detail: "기록 없음", count: 0 };
-    const latest = entries[0];
-    const hasCritical = entries.some((entry) => /error|failed|rejection/i.test(entry.type));
-    return {
-      tone: hasCritical ? "warn" : "busy",
-      label: `${entries.length}건`,
-      detail: `${latest.type} · ${formatSyncTime(latest.at) || "방금"}`,
-      count: entries.length,
-    };
-  }
-
-  function diagnosticPayload() {
-    return {
-      generatedAt: new Date().toISOString(),
-      site: "전적몬",
-      appVersion: APP_VERSION,
-      url: window.location.href,
-      userAgent: navigator.userAgent,
-      userEmail: userEmail(),
-      online: navigator.onLine,
-      sync: {
-        cloudStatus: cloudStatusText(),
-        cloudUpdatedAt: state.cloudUpdatedAt,
-        cloudError: state.cloudError,
-        localSavedAt: state.localSavedAt,
-        localSaveError: state.localSaveError,
-      },
-      data: {
-        summary: dataSummary(),
-        decks: data.decks.length,
-        tournaments: data.tournaments.length,
-        matches: data.matches.length,
-        bytes: safeJsonSize(data),
-      },
-      cardData: cardDataSummary(),
-      diagnostics: diagnosticEntries(),
-    };
   }
 
   function userEmail() {
@@ -5861,23 +5803,6 @@
     notifyToast("카드 데이터 상태 저장", `${summary.catalogCount.toLocaleString("ko-KR")}장 카탈로그`, "success");
   }
 
-  function downloadDiagnostics() {
-    const payload = diagnosticPayload();
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `jeonjeokmon-diagnostics-${todayISO()}.json`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-    notifyToast("진단 파일 저장", `${payload.diagnostics.length}건 기록 포함`, "success");
-  }
-
-  function clearDiagnostics() {
-    localStorage.removeItem(DIAGNOSTIC_KEY);
-    notifyToast("진단 기록 비움", "새로 생기는 문제만 다시 기록합니다.", "success");
-    if (state.tab === "settings") render();
-  }
 
   document.addEventListener(
     "error",

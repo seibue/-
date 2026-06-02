@@ -1,8 +1,9 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a4-effects";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a5-diagnostics";
 const CORE_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
+  "/js/diagnostics.js",
   "/js/format.js",
   "/js/docx-export.js",
   "/js/share-image.js",

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260602-tournament-match-edit";
+  const APP_VERSION = "20260602-tournament-all-records";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -3969,7 +3969,7 @@
     const matches = tournamentMatches(tournament.id);
     const stats = statsFromMatches(matches);
     const stageSummary = tournamentStageSummary(matches, tournament.format);
-    const recent = [...matches].slice(-4).reverse();
+    const recent = [...matches].reverse();
     const nextAction = tournamentNextActionText(tournament);
     const progress = tournamentRoundProgress(tournament);
     const finalSummary = tournamentFinalSummaryText(tournament);

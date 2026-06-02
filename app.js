@@ -3,8 +3,25 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260602-contact-x";
+  const APP_VERSION = "20260602-module-a1-format";
   const root = document.getElementById("app");
+
+  // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
+  // (app.js 보다 먼저 로드되어 window.JJM.format 으로 제공됨)
+  const {
+    uid,
+    escapeHTML,
+    todayISO,
+    formatDate,
+    resultLabel,
+    resultShortLabel,
+    playOrderLabel,
+    resultFromGameStats,
+    singleGameStats,
+    normalizeGameStats,
+    emptyRecordStats,
+    finalizeRecordStats,
+  } = window.JJM.format;
 
   const colorMap = {
     red: "#ef4444",
@@ -1357,39 +1374,6 @@
     render();
   }
 
-  function uid(prefix) {
-    return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-  }
-
-  function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, (char) => {
-      const map = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      };
-      return map[char];
-    });
-  }
-
-  function todayISO() {
-    const date = new Date();
-    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-    return date.toISOString().slice(0, 10);
-  }
-
-  function formatDate(value) {
-    if (!value) return "날짜 없음";
-    const date = new Date(`${value}T00:00:00`);
-    return new Intl.DateTimeFormat("ko-KR", {
-      month: "short",
-      day: "numeric",
-      weekday: "short",
-    }).format(date);
-  }
-
   function getDeck(id) {
     return data.decks.find((deck) => deck.id === id);
   }
@@ -2038,44 +2022,6 @@
     return value === expected ? " checked" : "";
   }
 
-  function resultLabel(result) {
-    return {
-      win: "승리",
-      loss: "패배",
-      draw: "무승부",
-    }[result] || "기록";
-  }
-
-  function resultShortLabel(result) {
-    return {
-      win: "승",
-      loss: "패",
-      draw: "무",
-    }[result] || "기록";
-  }
-
-  function resultFromGameStats(stats) {
-    if ((Number(stats.gameWins) || 0) > (Number(stats.gameLosses) || 0)) return "win";
-    if ((Number(stats.gameWins) || 0) < (Number(stats.gameLosses) || 0)) return "loss";
-    return "draw";
-  }
-
-  function singleGameStats(result) {
-    return {
-      gameWins: result === "win" ? 1 : 0,
-      gameLosses: result === "loss" ? 1 : 0,
-      gameDraws: result === "draw" ? 1 : 0,
-    };
-  }
-
-  function normalizeGameStats(wins, losses, draws, fallbackResult = "win") {
-    const gameWins = Math.max(0, Math.min(9, Number(wins) || 0));
-    const gameLosses = Math.max(0, Math.min(9, Number(losses) || 0));
-    const gameDraws = Math.max(0, Math.min(9, Number(draws) || 0));
-    if (gameWins + gameLosses + gameDraws) return { gameWins, gameLosses, gameDraws };
-    return singleGameStats(fallbackResult);
-  }
-
   function gameStatsFromScore(score) {
     const option = MATCH_SCORE_OPTIONS.find(([value]) => value === score) || MATCH_SCORE_OPTIONS[0];
     return { gameWins: option[1], gameLosses: option[2], gameDraws: option[3] };
@@ -2099,10 +2045,6 @@
     return "단판";
   }
 
-  function emptyRecordStats() {
-    return { total: 0, wins: 0, losses: 0, draws: 0, gameTotal: 0, gameWins: 0, gameLosses: 0, gameDraws: 0 };
-  }
-
   function addMatchToStats(stats, match) {
     stats.total += 1;
     if (match.result === "win") stats.wins += 1;
@@ -2114,22 +2056,6 @@
     stats.gameDraws += gameStats.gameDraws;
     stats.gameTotal += gameStats.gameWins + gameStats.gameLosses + gameStats.gameDraws;
     return stats;
-  }
-
-  function finalizeRecordStats(stats) {
-    return {
-      ...stats,
-      rate: stats.total ? Math.round((stats.wins / stats.total) * 100) : 0,
-      gameRate: stats.gameTotal ? Math.round((stats.gameWins / stats.gameTotal) * 100) : 0,
-    };
-  }
-
-  function playOrderLabel(order) {
-    return {
-      first: "선공",
-      second: "후공",
-      unknown: "선후공 미상",
-    }[order] || "선후공 미상";
   }
 
   function colorDots(colors) {

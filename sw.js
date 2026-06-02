@@ -1,8 +1,9 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-contact-x";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a1-format";
 const CORE_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
+  "/js/format.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

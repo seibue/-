@@ -25,6 +25,7 @@ updateFile("index.html", [
   [/styles\.css\?v=[^"]+/g, `styles.css?v=${version}`],
   [/card-catalog\.js\?v=[^"]+/g, `card-catalog.js?v=${version}`],
   [/korean-card-effects\.js\?v=[^"]+/g, `korean-card-effects.js?v=${version}`],
+  [/js\/format\.js\?v=[^"]+/g, `js/format.js?v=${version}`],
   [/app\.js\?v=[^"]+/g, `app.js?v=${version}`],
 ]);
 

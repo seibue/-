@@ -1,0 +1,10 @@
+{
+  "name": "jeonjeokmon",
+  "version": "1.0.0",
+  "description": "디지몬 카드게임 전적·덱·대회 기록 PWA",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check app.js && node --check sw.js"
+  }
+}

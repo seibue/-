@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-fix-korean-deck-header";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-stats-module";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -9,6 +9,7 @@ const CORE_ASSETS = [
   "/js/share-image.js",
   "/js/card-effects.js",
   "/js/deck-import.js",
+  "/js/stats.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

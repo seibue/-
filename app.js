@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260602-fix-korean-deck-header";
+  const APP_VERSION = "20260602-stats-module";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -246,6 +246,33 @@
     getData: () => data,
     cardTypeLabels,
     REMOTE_CARD_API_URL,
+  });
+
+  // 트랙 B: 통계/매치업 계산은 js/stats.js 로 이동.
+  // 렌더링/공유 텍스트/홈 빌더는 app.js에 잔류, 계산 코어만 DI로 연결.
+  const {
+    statsFromMatches,
+    statsForDeckCard,
+    statsForDeck,
+    summaryStats,
+    normalizeOpponentDeckName,
+    matchupOpponentKey,
+    deckMatchupRows,
+    stageStatsFromMatches,
+    tournamentStageSummary,
+    validMatchupDeckId,
+    validMatchupOpponent,
+    matchesForMatchup,
+    matchupBreakdownRows,
+  } = window.JJM.stats.createStats({
+    getData: () => data,
+    state,
+    deckName,
+    matchDateTime,
+    shareRecordText,
+    emptyRecordStats,
+    addMatchToStats,
+    finalizeRecordStats,
   });
 
   function createDefaultData() {
@@ -2065,11 +2092,6 @@
     return cardTypeLabels[type] || cardTypeLabels.other;
   }
 
-  function statsForDeckCard(deckId, card) {
-    const matches = data.matches.filter((match) => match.deckId === deckId);
-    return statsFromMatches(matches);
-  }
-
   function getFilteredMatches() {
     const query = state.filters.query.trim().toLowerCase();
     return [...data.matches]
@@ -2093,65 +2115,6 @@
         return haystack.includes(query);
       })
       .sort((a, b) => `${b.date || ""}${b.createdAt || ""}`.localeCompare(`${a.date || ""}${a.createdAt || ""}`));
-  }
-
-  function statsForDeck(deckId) {
-    const matches = data.matches.filter((match) => match.deckId === deckId);
-    return statsFromMatches(matches);
-  }
-
-  function summaryStats() {
-    return statsFromMatches(data.matches);
-  }
-
-  function normalizeOpponentDeckName(value) {
-    return String(value || "")
-      .trim()
-      .replace(/\s+/g, " ");
-  }
-
-  function matchupOpponentKey(value) {
-    return normalizeOpponentDeckName(value).toLowerCase();
-  }
-
-  function deckMatchupRows(deckId = "", limit = 12) {
-    const rows = new Map();
-
-    data.matches.forEach((match) => {
-      const opponent = normalizeOpponentDeckName(match.opponent);
-      if (deckId && match.deckId !== deckId) return;
-      if (!match.deckId || !opponent) return;
-
-      const key = `${match.deckId}::${opponent.toLowerCase()}`;
-      if (!rows.has(key)) {
-        rows.set(key, {
-          deckId: match.deckId,
-          deckName: deckName(match.deckId),
-          opponent,
-          ...emptyRecordStats(),
-        });
-      }
-
-      const row = rows.get(key);
-      addMatchToStats(row, match);
-    });
-
-    return [...rows.values()]
-      .map(finalizeRecordStats)
-      .sort(
-        (a, b) =>
-          b.total - a.total ||
-          b.rate - a.rate ||
-          a.deckName.localeCompare(b.deckName, "ko") ||
-          a.opponent.localeCompare(b.opponent, "ko")
-      )
-      .slice(0, limit || undefined);
-  }
-
-  function statsFromMatches(matches) {
-    const stats = emptyRecordStats();
-    matches.forEach((match) => addMatchToStats(stats, match));
-    return finalizeRecordStats(stats);
   }
 
   function shareDateValue() {
@@ -2182,26 +2145,6 @@
 
   function hasMatchGameBreakdown(stats) {
     return Boolean(stats?.gameTotal && stats.gameTotal !== stats.total);
-  }
-
-  function stageStatsFromMatches(matches, stage) {
-    return finalizeRecordStats(
-      matches.filter((match) => (match.roundStage || "none") === stage).reduce((stats, match) => addMatchToStats(stats, match), emptyRecordStats())
-    );
-  }
-
-  function tournamentStageSummary(matches, format = "mixed") {
-    const swiss = stageStatsFromMatches(matches, "swiss");
-    const top = stageStatsFromMatches(matches, "top");
-    const none = stageStatsFromMatches(matches, "none");
-    const parts = [];
-    if (swiss.total) parts.push(`스위스 ${shareRecordText(swiss)}`);
-    if (top.total) parts.push(`토너먼트 ${shareRecordText(top)}`);
-    if (none.total) {
-      const fallbackLabel = format === "swiss" ? "스위스" : format === "top" ? "토너먼트" : "라운드 미구분";
-      parts.push(`${fallbackLabel} ${shareRecordText(none)}`);
-    }
-    return parts.join(" / ");
   }
 
   function matchesForShareDate(date) {
@@ -2439,37 +2382,6 @@
         </div>
       </div>
     `;
-  }
-
-  function validMatchupDeckId(deckRows) {
-    if (deckRows.some((row) => row.deck.id === state.matchupDeckId)) return state.matchupDeckId;
-    return deckRows[0]?.deck.id || "";
-  }
-
-  function validMatchupOpponent(matchupRows) {
-    const selectedKey = matchupOpponentKey(state.matchupOpponent);
-    const selected = matchupRows.find((row) => matchupOpponentKey(row.opponent) === selectedKey);
-    return selected?.opponent || matchupRows[0]?.opponent || "";
-  }
-
-  function matchesForMatchup(deckId, opponent) {
-    const opponentKey = matchupOpponentKey(opponent);
-    return data.matches
-      .filter((match) => match.deckId === deckId && matchupOpponentKey(match.opponent) === opponentKey)
-      .sort((a, b) => matchDateTime(b) - matchDateTime(a) || String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
-  }
-
-  function matchupBreakdownRows(matches, field, labels = {}) {
-    const rows = new Map();
-    matches.forEach((match) => {
-      const rawValue = match[field] || "unknown";
-      const label = labels[rawValue] || rawValue || "미기록";
-      if (!rows.has(label)) rows.set(label, []);
-      rows.get(label).push(match);
-    });
-    return [...rows.entries()]
-      .map(([label, rowMatches]) => ({ label, stats: statsFromMatches(rowMatches) }))
-      .sort((a, b) => b.stats.total - a.stats.total || b.stats.rate - a.stats.rate || a.label.localeCompare(b.label, "ko"));
   }
 
   function matchupCardRows(deckId, matches) {

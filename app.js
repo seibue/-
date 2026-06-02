@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260602-module-a5-diagnostics";
+  const APP_VERSION = "20260602-deck-export-code";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3198,7 +3198,8 @@
             <button class="icon-button" type="button" title="덱 레시피 인쇄" data-action="print-deck" data-id="${escapeHTML(deck.id)}">⎙</button>
             <button class="icon-button text-icon" type="button" title="DOCX 다운로드" data-action="download-deck-docx" data-id="${escapeHTML(deck.id)}">DOCX</button>
             <button class="icon-button text-icon" type="button" title="덱 이미지 저장" data-action="download-deck-image" data-id="${escapeHTML(deck.id)}">PNG</button>
-            <button class="icon-button text-icon" type="button" title="덱 내보내기" data-action="export-deck" data-id="${escapeHTML(deck.id)}">내보내기</button>
+            <button class="icon-button text-icon" type="button" title="덱 내보내기 (JSON 파일)" data-action="export-deck" data-id="${escapeHTML(deck.id)}">내보내기</button>
+            <button class="icon-button text-icon" type="button" title="덱 코드 복사 (다른 프로그램용)" data-action="copy-deck-code" data-id="${escapeHTML(deck.id)}">코드복사</button>
             <button class="icon-button" type="button" title="복사" data-action="clone-deck" data-id="${escapeHTML(deck.id)}">⧉</button>
             <button class="icon-button" type="button" title="삭제" data-action="delete-deck" data-id="${escapeHTML(deck.id)}">×</button>
           </div>
@@ -4978,6 +4979,11 @@
       if (deck) downloadDeckExport(deck);
       return;
     }
+    if (action === "copy-deck-code") {
+      const deck = getDeck(target.dataset.id);
+      if (deck) copyDeckExportCode(deck);
+      return;
+    }
     if (action === "print-deck") {
       const deck = getDeck(target.dataset.id);
       if (deck) printDeckRecipe(deck);
@@ -5349,6 +5355,35 @@
       "디지타마",
       ...eggCards.map(cardLine),
     ].join("\n");
+  }
+
+  function deckExportCodeText(deck) {
+    const cards = deckCards(deck);
+    const mainCards = sortDeckCards(cards.filter((card) => card.type !== "digiEgg"));
+    const eggCards = sortDeckCards(cards.filter((card) => card.type === "digiEgg"));
+    const entries = ["Exported from digimonmeta.com"];
+    [...mainCards, ...eggCards].forEach((card) => {
+      const cardNumber = String(card.cardNumber || "").trim().toUpperCase();
+      if (!cardNumber) return;
+      const count = Math.max(0, Math.floor(Number(card.count) || 0));
+      for (let index = 0; index < count; index += 1) entries.push(cardNumber);
+    });
+    return JSON.stringify(entries);
+  }
+
+  async function copyDeckExportCode(deck) {
+    const printableDeck = normalizeDeck(deck || {});
+    if (!deckCards(printableDeck).length) {
+      alert("내보낼 카드가 없습니다. 덱을 먼저 구성해 주세요.");
+      return;
+    }
+    const code = deckExportCodeText(printableDeck);
+    try {
+      await navigator.clipboard.writeText(code);
+      notifyToast("덱 코드 복사 완료", "다른 프로그램의 덱 가져오기에 붙여넣을 수 있습니다.", "success");
+    } catch (error) {
+      window.prompt("아래 덱 코드를 복사해 주세요.", code);
+    }
   }
 
   function createDeckExportPayload(deck) {

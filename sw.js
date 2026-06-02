@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-module-a5-diagnostics";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-deck-export-code";
 const CORE_ASSETS = [
   "/",
   "/index.html",

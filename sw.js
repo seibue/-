@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260603-cloud-module";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-stats-period-meta";
 const CORE_ASSETS = [
   "/",
   "/index.html",

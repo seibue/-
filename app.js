@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-cloud-module";
+  const APP_VERSION = "20260603-stats-period-meta";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -140,6 +140,7 @@
     deckCardFilters: createDefaultDeckCardFilters(),
     matchupDeckId: "",
     matchupOpponent: "",
+    statsPeriod: "all",
     shareDate: "",
     deckImageLayout: data.settings?.deckImageLayout || "x",
     filters: {
@@ -264,6 +265,7 @@
     validMatchupOpponent,
     matchesForMatchup,
     matchupBreakdownRows,
+    opponentMetaRows,
   } = window.JJM.stats.createStats({
     getData: () => data,
     state,
@@ -2750,25 +2752,92 @@
     `;
   }
 
+  const STATS_PERIODS = [
+    ["all", "전체"],
+    ["month", "이번 달"],
+    ["30d", "최근 30일"],
+    ["7d", "최근 7일"],
+  ];
+  // 메타 대시보드에서 제외할 대전 유형 (가벼운 테스트 판은 메타 통계에 넣지 않음)
+  const META_EXCLUDED_MATCH_TYPES = ["테스트 플레이"];
+
+  function statsPeriodFromValue(value) {
+    return STATS_PERIODS.some(([key]) => key === value) ? value : "all";
+  }
+
+  function statsPeriodStartMs(period) {
+    const now = new Date();
+    if (period === "7d") return Date.now() - 7 * 24 * 60 * 60 * 1000;
+    if (period === "30d") return Date.now() - 30 * 24 * 60 * 60 * 1000;
+    if (period === "month") return new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+    return -Infinity;
+  }
+
+  function statsScopedMatches() {
+    const period = statsPeriodFromValue(state.statsPeriod);
+    if (period === "all") return data.matches;
+    const start = statsPeriodStartMs(period);
+    return data.matches.filter((match) => matchDateTime(match) >= start);
+  }
+
+  function renderStatsPeriodChips() {
+    const active = statsPeriodFromValue(state.statsPeriod);
+    return `
+      <div class="stats-period-row">
+        ${STATS_PERIODS.map(
+          ([key, label]) => `
+            <button class="control-button ${key === active ? "active" : ""}" type="button" data-action="set-stats-period" data-period="${key}">${label}</button>
+          `
+        ).join("")}
+      </div>
+    `;
+  }
+
+  function renderMetaDashboardCard(metaRows) {
+    if (!metaRows.length) return "";
+    const top = metaRows[0];
+    return `
+      <div class="settings-card" style="margin-top: 12px;">
+        <div class="settings-title-row">
+          <h2 class="settings-title">메타 대시보드</h2>
+          <span class="sync-badge ok">테스트 플레이 제외</span>
+        </div>
+        <div class="mini-text">선택한 기간에 가장 많이 만난 상대 덱과 승률입니다. 무엇을 대비해 덱을 짤지 참고하세요.</div>
+        <div class="bar-list">
+          ${metaRows
+            .map((row) => renderBar(`vs ${row.opponent}`, `${row.total}전 · ${row.wins}승 ${row.losses}패${row.draws ? ` ${row.draws}무` : ""} · 승률 ${row.rate}%`, row.rate))
+            .join("")}
+        </div>
+        <div class="mini-text" style="margin-top: 8px;">최다 상대: <strong>${escapeHTML(top.opponent)}</strong> (${top.total}전)</div>
+      </div>
+    `;
+  }
+
   function renderStatsView() {
-    const stats = summaryStats();
+    const scoped = statsScopedMatches();
+    const stats = statsFromMatches(scoped);
     const deckRows = data.decks
-      .map((deck) => ({ deck, stats: statsForDeck(deck.id) }))
+      .map((deck) => ({ deck, stats: statsFromMatches(scoped.filter((match) => match.deckId === deck.id)) }))
       .filter((row) => row.stats.total > 0)
       .sort((a, b) => b.stats.total - a.stats.total);
     const typeRows = data.matchTypes
       .map((type) => {
-        const total = data.matches.filter((match) => match.matchType === type).length;
+        const total = scoped.filter((match) => match.matchType === type).length;
         return { type, total };
       })
       .filter((row) => row.total > 0)
       .sort((a, b) => b.total - a.total);
+    const metaRows = opponentMetaRows(
+      scoped.filter((match) => !META_EXCLUDED_MATCH_TYPES.includes(match.matchType)),
+      8
+    );
     const selectedMatchupDeckId = validMatchupDeckId(deckRows);
-    const matchupRows = deckMatchupRows(selectedMatchupDeckId, 0);
+    const matchupRows = deckMatchupRows(selectedMatchupDeckId, 0, scoped);
     const selectedMatchupOpponent = validMatchupOpponent(matchupRows);
 
     return `
       <section>
+        ${renderStatsPeriodChips()}
         <div class="stats-grid">
           <article class="stat-card rate-card" style="--rate: ${stats.rate}%">
             <div class="rate-ring" aria-label="전체 승률 ${stats.rate}%"><span>${stats.rate}%</span></div>
@@ -2802,13 +2871,18 @@
                   ${typeRows.map((row) => renderBar(row.type, `${row.total}회`, Math.round((row.total / stats.total) * 100))).join("")}
                 </div>
               </div>
-              ${renderMatchupReportCard(deckRows, selectedMatchupDeckId, matchupRows, selectedMatchupOpponent)}
+              ${renderMetaDashboardCard(metaRows)}
+              ${renderMatchupReportCard(deckRows, selectedMatchupDeckId, matchupRows, selectedMatchupOpponent, scoped)}
             `
             : `
               <div class="empty-state">
                 <div class="empty-icon pixel-bars" aria-hidden="true"><span></span></div>
-                <div class="empty-title">아직 통계가 없습니다</div>
-                <div class="empty-copy">전적을 추가하면 승률과 덱별 기록이 표시됩니다</div>
+                <div class="empty-title">${statsPeriodFromValue(state.statsPeriod) === "all" ? "아직 통계가 없습니다" : "이 기간에 전적이 없습니다"}</div>
+                <div class="empty-copy">${
+                  statsPeriodFromValue(state.statsPeriod) === "all"
+                    ? "전적을 추가하면 승률과 덱별 기록이 표시됩니다"
+                    : "다른 기간을 선택하거나 전적을 추가해 주세요"
+                }</div>
               </div>
             `
         }
@@ -2835,10 +2909,10 @@
     `;
   }
 
-  function renderMatchupReportCard(deckRows, selectedDeckId, matchupRows, selectedOpponent) {
+  function renderMatchupReportCard(deckRows, selectedDeckId, matchupRows, selectedOpponent, scopedMatches = null) {
     const selectedRow = matchupRows.find((row) => matchupOpponentKey(row.opponent) === matchupOpponentKey(selectedOpponent));
     const selectedDeck = getDeck(selectedDeckId);
-    const matches = selectedRow ? matchesForMatchup(selectedDeckId, selectedRow.opponent) : [];
+    const matches = selectedRow ? matchesForMatchup(selectedDeckId, selectedRow.opponent, scopedMatches) : [];
     const matchupStats = selectedRow || statsFromMatches(matches);
     const playRows = matchupBreakdownRows(matches, "playOrder", {
       first: "선공",
@@ -4425,6 +4499,11 @@
     if (action === "edit-match") {
       state.modal = "match";
       state.editingMatchId = target.dataset.id;
+      render();
+      return;
+    }
+    if (action === "set-stats-period") {
+      state.statsPeriod = statsPeriodFromValue(target.dataset.period);
       render();
       return;
     }

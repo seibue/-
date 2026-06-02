@@ -102,6 +102,47 @@ test("matchesForMatchup: 덱+상대 키로 필터", () => {
   assert.equal(matches[0].date, "2026-06-02"); // 최신순 정렬
 });
 
+test("deckMatchupRows: sourceMatches 인자로 기간 범위 매치만 집계", () => {
+  const all = {
+    matches: [
+      { deckId: "a", opponent: "블루", result: "win" },
+      { deckId: "a", opponent: "블루", result: "loss" },
+    ],
+    decks: [],
+  };
+  const api = makeApi(all);
+  const scoped = [all.matches[0]]; // 기간 필터로 1건만 남았다고 가정
+  const rows = api.deckMatchupRows("a", 0, scoped);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].total, 1);
+  assert.equal(rows[0].wins, 1);
+});
+
+test("opponentMetaRows: 상대 덱 기준 묶음 + total 내림차순 (덱 구분 없음)", () => {
+  const api = makeApi();
+  const matches = [
+    { deckId: "a", opponent: "블루", result: "win" },
+    { deckId: "b", opponent: "블루", result: "loss" }, // 다른 덱이어도 상대가 같으면 합산
+    { deckId: "a", opponent: "레드", result: "win" },
+    { deckId: "a", opponent: "", result: "win" }, // 상대 미기록 제외
+  ];
+  const rows = api.opponentMetaRows(matches);
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].opponent, "블루");
+  assert.equal(rows[0].total, 2);
+  assert.equal(rows[0].wins, 1);
+});
+
+test("opponentMetaRows: limit 적용", () => {
+  const api = makeApi();
+  const matches = [
+    { deckId: "a", opponent: "블루", result: "win" },
+    { deckId: "a", opponent: "레드", result: "win" },
+    { deckId: "a", opponent: "옐로", result: "win" },
+  ];
+  assert.equal(api.opponentMetaRows(matches, 2).length, 2);
+});
+
 test("validMatchupDeckId / validMatchupOpponent: 선택값 유효성 폴백", () => {
   const api = makeApi({ matches: [], decks: [] }, { matchupDeckId: "x", matchupOpponent: "블루" });
   const deckRows = [{ deck: { id: "a" } }, { deck: { id: "b" } }];

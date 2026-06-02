@@ -56,10 +56,10 @@
       return normalizeOpponentDeckName(value).toLowerCase();
     }
 
-    function deckMatchupRows(deckId = "", limit = 12) {
+    function deckMatchupRows(deckId = "", limit = 12, sourceMatches = null) {
       const rows = new Map();
 
-      getData().matches.forEach((match) => {
+      (sourceMatches || getData().matches).forEach((match) => {
         const opponent = normalizeOpponentDeckName(match.opponent);
         if (deckId && match.deckId !== deckId) return;
         if (!match.deckId || !opponent) return;
@@ -121,11 +121,27 @@
       return selected?.opponent || matchupRows[0]?.opponent || "";
     }
 
-    function matchesForMatchup(deckId, opponent) {
+    function matchesForMatchup(deckId, opponent, sourceMatches = null) {
       const opponentKey = matchupOpponentKey(opponent);
-      return getData()
-        .matches.filter((match) => match.deckId === deckId && matchupOpponentKey(match.opponent) === opponentKey)
+      return (sourceMatches || getData().matches)
+        .filter((match) => match.deckId === deckId && matchupOpponentKey(match.opponent) === opponentKey)
         .sort((a, b) => matchDateTime(b) - matchDateTime(a) || String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+    }
+
+    // 메타 대시보드: 상대 덱 기준으로만 묶어 가장 많이 만난 상대 + 승률 (덱 구분 없음)
+    function opponentMetaRows(matches, limit = 8) {
+      const rows = new Map();
+      matches.forEach((match) => {
+        const opponent = normalizeOpponentDeckName(match.opponent);
+        if (!opponent) return;
+        const key = opponent.toLowerCase();
+        if (!rows.has(key)) rows.set(key, { opponent, ...emptyRecordStats() });
+        addMatchToStats(rows.get(key), match);
+      });
+      return [...rows.values()]
+        .map(finalizeRecordStats)
+        .sort((a, b) => b.total - a.total || b.rate - a.rate || a.opponent.localeCompare(b.opponent, "ko"))
+        .slice(0, limit || undefined);
     }
 
     function matchupBreakdownRows(matches, field, labels = {}) {
@@ -155,6 +171,7 @@
       validMatchupOpponent,
       matchesForMatchup,
       matchupBreakdownRows,
+      opponentMetaRows,
     };
   }
 

@@ -1586,6 +1586,19 @@ button:disabled {
   font-size: 16px;
 }
 
+.stats-period-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.stats-period-row .control-button {
+  flex: 1 1 auto;
+  min-width: 72px;
+  padding: 8px 10px;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

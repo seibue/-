@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260528-tournament-card-balance";
+  const APP_VERSION = "20260602-remove-newdeck-input";
   const root = document.getElementById("app");
 
   const colorMap = {
@@ -4882,10 +4882,6 @@
               </div>`
             : ""
         }
-        <label class="field">
-          <span>새 덱 이름</span>
-          <input class="input" name="newDeckName" placeholder="새 덱으로 기록할 때 입력" autocomplete="off" />
-        </label>
         <div class="form-row">
           <label class="field">
             <span>날짜</span>
@@ -5763,12 +5759,10 @@
     if (action === "select-match-deck") {
       const panel = target.closest(".modal-panel");
       const select = panel?.querySelector('[name="deckId"]');
-      const newDeckName = panel?.querySelector('[name="newDeckName"]');
       if (select) {
         select.value = target.dataset.id || "";
         select.focus();
       }
-      if (newDeckName) newDeckName.value = "";
       panel?.querySelectorAll(".quick-fill-chip[data-action='select-match-deck']").forEach((button) => {
         button.classList.toggle("active", button.dataset.id === select?.value);
       });
@@ -6022,11 +6016,9 @@
 
   function handleMatchSubmit(form, submitter = null) {
     const formData = new FormData(form);
-    const newDeckName = String(formData.get("newDeckName") || "").trim();
-    let deckId = String(formData.get("deckId") || "");
-    if (newDeckName) deckId = ensureDeck(newDeckName).id;
+    const deckId = String(formData.get("deckId") || "");
     if (!deckId) {
-      alert("덱을 선택하거나 새 덱 이름을 입력해 주세요.");
+      alert("덱을 선택해 주세요.");
       return;
     }
     const tournamentId = String(formData.get("tournamentId") || "");

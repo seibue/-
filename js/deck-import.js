@@ -186,11 +186,14 @@
             deckName = nameMatch[1].trim();
             return;
           }
-          if (/^(?:메인|메인\s*덱|main|main\s*deck|deck)\b/i.test(line)) {
+          // 헤더 뒤 경계는 \b 대신 (?=\s|$) 사용 — \b 는 한글 뒤에서 매칭되지 않아
+          // "메인"/"디지타마" 같은 한국어 단독 헤더가 인식되지 않던 버그를 수정.
+          // 또한 공식 표기 "Digi-Egg" 처럼 하이픈으로 구분된 헤더도 인식하도록 [\s-]* 허용.
+          if (/^(?:메인\s*덱|메인|main[\s-]*deck|main|deck)(?=\s|$)/i.test(line)) {
             sectionType = "main";
             return;
           }
-          if (/^(?:디지타마|digi\s*egg|digitama|egg)\b/i.test(line)) {
+          if (/^(?:디지타마|digi[\s-]*egg|digi[\s-]*tama|egg)(?=\s|$)/i.test(line)) {
             sectionType = "digiEgg";
             return;
           }

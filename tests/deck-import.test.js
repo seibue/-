@@ -65,6 +65,24 @@ test("parseDeckTextLine: 명시적 digiEgg 섹션이면 카탈로그 없어도 d
   assert.equal(card.level, "2");
 });
 
+test("parseDeckTextImport: 한국어 섹션 헤더('메인'/'디지타마')도 인식한다", () => {
+  // 카탈로그 없이도 '디지타마' 헤더로 섹션 전환되어 digiEgg 로 분류돼야 함
+  const api = makeApi();
+  const source = ["메인", "4 EX5-001 그레이몬", "디지타마", "4 BT1-001 코로몬"].join("\n");
+  const decks = api.parseDeckTextImport(source, "내 덱");
+  const main = decks[0].cards.find((c) => c.cardNumber === "EX5-001");
+  const egg = decks[0].cards.find((c) => c.cardNumber === "BT1-001");
+  assert.equal(main.type, "digimon");
+  assert.equal(egg.type, "digiEgg");
+});
+
+test("parseDeckTextImport: 영어 섹션 헤더(Main/Digi-Egg)도 인식한다", () => {
+  const api = makeApi();
+  const source = ["Main", "4 EX5-001 그레이몬", "Digi-Egg", "4 BT1-001 코로몬"].join("\n");
+  const decks = api.parseDeckTextImport(source, "내 덱");
+  assert.equal(decks[0].cards.find((c) => c.cardNumber === "BT1-001").type, "digiEgg");
+});
+
 test("decksFromJsonImport: 카드 배열만 있으면 단일 덱으로 감싼다", () => {
   const api = makeApi();
   const decks = api.decksFromJsonImport([{ cardNumber: "EX5-001" }], "내 덱");

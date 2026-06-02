@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260602-deck-import-module";
+const CACHE_NAME = "jeonjeokmon-shell-20260602-fix-korean-deck-header";
 const CORE_ASSETS = [
   "/",
   "/index.html",

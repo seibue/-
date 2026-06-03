@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260603-thumb-count-pos";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-card-search-boundary";
 const CORE_ASSETS = [
   "/",
   "/index.html",

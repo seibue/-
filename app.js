@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-thumb-count-pos";
+  const APP_VERSION = "20260603-card-search-boundary";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -1415,8 +1415,23 @@
     wrapper.append(fallback);
   }
 
+  // 카드 번호(이름/색/종류 제외) 텍스트
   function catalogSearchText(card) {
-    return `${card.no} ${card.no.replace(/-/g, "")} ${card.name} ${cardTypeLabel(card.type)} ${colorLabel(card.color)} ${colorLabel(card.color2)} ${card.rarity}`.toLowerCase();
+    return `${card.name} ${cardTypeLabel(card.type)} ${colorLabel(card.color)} ${colorLabel(card.color2)} ${card.rarity}`.toLowerCase();
+  }
+
+  // 카드 번호 검색은 세트코드 경계를 인식한다.
+  // "bt21" → 세트코드가 bt21로 시작하는 카드(BT21-xxx)만 매칭, BT2-1xx 는 제외.
+  function cardNumberMatchesQuery(cardNo, rawQuery) {
+    const q = String(rawQuery || "").toLowerCase().trim().replace(/\s+/g, "");
+    if (!q) return false;
+    const no = String(cardNo || "").toLowerCase();
+    if (q.includes("-")) return no.includes(q); // 하이픈 포함 질의는 경계가 보존되므로 부분일치
+    const [setCode, cardPart = ""] = no.split("-");
+    if (/^\d+$/.test(q)) return cardPart.startsWith(q); // 숫자만 → 카드번호로 검색
+    if (setCode.startsWith(q)) return true; // 세트코드 검색 (bt21 → BT21만)
+    if (q === setCode + cardPart) return true; // 하이픈 없는 전체 번호 정확검색
+    return false;
   }
 
   function deckCardFilters() {
@@ -1478,6 +1493,7 @@
       if (filters.levels.length && !filters.levels.includes(card.level)) return false;
       if (filters.setPrefix !== "all" && cardSetPrefix(card) !== filters.setPrefix) return false;
       if (!query) return true;
+      if (cardNumberMatchesQuery(card.no, query)) return true;
       const searchText = catalogSearchText(card);
       return searchText.includes(query) || normalizeCatalogQuery(searchText).includes(compactQuery);
     }).sort(compareCatalogCards);

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-mobile-deck-stepper";
+  const APP_VERSION = "20260603-catalog-dedup";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -74,9 +74,20 @@
     ["swiss", "스위스"],
     ["top", "토너먼트"],
   ];
-  const CARD_CATALOG = Array.isArray(window.DIGIMON_CARD_CATALOG)
-    ? window.DIGIMON_CARD_CATALOG.map((card, index) => normalizeCatalogCard(card, index)).filter((card) => card.no && card.name)
-    : [];
+  // 같은 카드 번호의 다른 아트/레어도 중복은 덱 구성에 불필요하므로 번호 기준 1개만 유지
+  // (카드 목록은 첫 등장(보통 기본 레어도)을 대표로 사용)
+  const CARD_CATALOG = (() => {
+    const source = Array.isArray(window.DIGIMON_CARD_CATALOG) ? window.DIGIMON_CARD_CATALOG : [];
+    const seen = new Set();
+    const list = [];
+    source.forEach((card, index) => {
+      const normalized = normalizeCatalogCard(card, index);
+      if (!normalized.no || !normalized.name || seen.has(normalized.no)) return;
+      seen.add(normalized.no);
+      list.push(normalized);
+    });
+    return list;
+  })();
   const REMOTE_CARD_API_URL = "https://digimoncard.io/api-public/search";
   const REMOTE_CARD_IMAGE_BASE_URL = "https://images.digimoncard.io/images/cards";
   const CARD_IMAGE_LOAD_TIMEOUT_MS = 7000;

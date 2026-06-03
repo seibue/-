@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260603-mobile-deck-stepper";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-catalog-dedup";
 const CORE_ASSETS = [
   "/",
   "/index.html",

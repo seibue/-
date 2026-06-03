@@ -4872,8 +4872,15 @@ button:disabled {
     display: flex;
   }
 
-  .deck-thumb-btn.minus {
+  /* − 와 장수 배지 위치 교체: 장수=좌상단, −=좌하단 */
+  .deck-thumb-count {
     top: 3px;
+    bottom: auto;
+    left: 3px;
+  }
+
+  .deck-thumb-btn.minus {
+    bottom: 3px;
     left: 3px;
   }
 

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-catalog-dedup";
+  const APP_VERSION = "20260603-deck-preview-scroll2";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2318,23 +2318,35 @@
     document.body.classList.toggle("deck-modal-open", state.modal === "deck");
   }
 
+  let pendingDeckScroll = null;
   function renderKeepingDeckScroll() {
-    const modalPanel = document.querySelector(".deck-modal-panel");
-    const catalogGrid = document.querySelector(".catalog-grid");
-    const deckList = document.querySelector(".hub-deck-list");
-    const scrollState = {
-      modal: modalPanel?.scrollTop || 0,
-      catalog: catalogGrid?.scrollTop || 0,
-      deckList: deckList?.scrollTop || 0,
-    };
+    // 데스크톱은 내부 컨테이너(.deck-modal-panel/.catalog-grid)가 스크롤되고,
+    // 모바일은 .deck-modal-backdrop(페이지)이 스크롤된다 → 양쪽 모두 저장/복원.
+    // 같은 틱에 두 번 호출되면(미리보기 열기 + 정발효과 캐시 후 재렌더) 두 번째는 이미
+    // 초기화된 스크롤(0)을 읽으므로, 첫 호출의 목표값을 유지해 덮어쓰기를 막는다.
+    if (!pendingDeckScroll) {
+      pendingDeckScroll = {
+        backdrop: document.querySelector(".deck-modal-backdrop")?.scrollTop || 0,
+        modal: document.querySelector(".deck-modal-panel")?.scrollTop || 0,
+        catalog: document.querySelector(".catalog-grid")?.scrollTop || 0,
+        deckList: document.querySelector(".hub-deck-list")?.scrollTop || 0,
+        window: window.scrollY || 0,
+      };
+    }
     render();
     window.requestAnimationFrame(() => {
+      if (!pendingDeckScroll) return;
+      const target = pendingDeckScroll;
+      pendingDeckScroll = null;
+      const nextModalBackdrop = document.querySelector(".deck-modal-backdrop");
       const nextModalPanel = document.querySelector(".deck-modal-panel");
       const nextCatalogGrid = document.querySelector(".catalog-grid");
       const nextDeckList = document.querySelector(".hub-deck-list");
-      if (nextModalPanel) nextModalPanel.scrollTop = scrollState.modal;
-      if (nextCatalogGrid) nextCatalogGrid.scrollTop = scrollState.catalog;
-      if (nextDeckList) nextDeckList.scrollTop = scrollState.deckList;
+      if (nextModalBackdrop) nextModalBackdrop.scrollTop = target.backdrop;
+      if (nextModalPanel) nextModalPanel.scrollTop = target.modal;
+      if (nextCatalogGrid) nextCatalogGrid.scrollTop = target.catalog;
+      if (nextDeckList) nextDeckList.scrollTop = target.deckList;
+      if (target.window) window.scrollTo(0, target.window);
     });
   }
 

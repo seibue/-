@@ -4850,26 +4850,45 @@ button:disabled {
     gap: 5px;
   }
 
-  /* 모바일: 오버레이 항상 표시 (호버 없음) */
+  /* 모바일: 오버레이 항상 표시 (호버 없음) — 4모서리에 컨트롤 배치 */
   .deck-thumb-overlay {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: none; /* 카드 art 탭(미리보기)은 통과, 버튼만 캡처 */
     background: rgba(0, 0, 0, 0);
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding: 3px;
+    display: block;
+    padding: 0;
+  }
+
+  .deck-thumb-btn {
+    position: absolute;
+    pointer-events: auto;
+    width: 28px;
+    height: 28px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
   }
 
   .deck-thumb-btn.minus,
   .deck-thumb-btn.plus {
-    display: none;
+    display: flex;
+  }
+
+  .deck-thumb-btn.minus {
+    top: 3px;
+    left: 3px;
+  }
+
+  .deck-thumb-btn.plus {
+    bottom: 3px;
+    right: 3px;
   }
 
   .deck-thumb-btn.remove {
+    top: 3px;
+    right: 3px;
     width: 22px;
     height: 22px;
     font-size: 11px;
-    background: rgba(255, 50, 70, 0.85);
+    background: rgba(255, 50, 70, 0.9);
   }
 
   .deck-tool-button {

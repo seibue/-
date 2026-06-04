@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-store-module";
+  const APP_VERSION = "20260603-a11y-pass";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -894,7 +894,7 @@
   function renderToastStack() {
     if (!state.toasts.length) return "";
     return `
-      <div class="toast-stack" data-toast-stack>
+      <div class="toast-stack" data-toast-stack role="status" aria-live="polite" aria-atomic="false">
         ${state.toasts
           .map(
             (toast) => `
@@ -910,7 +910,7 @@
                       : ""
                   }
                 </div>
-                <button class="toast-close" type="button" title="닫기" data-action="dismiss-toast" data-id="${escapeHTML(toast.id)}">×</button>
+                <button class="toast-close" type="button" title="닫기" aria-label="알림 닫기" data-action="dismiss-toast" data-id="${escapeHTML(toast.id)}">×</button>
               </div>
             `
           )
@@ -2215,7 +2215,7 @@
           ${tabs
             .map(
               ([id, label]) => `
-                <button class="tab-button ${state.tab === id ? "active" : ""}" type="button" data-tab="${id}">
+                <button class="tab-button ${state.tab === id ? "active" : ""}" type="button" data-tab="${id}"${state.tab === id ? ' aria-current="page"' : ""}>
                   ${label}
                 </button>
               `
@@ -2450,8 +2450,8 @@
           ${match.memo ? `<p class="match-memo">${escapeHTML(match.memo)}</p>` : ""}
         </div>
         <div class="card-actions">
-          <button class="icon-button" type="button" title="수정" data-action="edit-match" data-id="${escapeHTML(match.id)}">✎</button>
-          <button class="icon-button" type="button" title="삭제" data-action="delete-match" data-id="${escapeHTML(match.id)}">×</button>
+          <button class="icon-button" type="button" title="수정" aria-label="전적 수정" data-action="edit-match" data-id="${escapeHTML(match.id)}">✎</button>
+          <button class="icon-button" type="button" title="삭제" aria-label="전적 삭제" data-action="delete-match" data-id="${escapeHTML(match.id)}">×</button>
         </div>
       </article>
     `;
@@ -2595,8 +2595,8 @@
           <button class="icon-button text-icon" type="button" title="이 대회 전적 추가" data-action="open-match-for-tournament" data-id="${escapeHTML(tournament.id)}">${escapeHTML(nextAction)}</button>
           ${tournamentStageActionButton(tournament, "swiss", "스위스")}
           ${tournamentStageActionButton(tournament, "top", "토너먼트", "gold")}
-          <button class="icon-button" type="button" title="수정" data-action="edit-tournament" data-id="${escapeHTML(tournament.id)}">✎</button>
-          <button class="icon-button" type="button" title="삭제" data-action="delete-tournament" data-id="${escapeHTML(tournament.id)}">×</button>
+          <button class="icon-button" type="button" title="수정" aria-label="대회 수정" data-action="edit-tournament" data-id="${escapeHTML(tournament.id)}">✎</button>
+          <button class="icon-button" type="button" title="삭제" aria-label="대회 삭제" data-action="delete-tournament" data-id="${escapeHTML(tournament.id)}">×</button>
         </div>
         ${roundList}
         ${memo}
@@ -2656,15 +2656,15 @@
             ${deck.note ? `<div class="mini-text">${escapeHTML(deck.note)}</div>` : ""}
           </div>
           <div class="card-actions">
-            <button class="icon-button" type="button" title="수정" data-action="edit-deck" data-id="${escapeHTML(deck.id)}">✎</button>
-            <button class="icon-button" type="button" title="덱 레시피 인쇄" data-action="print-deck" data-id="${escapeHTML(deck.id)}">⎙</button>
+            <button class="icon-button" type="button" title="수정" aria-label="덱 수정" data-action="edit-deck" data-id="${escapeHTML(deck.id)}">✎</button>
+            <button class="icon-button" type="button" title="덱 레시피 인쇄" aria-label="덱 레시피 인쇄" data-action="print-deck" data-id="${escapeHTML(deck.id)}">⎙</button>
             <button class="icon-button text-icon" type="button" title="DOCX 다운로드" data-action="download-deck-docx" data-id="${escapeHTML(deck.id)}">DOCX</button>
             <button class="icon-button text-icon" type="button" title="덱 이미지 저장" data-action="download-deck-image" data-id="${escapeHTML(deck.id)}">PNG</button>
             <button class="icon-button text-icon" type="button" title="덱 내보내기 (JSON 파일)" data-action="export-deck" data-id="${escapeHTML(deck.id)}">내보내기</button>
             <button class="icon-button text-icon" type="button" title="덱 코드 복사 (다른 프로그램용)" data-action="copy-deck-code" data-id="${escapeHTML(deck.id)}">코드복사</button>
             <button class="icon-button text-icon" type="button" title="현재 구성을 버전으로 기록 (이후 전적이 이 버전에 집계)" data-action="save-deck-version" data-id="${escapeHTML(deck.id)}">버전</button>
-            <button class="icon-button" type="button" title="복사" data-action="clone-deck" data-id="${escapeHTML(deck.id)}">⧉</button>
-            <button class="icon-button" type="button" title="삭제" data-action="delete-deck" data-id="${escapeHTML(deck.id)}">×</button>
+            <button class="icon-button" type="button" title="복사" aria-label="덱 복사" data-action="clone-deck" data-id="${escapeHTML(deck.id)}">⧉</button>
+            <button class="icon-button" type="button" title="삭제" aria-label="덱 삭제" data-action="delete-deck" data-id="${escapeHTML(deck.id)}">×</button>
           </div>
         </div>
         <div class="deck-stats">
@@ -3374,7 +3374,7 @@
     return `
       <div class="card-preview-backdrop">
         <section class="card-preview-panel" role="dialog" aria-modal="true" aria-label="${escapeHTML(card.name)} 미리보기">
-          <button class="icon-button card-preview-close" type="button" title="닫기" data-action="close-card-preview">×</button>
+          <button class="icon-button card-preview-close" type="button" title="닫기" aria-label="미리보기 닫기" data-action="close-card-preview">×</button>
           <div class="card-preview-image">
             ${
               imageSrc
@@ -3472,7 +3472,7 @@
         <section class="modal-panel ${escapeHTML(className)}" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}">
           <div class="modal-head">
             <h2 class="modal-title">${escapeHTML(title)}</h2>
-            <button class="icon-button" type="button" title="닫기" data-action="close-modal">×</button>
+            <button class="icon-button" type="button" title="닫기" aria-label="닫기" data-action="close-modal">×</button>
           </div>
           <div class="modal-body">${body}</div>
           ${actions ? `<div class="modal-actions">${actions}</div>` : ""}
@@ -3908,13 +3908,13 @@
           </div>
         </div>
         <div class="deck-count-stepper">
-          <button class="step-button" type="button" data-action="decrement-deck-card" data-card-id="${escapeHTML(card.id)}">-</button>
+          <button class="step-button" type="button" aria-label="1장 빼기" data-action="decrement-deck-card" data-card-id="${escapeHTML(card.id)}">-</button>
           <input class="input count-input" data-card-field="count" data-card-id="${escapeHTML(card.id)}" type="number" min="1" max="4" value="${
             card.count
           }" aria-label="매수" />
-          <button class="step-button" type="button" data-action="increment-deck-card" data-card-id="${escapeHTML(card.id)}">+</button>
+          <button class="step-button" type="button" aria-label="1장 추가" data-action="increment-deck-card" data-card-id="${escapeHTML(card.id)}">+</button>
         </div>
-        <button class="icon-button" type="button" title="카드 삭제" data-action="remove-deck-card" data-card-id="${escapeHTML(card.id)}">×</button>
+        <button class="icon-button" type="button" title="카드 삭제" aria-label="카드 삭제" data-action="remove-deck-card" data-card-id="${escapeHTML(card.id)}">×</button>
       </div>
     `;
   }

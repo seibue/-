@@ -90,6 +90,18 @@ test("모바일 덱 목록: 카드 +/- 버튼이 보이고 수량이 바뀐다",
   await expect(totalPill).not.toHaveText(before); // 총 매수가 1 줄어듦
 });
 
+test("접근성: 활성 탭 aria-current + 모달 dialog 시맨틱", async ({ page }) => {
+  await gotoApp(page);
+  // 활성 탭에 aria-current="page"
+  await page.locator('[data-tab="decks"]').first().click();
+  await expect(page.locator('[data-tab="decks"][aria-current="page"]').first()).toBeVisible();
+  // 모달은 role=dialog + aria-modal
+  await page.locator('[data-action="edit-deck"]').first().click();
+  const dialog = page.locator('[role="dialog"][aria-modal="true"]').first();
+  await expect(dialog).toBeVisible();
+  await expect(page.locator('[aria-label="닫기"]').first()).toBeVisible();
+});
+
 test("덱 버전 기록 → 버전별 성적 섹션이 생긴다", async ({ page }) => {
   await gotoApp(page);
   await page.locator('[data-tab="decks"]').first().click();

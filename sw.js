@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260603-a11y-pass";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-review-cleanup";
 const CORE_ASSETS = [
   "/",
   "/index.html",

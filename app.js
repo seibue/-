@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-a11y-pass";
+  const APP_VERSION = "20260603-review-cleanup";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -105,16 +105,9 @@
   // 트랙 B: 데이터 정규화 레이어는 js/store.js 로 이동.
   // loadData()(아래 `let data`) 와 docx/cloud 팩토리보다 먼저 생성해야 한다(normalizeDeck/mergeData 주입).
   // createDefaultData/createDemoData/loadData(IO) 와 normalizeCardNumber/normalizeLevel(공용)은 app.js 잔류.
-  const {
-    mergeData,
-    normalizeMatchTypeName,
-    normalizeMatchTypes,
-    normalizeTournament,
-    normalizeDeck,
-    normalizeDeckVersions,
-    normalizeCards,
-    normalizeMatch,
-  } = window.JJM.store.createStore({
+  // app.js가 직접 쓰는 것만 구조분해 (normalizeMatchTypes/Tournament/DeckVersions/Match 는
+  // store 내부의 mergeData/normalizeDeck 가 사용하므로 여기서 꺼낼 필요 없음)
+  const { mergeData, normalizeMatchTypeName, normalizeDeck, normalizeCards } = window.JJM.store.createStore({
     uid,
     todayISO,
     normalizeCardNumber,

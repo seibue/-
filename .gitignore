@@ -2,6 +2,12 @@
 .vercel/
 deck-recipe-template.docx
 
+# Node / Playwright (devDependency, 배포 불필요)
+node_modules/
+test-results/
+playwright-report/
+.last-run.json
+
 # 개발 중 생성된 목업·스크린샷 (배포 불필요)
 *-mockup.html
 *-mockup.png

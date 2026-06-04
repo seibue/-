@@ -5,6 +5,11 @@
   "private": true,
   "scripts": {
     "test": "node --test",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install chromium",
     "check": "node --check app.js && node --check sw.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
   }
 }

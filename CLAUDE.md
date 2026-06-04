@@ -78,8 +78,13 @@ node tools/bump-cache-version.js 20260527-my-feature
 ```powershell
 node --check app.js
 node --check sw.js
-npm test          # node:test 기반, 의존성 0 — 모듈 회귀 검증
+npm test          # node:test 기반(의존성 0) — 순수 로직/모듈 회귀 검증
+npm run test:e2e  # Playwright(devDependency) — 실제 브라우저 스모크(앱로드·탭·검색·스테퍼·통계·버전)
 ```
+> e2e 최초 1회: `npm install` 후 `npm run test:e2e:install`(chromium 다운로드).
+> `tests/e2e/*.spec.js`는 `@playwright/test` 기반이라 `node --test`에는 안 잡힙니다.
+> e2e는 `preview-server.cjs`(8787)를 자동 기동하며, desktop·mobile 2개 프로젝트로 돕니다.
+> 모바일 전용 검증(썸네일 +/-)은 desktop 프로젝트에서 자동 skip.
 
 ### 4. 기존 기능 삭제·구조 변경 전 설명 먼저
 큰 변경은 작업 전에 무엇을 바꾸는지 설명하고 확인을 받습니다.
@@ -251,7 +256,8 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - Supabase publishable key는 공개 키이므로 커밋해도 무방합니다.
 - `js/` 모듈은 **`app.js`보다 먼저 로드**되어야 합니다(`window.JJM.*` 의존). `index.html`의 `<script>` 순서를 깨지 말 것.
 - 모듈에 `data`를 직접 주입하면 재할당 시 stale 스냅샷이 됩니다 — 반드시 `getData: () => data` 게터 사용.
-- node 테스트는 브라우저 API(canvas/네트워크/OAuth)를 못 잡습니다. 덱 레시피·공유 이미지·클라우드 로그인은 **배포 후 실기기 확인** 필요. 로컬 점검은 `node preview-server.cjs` (포트 8787).
+- node 테스트는 브라우저 API(canvas/네트워크/OAuth)를 못 잡습니다. 캔버스·OAuth는 여전히 수동/실기기 확인 필요하지만, **UI 흐름은 `npm run test:e2e`(Playwright)로 자동 검증**됩니다. 로컬 점검은 `node preview-server.cjs` (포트 8787).
+- `node_modules/`, `test-results/`, `playwright-report/`는 .gitignore 처리 (배포 불필요). Vercel 배포에는 영향 없음.
 
 ---
 

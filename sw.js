@@ -1,10 +1,11 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260603-card-search-boundary";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-store-module";
 const CORE_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
   "/js/diagnostics.js",
   "/js/format.js",
+  "/js/store.js",
   "/js/docx-export.js",
   "/js/share-image.js",
   "/js/card-effects.js",

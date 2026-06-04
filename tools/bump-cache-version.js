@@ -27,6 +27,7 @@ updateFile("index.html", [
   [/korean-card-effects\.js\?v=[^"]+/g, `korean-card-effects.js?v=${version}`],
   [/js\/diagnostics\.js\?v=[^"]+/g, `js/diagnostics.js?v=${version}`],
   [/js\/format\.js\?v=[^"]+/g, `js/format.js?v=${version}`],
+  [/js\/store\.js\?v=[^"]+/g, `js/store.js?v=${version}`],
   [/js\/docx-export\.js\?v=[^"]+/g, `js/docx-export.js?v=${version}`],
   [/js\/share-image\.js\?v=[^"]+/g, `js/share-image.js?v=${version}`],
   [/js\/card-effects\.js\?v=[^"]+/g, `js/card-effects.js?v=${version}`],

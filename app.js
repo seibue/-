@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-card-search-boundary";
+  const APP_VERSION = "20260603-store-module";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -101,6 +101,32 @@
   // cloudClient 는 app.js에 보관(표시 함수 cloudStatusText/syncTone 가 읽음). 클라우드 로직은 js/cloud.js.
   // 초기엔 Supabase 라이브러리가 로드되기 전이라 항상 null (기존 createCloudClient() 도 null 반환).
   let cloudClient = null;
+
+  // 트랙 B: 데이터 정규화 레이어는 js/store.js 로 이동.
+  // loadData()(아래 `let data`) 와 docx/cloud 팩토리보다 먼저 생성해야 한다(normalizeDeck/mergeData 주입).
+  // createDefaultData/createDemoData/loadData(IO) 와 normalizeCardNumber/normalizeLevel(공용)은 app.js 잔류.
+  const {
+    mergeData,
+    normalizeMatchTypeName,
+    normalizeMatchTypes,
+    normalizeTournament,
+    normalizeDeck,
+    normalizeDeckVersions,
+    normalizeCards,
+    normalizeMatch,
+  } = window.JJM.store.createStore({
+    uid,
+    todayISO,
+    normalizeCardNumber,
+    normalizeLevel,
+    cardTypeLabels,
+    TOURNAMENT_FORMAT_OPTIONS,
+    ROUND_STAGE_OPTIONS,
+    normalizeGameStats,
+    singleGameStats,
+    resultFromGameStats,
+    createDefaultData,
+  });
 
   const tabs = [
     ["home", "홈"],
@@ -589,131 +615,6 @@
     } catch (error) {
       return {};
     }
-  }
-
-  function normalizeMatchTypeName(value) {
-    const type = String(value || "").trim();
-    return type === "스토어 대회" ? "매장 대표전" : type;
-  }
-
-  function normalizeMatchTypes(types) {
-    const defaults = createDefaultData().matchTypes;
-    const source = Array.isArray(types) && types.length ? types : defaults;
-    const seen = new Set();
-    const normalized = [];
-    source.forEach((item) => {
-      const type = normalizeMatchTypeName(item);
-      if (!type || seen.has(type)) return;
-      seen.add(type);
-      normalized.push(type);
-    });
-    return normalized.length ? normalized : defaults;
-  }
-
-  function mergeData(saved) {
-    const defaults = createDefaultData();
-    const settings = saved.settings && typeof saved.settings === "object" && !Array.isArray(saved.settings) ? { ...saved.settings } : {};
-    return {
-      settings,
-      matchTypes: normalizeMatchTypes(Array.isArray(saved.matchTypes) ? saved.matchTypes : defaults.matchTypes),
-      decks: Array.isArray(saved.decks) ? saved.decks.map(normalizeDeck) : [],
-      tournaments: Array.isArray(saved.tournaments) ? saved.tournaments.map(normalizeTournament) : [],
-      matches: Array.isArray(saved.matches) ? saved.matches.map(normalizeMatch) : [],
-    };
-  }
-
-  function normalizeTournament(tournament) {
-    const fallbackDate = todayISO();
-    const format = TOURNAMENT_FORMAT_OPTIONS.some(([value]) => value === tournament.format) ? tournament.format : "mixed";
-    return {
-      id: tournament.id || uid("tournament"),
-      name: String(tournament.name || "").trim() || "이름 없는 대회",
-      date: String(tournament.date || fallbackDate),
-      format,
-      location: String(tournament.location || "").trim(),
-      memo: String(tournament.memo || "").trim(),
-      createdAt: tournament.createdAt || new Date().toISOString(),
-      updatedAt: tournament.updatedAt || tournament.createdAt || new Date().toISOString(),
-    };
-  }
-
-  function normalizeDeckVersions(versions) {
-    if (!Array.isArray(versions)) return [];
-    return versions
-      .filter((version) => version && typeof version === "object")
-      .map((version) => ({
-        id: version.id || uid("dver"),
-        label: String(version.label || "").trim(),
-        cards: normalizeCards(version.cards),
-        createdAt: version.createdAt || new Date().toISOString(),
-      }))
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-  }
-
-  function normalizeDeck(deck) {
-    return {
-      id: deck.id || uid("deck"),
-      name: deck.name || "이름 없는 덱",
-      colors: Array.isArray(deck.colors) && deck.colors.length ? deck.colors : ["blue"],
-      note: deck.note || "",
-      cards: normalizeCards(deck.cards),
-      versions: normalizeDeckVersions(deck.versions),
-      createdAt: deck.createdAt || new Date().toISOString(),
-      updatedAt: deck.updatedAt || deck.createdAt || new Date().toISOString(),
-    };
-  }
-
-  function normalizeCards(cards) {
-    if (!Array.isArray(cards)) return [];
-    const merged = new Map();
-    cards.forEach((card) => {
-      const cardNumber = normalizeCardNumber(card.cardNumber || card.number || card.no || "");
-      const name = String(card.name || "").trim();
-      if (!cardNumber || !name) return;
-      const normalized = {
-        id: card.id || uid("card"),
-        cardNumber,
-        level: normalizeLevel(card.level || card.lv || ""),
-        name,
-        count: Math.max(1, Math.min(4, Number(card.count) || 1)),
-        type: cardTypeLabels[card.type] ? card.type : "digimon",
-      };
-      const existing = merged.get(cardNumber);
-      if (existing) {
-        existing.count = Math.min(4, existing.count + normalized.count);
-        existing.level = normalized.level || existing.level;
-        existing.name = normalized.name || existing.name;
-        existing.type = normalized.type || existing.type;
-      } else {
-        merged.set(cardNumber, normalized);
-      }
-    });
-    return [...merged.values()];
-  }
-
-  function normalizeMatch(match) {
-    const matchFormat = match.matchFormat === "match" ? "match" : "single";
-    const fallbackResult = ["win", "loss", "draw"].includes(match.result) ? match.result : "win";
-    const roundStage = ROUND_STAGE_OPTIONS.some(([value]) => value === match.roundStage) ? match.roundStage : "none";
-    const gameStats =
-      matchFormat === "match"
-        ? normalizeGameStats(match.gameWins, match.gameLosses, match.gameDraws, fallbackResult)
-        : singleGameStats(fallbackResult);
-    return {
-      ...match,
-      matchType: normalizeMatchTypeName(match.matchType) || "대전",
-      result: matchFormat === "match" ? resultFromGameStats(gameStats) : fallbackResult,
-      matchFormat,
-      gameWins: gameStats.gameWins,
-      gameLosses: gameStats.gameLosses,
-      gameDraws: gameStats.gameDraws,
-      tournamentId: String(match.tournamentId || ""),
-      roundStage,
-      roundLabel: String(match.roundLabel || "").trim(),
-      cardIds: Array.isArray(match.cardIds) ? match.cardIds.map(String) : [],
-      cardNames: Array.isArray(match.cardNames) ? match.cardNames.map(String) : [],
-      cardNumbers: Array.isArray(match.cardNumbers) ? match.cardNumbers.map(normalizeCardNumber) : [],
-    };
   }
 
   function normalizeCardNumber(value) {

@@ -90,6 +90,21 @@ test("모바일 덱 목록: 카드 +/- 버튼이 보이고 수량이 바뀐다",
   await expect(totalPill).not.toHaveText(before); // 총 매수가 1 줄어듦
 });
 
+test("대회일정 캘린더: 월간 격자 + 월 이동", async ({ page }) => {
+  await gotoApp(page);
+  await page.locator('[data-tab="events"]').first().click();
+  // 7일 x 6주 = 42칸
+  await expect(page.locator(".calendar-cell")).toHaveCount(42);
+  await expect(page.locator(".calendar-weekday")).toHaveCount(7);
+  const title = page.locator(".calendar-title");
+  const before = await title.innerText();
+  await page.locator('[data-action="calendar-next-month"]').click();
+  await expect(title).not.toHaveText(before); // 월 이동됨
+  // 날짜 클릭 → 일정 패널
+  await page.locator(".calendar-cell[data-date]").first().click();
+  await expect(page.getByText("일정").first()).toBeVisible();
+});
+
 test("접근성: 활성 탭 aria-current + 모달 dialog 시맨틱", async ({ page }) => {
   await gotoApp(page);
   // 활성 탭에 aria-current="page"

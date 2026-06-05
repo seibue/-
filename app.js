@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-review-cleanup";
+  const APP_VERSION = "20260603-calendar";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -22,6 +22,9 @@
     emptyRecordStats,
     finalizeRecordStats,
   } = window.JJM.format;
+
+  // 캘린더 엔진(순수): 구글 캘린더 링크 / .ics(알람 포함) / 월간 격자
+  const { googleCalendarUrl, buildIcs, icsFileName, monthMatrix, groupEventsByLocalDate } = window.JJM.calendar;
 
   const colorMap = {
     red: "#ef4444",
@@ -125,6 +128,7 @@
     ["home", "홈"],
     ["matches", "전적 기록"],
     ["tournaments", "대회 기록"],
+    ["events", "대회일정"],
     ["decks", "덱 관리"],
     ["stats", "통계"],
     ["settings", "설정"],
@@ -172,6 +176,12 @@
     matchupOpponent: "",
     statsPeriod: "all",
     shareDate: "",
+    tournamentEvents: [],
+    eventsLoaded: false,
+    calendarYear: new Date().getFullYear(),
+    calendarMonth: new Date().getMonth(),
+    selectedCalendarDate: "",
+    editingEventId: null,
     deckImageLayout: data.settings?.deckImageLayout || "x",
     filters: {
       query: "",
@@ -337,6 +347,7 @@
   // 트랙 B: 클라우드 동기화(Supabase)는 js/cloud.js 로 이동.
   // cloudClient 는 app.js 보관 → get/set 으로 주입, data 재할당은 setData 로 처리.
   const {
+    ensureCloudClient,
     setDataFromCloud,
     scheduleCloudSave,
     saveCloudData,
@@ -2263,6 +2274,7 @@
   function renderCurrentTab() {
     if (state.tab === "home") return renderHomeView();
     if (state.tab === "tournaments") return renderTournamentsView();
+    if (state.tab === "events") return renderEventsView();
     if (state.tab === "decks") return renderDecksView();
     if (state.tab === "stats") return renderStatsView();
     if (state.tab === "settings") return renderSettingsView();
@@ -2448,6 +2460,258 @@
         </div>
       </article>
     `;
+  }
+
+  // ── 대회일정(공식 캘린더) ─────────────────────────────────────────────
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const localDateStr = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  const localTimeStr = (d) => `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+
+  async function fetchTournamentEvents() {
+    const client = cloudClient || (await ensureCloudClient());
+    if (!client) return [];
+    const { data: rows, error } = await client
+      .from("tournament_events")
+      .select("id, title, starts_at, ends_at, location, description")
+      .order("starts_at", { ascending: true });
+    if (error) throw error;
+    return (rows || []).map((row) => ({
+      id: row.id,
+      title: row.title || "대회",
+      startsAt: row.starts_at,
+      endsAt: row.ends_at || "",
+      location: row.location || "",
+      description: row.description || "",
+    }));
+  }
+
+  let eventsLoading = false;
+  async function loadTournamentEvents(force = false) {
+    if (eventsLoading || (state.eventsLoaded && !force)) return;
+    eventsLoading = true;
+    try {
+      state.tournamentEvents = await fetchTournamentEvents();
+      state.eventsLoaded = true;
+      if (state.tab === "events") render();
+    } catch (error) {
+      recordDiagnostic("events-load-failed", error?.message || "Tournament events load failed");
+    } finally {
+      eventsLoading = false;
+    }
+  }
+
+  async function upsertTournamentEvent(payload) {
+    const client = cloudClient || (await ensureCloudClient());
+    if (!client) throw new Error("DB 연결을 확인해 주세요.");
+    const row = {
+      title: payload.title,
+      starts_at: payload.startsAt,
+      ends_at: payload.endsAt || null,
+      location: payload.location || "",
+      description: payload.description || "",
+      updated_at: new Date().toISOString(),
+      created_by: state.authUser?.id || null,
+    };
+    if (payload.id) row.id = payload.id;
+    const { error } = await client.from("tournament_events").upsert(row);
+    if (error) throw error;
+  }
+
+  async function deleteTournamentEventById(id) {
+    const client = cloudClient || (await ensureCloudClient());
+    if (!client) throw new Error("DB 연결을 확인해 주세요.");
+    const { error } = await client.from("tournament_events").delete().eq("id", id);
+    if (error) throw error;
+  }
+
+  function downloadIcs(events, fileName) {
+    if (!events.length) {
+      notifyToast("내보낼 일정 없음", "등록된 대회 일정이 없습니다.", "info");
+      return;
+    }
+    const blob = new Blob([buildIcs(events)], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `${safeFileName(String(fileName).replace(/\.ics$/i, ""))}.ics`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function renderEventsView() {
+    if (!state.eventsLoaded) loadTournamentEvents();
+    const year = state.calendarYear;
+    const month = state.calendarMonth;
+    const matrix = monthMatrix(year, month, todayISO());
+    const byDate = groupEventsByLocalDate(state.tournamentEvents);
+    const selDate = state.selectedCalendarDate;
+    const admin = isAdminUser();
+    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+    return `
+      <section class="events-view">
+        <div class="calendar-toolbar">
+          <button class="icon-button" type="button" data-action="calendar-prev-month" aria-label="이전 달">‹</button>
+          <strong class="calendar-title">${year}년 ${month + 1}월</strong>
+          <button class="icon-button" type="button" data-action="calendar-next-month" aria-label="다음 달">›</button>
+          <div class="calendar-tools">
+            ${state.tournamentEvents.length ? `<button class="control-button compact" type="button" data-action="ics-download-all">전체 .ics</button>` : ""}
+            ${admin ? `<button class="control-button active compact" type="button" data-action="add-event">＋ 일정 추가</button>` : ""}
+          </div>
+        </div>
+        ${!state.eventsLoaded ? `<div class="mini-text">대회 일정 불러오는 중…</div>` : ""}
+        <div class="calendar-grid">
+          ${weekdays.map((w, i) => `<div class="calendar-weekday${i === 0 ? " sun" : i === 6 ? " sat" : ""}">${w}</div>`).join("")}
+          ${matrix.weeks
+            .flat()
+            .map((cell) => {
+              const evs = byDate[cell.iso] || [];
+              return `
+                <button class="calendar-cell${cell.inMonth ? "" : " out"}${cell.isToday ? " today" : ""}${cell.iso === selDate ? " selected" : ""}${evs.length ? " has-ev" : ""}" type="button" data-action="select-calendar-day" data-date="${cell.iso}">
+                  <span class="cal-day">${cell.day}</span>
+                  ${evs.slice(0, 2).map((e) => `<span class="cal-ev">${escapeHTML(e.title)}</span>`).join("")}
+                  ${evs.length > 2 ? `<span class="cal-more">+${evs.length - 2}</span>` : ""}
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+        ${
+          selDate
+            ? renderCalendarDayPanel(selDate, byDate[selDate] || [], admin)
+            : `<div class="mini-text" style="margin-top: 10px;">날짜를 누르면 그날의 대회 일정이 표시됩니다.${admin ? " 관리자는 '일정 추가'로 공식 대회를 올릴 수 있습니다." : ""}</div>`
+        }
+      </section>
+    `;
+  }
+
+  function renderCalendarDayPanel(date, events, admin) {
+    return `
+      <div class="settings-card" style="margin-top: 12px;">
+        <h2 class="settings-title">${escapeHTML(formatDate(date))} 일정</h2>
+        ${
+          events.length
+            ? events
+                .map((ev) => {
+                  const t = new Date(ev.startsAt);
+                  const time = Number.isNaN(t.getTime()) ? "" : localTimeStr(t);
+                  return `
+                    <div class="event-row">
+                      <div class="event-main">
+                        <strong>${escapeHTML(ev.title)}</strong>
+                        <span>${time}${ev.location ? ` · ${escapeHTML(ev.location)}` : ""}</span>
+                        ${ev.description ? `<p class="match-memo">${escapeHTML(ev.description)}</p>` : ""}
+                      </div>
+                      <div class="event-actions">
+                        <a class="control-button compact" href="${escapeHTML(googleCalendarUrl(ev))}" target="_blank" rel="noopener noreferrer">📅 구글</a>
+                        <button class="control-button compact" type="button" data-action="ics-download" data-event-id="${escapeHTML(ev.id)}">.ics</button>
+                        ${
+                          admin
+                            ? `<button class="icon-button" type="button" data-action="edit-event" data-event-id="${escapeHTML(ev.id)}" aria-label="일정 수정" title="수정">✎</button>
+                               <button class="icon-button" type="button" data-action="delete-event" data-event-id="${escapeHTML(ev.id)}" aria-label="일정 삭제" title="삭제">×</button>`
+                            : ""
+                        }
+                      </div>
+                    </div>
+                  `;
+                })
+                .join("")
+            : `<div class="mini-text">이 날짜에 등록된 대회가 없습니다.</div>`
+        }
+      </div>
+    `;
+  }
+
+  function renderEventModal() {
+    const ev = state.editingEventId ? state.tournamentEvents.find((item) => item.id === state.editingEventId) : null;
+    const start = ev ? new Date(ev.startsAt) : null;
+    const dateVal = start && !Number.isNaN(start.getTime()) ? localDateStr(start) : state.selectedCalendarDate || todayISO();
+    const timeVal = start && !Number.isNaN(start.getTime()) ? localTimeStr(start) : "10:00";
+    const end = ev?.endsAt ? new Date(ev.endsAt) : null;
+    const endVal = end && !Number.isNaN(end.getTime()) ? localTimeStr(end) : "";
+    const body = `
+      <form class="form-grid" id="event-form">
+        <label class="field">
+          <span>대회 이름</span>
+          <input class="input" name="title" value="${escapeHTML(ev?.title || "")}" placeholder="예: 6월 매장 대표전" autocomplete="off" required />
+        </label>
+        <div class="form-row">
+          <label class="field">
+            <span>날짜</span>
+            <input class="input" type="date" name="date" value="${escapeHTML(dateVal)}" required />
+          </label>
+          <label class="field">
+            <span>시작 시간</span>
+            <input class="input" type="time" name="time" value="${escapeHTML(timeVal)}" required />
+          </label>
+          <label class="field">
+            <span>종료(선택)</span>
+            <input class="input" type="time" name="endTime" value="${escapeHTML(endVal)}" />
+          </label>
+        </div>
+        <label class="field">
+          <span>장소</span>
+          <input class="input" name="location" value="${escapeHTML(ev?.location || "")}" placeholder="매장명 또는 지역" autocomplete="off" />
+        </label>
+        <label class="field">
+          <span>설명/링크</span>
+          <textarea class="textarea" name="description" placeholder="참가 방법, 신청 링크, 진행 방식 등">${escapeHTML(ev?.description || "")}</textarea>
+        </label>
+      </form>
+    `;
+    const actions = `
+      <button class="control-button" type="button" data-action="close-modal">취소</button>
+      <button class="primary-action" type="submit" form="event-form">${ev ? "저장" : "추가"}</button>
+    `;
+    return modalFrame(ev ? "대회 일정 수정" : "대회 일정 추가", body, actions);
+  }
+
+  async function handleEventSubmit(form) {
+    if (!isAdminUser()) {
+      alert("관리자만 공식 일정을 추가할 수 있습니다.");
+      return;
+    }
+    const formData = new FormData(form);
+    const title = String(formData.get("title") || "").trim();
+    const date = String(formData.get("date") || "");
+    const time = String(formData.get("time") || "");
+    const endTime = String(formData.get("endTime") || "");
+    if (!title || !date || !time) {
+      alert("대회 이름, 날짜, 시작 시간을 입력해 주세요.");
+      return;
+    }
+    const start = new Date(`${date}T${time}:00`);
+    if (Number.isNaN(start.getTime())) {
+      alert("날짜/시간 형식을 확인해 주세요.");
+      return;
+    }
+    const end = endTime ? new Date(`${date}T${endTime}:00`) : null;
+    const submitter = document.querySelector('[form="event-form"][type="submit"]');
+    if (submitter) {
+      submitter.disabled = true;
+      submitter.textContent = "저장 중";
+    }
+    try {
+      await upsertTournamentEvent({
+        id: state.editingEventId || undefined,
+        title,
+        startsAt: start.toISOString(),
+        endsAt: end && !Number.isNaN(end.getTime()) ? end.toISOString() : "",
+        location: String(formData.get("location") || "").trim(),
+        description: String(formData.get("description") || "").trim(),
+      });
+      await loadTournamentEvents(true);
+      state.selectedCalendarDate = date;
+      state.calendarYear = start.getFullYear();
+      state.calendarMonth = start.getMonth();
+      closeModal();
+      notifyToast("일정 저장됨", title, "success");
+    } catch (error) {
+      if (submitter) {
+        submitter.disabled = false;
+        submitter.textContent = state.editingEventId ? "저장" : "추가";
+      }
+      alert(`일정 저장 실패: ${error?.message || "잠시 후 다시 시도해 주세요."}`);
+    }
   }
 
   function renderTournamentsView() {
@@ -3356,6 +3620,7 @@
     if (state.modal === "tournament") return renderTournamentModal();
     if (state.modal === "deck") return renderDeckModal();
     if (state.modal === "deck-import") return renderDeckImportModal();
+    if (state.modal === "event") return renderEventModal();
     return "";
   }
 
@@ -4151,6 +4416,7 @@
     state.importingDecks = false;
     state.deckDraftForm = null;
     state.deckDraftCards = [];
+    state.editingEventId = null;
     render();
   }
 
@@ -4500,6 +4766,58 @@
     if (action === "set-stats-period") {
       state.statsPeriod = statsPeriodFromValue(target.dataset.period);
       render();
+      return;
+    }
+    if (action === "calendar-prev-month" || action === "calendar-next-month") {
+      let month = state.calendarMonth + (action === "calendar-next-month" ? 1 : -1);
+      let year = state.calendarYear;
+      if (month < 0) {
+        month = 11;
+        year -= 1;
+      } else if (month > 11) {
+        month = 0;
+        year += 1;
+      }
+      state.calendarMonth = month;
+      state.calendarYear = year;
+      render();
+      return;
+    }
+    if (action === "select-calendar-day") {
+      state.selectedCalendarDate = state.selectedCalendarDate === target.dataset.date ? "" : target.dataset.date;
+      render();
+      return;
+    }
+    if (action === "add-event") {
+      if (!isAdminUser()) return;
+      state.modal = "event";
+      state.editingEventId = null;
+      render();
+      return;
+    }
+    if (action === "edit-event") {
+      if (!isAdminUser()) return;
+      state.modal = "event";
+      state.editingEventId = target.dataset.eventId;
+      render();
+      return;
+    }
+    if (action === "delete-event") {
+      if (!isAdminUser()) return;
+      if (!confirm("이 대회 일정을 삭제할까요?")) return;
+      deleteTournamentEventById(target.dataset.eventId)
+        .then(() => loadTournamentEvents(true))
+        .then(() => notifyToast("일정 삭제됨", "", "success"))
+        .catch((error) => alert(`삭제 실패: ${error?.message || ""}`));
+      return;
+    }
+    if (action === "ics-download") {
+      const ev = state.tournamentEvents.find((item) => item.id === target.dataset.eventId);
+      if (ev) downloadIcs([ev], `jeonjeokmon-${ev.title}`);
+      return;
+    }
+    if (action === "ics-download-all") {
+      downloadIcs(state.tournamentEvents, icsFileName());
       return;
     }
     if (action === "delete-match") {
@@ -5277,6 +5595,7 @@
     event.preventDefault();
     if (event.target.id === "match-form") handleMatchSubmit(event.target, event.submitter);
     if (event.target.id === "tournament-form") handleTournamentSubmit(event.target);
+    if (event.target.id === "event-form") handleEventSubmit(event.target);
     if (event.target.id === "deck-form") {
       const deckCardSearch = document.activeElement?.matches?.("[data-deck-card-search]") ? document.activeElement : null;
       if (deckCardSearch) {

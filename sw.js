@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260603-review-cleanup";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-calendar";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -13,6 +13,7 @@ const CORE_ASSETS = [
   "/js/stats.js",
   "/js/deck.js",
   "/js/cloud.js",
+  "/js/calendar.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

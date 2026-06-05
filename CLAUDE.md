@@ -8,7 +8,7 @@
 
 **전적몬**은 디지몬 카드게임 전적·덱·대회를 기록하는 한국어 PWA 웹앱입니다.
 
-- 라이브 URL: <https://digi-log.vercel.app/>
+- 라이브 URL: <https://jeonjeokmon.vercel.app/>
 - 호스팅: Vercel (GitHub 연결 예정 — 현재는 수동 배포)
 - 저장소: <https://github.com/seibue/DegiLog>
 

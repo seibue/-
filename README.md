@@ -1,8 +1,8 @@
 # 전적몬
 
-라이브: <https://digi-log.vercel.app/>
+라이브: <https://jeonjeokmon.vercel.app/>
 
-`digi-log.vercel.app`의 어두운 모바일 앱형 UI를 기준으로 만든 한국어 클론입니다.
+디지몬 카드게임 전적·덱·대회를 기록하는 한국어 PWA 웹앱입니다. (초기 UI는 어두운 모바일 앱형 디자인을 참고해 제작)
 
 ## 필수 조건
 

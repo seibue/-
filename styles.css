@@ -217,6 +217,29 @@ button:disabled {
   flex: 0 1 auto;
 }
 
+/* 상단 우측 설정(톱니) 버튼 */
+.topbar .topbar-settings {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  font-size: 20px;
+  line-height: 1;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  background: rgba(25, 231, 255, 0.08);
+  color: var(--accent);
+}
+.topbar .topbar-settings.active {
+  background: rgba(25, 231, 255, 0.22);
+}
+@media (max-width: 540px) {
+  .topbar .topbar-settings {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+}
+
 .auth-profile {
   display: grid;
   gap: 3px;

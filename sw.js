@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260605-event-region-filter-no-ics";
+const CACHE_NAME = "jeonjeokmon-shell-20260603-gear-region-merge";
 const CORE_ASSETS = [
   "/",
   "/index.html",

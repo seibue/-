@@ -1,0 +1,6 @@
+# 줄바꿈을 LF로 통일 (GitHub 웹 업로드 등으로 CRLF가 섞이는 것 방지)
+* text=auto eol=lf
+*.png binary
+*.svg text eol=lf
+*.ico binary
+*.webmanifest text eol=lf

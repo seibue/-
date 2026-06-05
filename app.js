@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-calendar-wider";
+  const APP_VERSION = "20260603-gear-region-merge";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -131,7 +131,6 @@
     ["events", "대회일정"],
     ["decks", "덱 관리"],
     ["stats", "통계"],
-    ["settings", "설정"],
   ];
 
   // 모듈 분리 A2: 덱 레시피 인쇄/DOCX 내보내기는 js/docx-export.js 로 이동.
@@ -882,7 +881,6 @@
         <strong>${escapeHTML(userEmail() || "로그인됨")}</strong>
         <span><span class="sync-dot ${syncTone()}"></span>${escapeHTML(cloudStatusText())}${lastSaved ? ` · ${escapeHTML(lastSaved)}` : ""}</span>
       </div>
-      <button class="auth-button" type="button" data-action="sync-cloud-now">동기화</button>
       <button class="auth-button ghost" type="button" data-action="logout-google">로그아웃</button>
     `;
   }
@@ -2215,6 +2213,7 @@
             </div>
           </div>
           ${renderAuthControls()}
+          <button class="icon-button topbar-settings${state.tab === "settings" ? " active" : ""}" type="button" data-tab="settings" aria-label="설정" title="설정"${state.tab === "settings" ? ' aria-current="page"' : ""}>⚙</button>
         </header>
         <nav class="tabs" aria-label="주요 화면">
           ${tabs

@@ -380,6 +380,10 @@ button:disabled {
   max-width: min(1100px, 100vw);
 }
 
+.content.calendar-content {
+  max-width: min(1320px, 100vw);
+}
+
 
 .home-dashboard {
   display: grid;
@@ -1684,9 +1688,9 @@ button:disabled {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 2px;
-  min-height: 64px;
-  padding: 4px;
+  gap: 3px;
+  min-height: 104px;
+  padding: 6px;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: rgba(4, 10, 20, 0.42);

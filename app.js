@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260603-calendar";
+  const APP_VERSION = "20260603-calendar-wider";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2226,7 +2226,7 @@
             )
             .join("")}
         </nav>
-        <main class="content ${state.tab === "home" ? "home-content" : ""} ${["tournaments", "matches", "stats"].includes(state.tab) ? "wide-content" : ""}">${renderCurrentTab()}</main>
+        <main class="content ${state.tab === "home" ? "home-content" : ""} ${["tournaments", "matches", "stats", "events"].includes(state.tab) ? "wide-content" : ""}${state.tab === "events" ? " calendar-content" : ""}">${renderCurrentTab()}</main>
         ${renderCloudConflictBanner()}
         ${renderModal()}
         ${renderCardPreview()}

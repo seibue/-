@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260606-import-digimonmeta";
+  const APP_VERSION = "20260606-card-number-variants";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -622,9 +622,15 @@
   }
 
   function normalizeCardNumber(value) {
-    return String(value || "")
-      .replace(/[^a-z0-9-]/gi, "")
-      .toUpperCase();
+    const cleaned = String(value || "")
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, "");
+    // 기본 카드번호(세트코드-번호)만 추출 → 에라타/프로모 변형 접미사 제거
+    // 예: EX3-057-ERRATA → EX3-057, P-103_P2 → P-103
+    const base = cleaned.match(/^[A-Z]+[0-9]*-[0-9]+/);
+    if (base) return base[0];
+    return cleaned.replace(/[^A-Z0-9-]/g, "");
   }
 
   function normalizeCatalogQuery(value) {

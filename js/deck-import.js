@@ -138,34 +138,34 @@
 
     function parseDeckTextLine(line, sectionType) {
       const compact = line.replace(/\s+/g, " ").trim();
-      let match = compact.match(/^(\d{1,2})\s*[xX장매]?\s*\(([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\)\s*(.*)$/);
+      let match = compact.match(/^(\d{1,2})\s*[xX장매]?\s*\(([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\)\s*(.*)$/);
       if (match) return importedCardFromLine(match[2], match[1], match[3] || "", sectionType);
 
-      match = compact.match(/^(\d{1,2})\s*[xX장매]?\s+([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\s*(.*)$/);
+      match = compact.match(/^(\d{1,2})\s*[xX장매]?\s+([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\s*(.*)$/);
       if (match) return importedCardFromLine(match[2], match[1], match[3] || "", sectionType);
 
-      match = compact.match(/^(\d{1,2})\s*[xX장매]?\s+(.+?)\s+([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)$/);
+      match = compact.match(/^(\d{1,2})\s*[xX장매]?\s+(.+?)\s+([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)$/);
       if (match) return importedCardFromLine(match[3], match[1], match[2] || "", sectionType);
 
-      match = compact.match(/^\(([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\)\s*[xX*]?\s*(\d{1,2})\s*(.*)$/);
+      match = compact.match(/^\(([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\)\s*[xX*]?\s*(\d{1,2})\s*(.*)$/);
       if (match) return importedCardFromLine(match[1], match[2], match[3] || "", sectionType);
 
-      match = compact.match(/^([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\s*(?:x|\*)\s*(\d{1,2})\s*(.*)$/i);
+      match = compact.match(/^([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\s*(?:x|\*)\s*(\d{1,2})\s*(.*)$/i);
       if (match) return importedCardFromLine(match[1], match[2], match[3] || "", sectionType);
 
-      match = compact.match(/^\(([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\)\s*(.*)$/);
+      match = compact.match(/^\(([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\)\s*(.*)$/);
       if (match) return importedCardFromLine(match[1], 1, match[2] || "", sectionType);
 
-      match = compact.match(/^([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\s+(.+?)\s*[xX*]\s*(\d{1,2})$/);
+      match = compact.match(/^([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\s+(.+?)\s*[xX*]\s*(\d{1,2})$/);
       if (match) return importedCardFromLine(match[1], match[3], match[2] || "", sectionType);
 
-      match = compact.match(/^([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\s+(.+?)\s+(\d{1,2})\s*[장매]?$/);
+      match = compact.match(/^([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\s+(.+?)\s+(\d{1,2})\s*[장매]?$/);
       if (match) return importedCardFromLine(match[1], match[3], match[2] || "", sectionType);
 
-      match = compact.match(/^([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\s+(\d{1,2})\s*(.*)$/);
+      match = compact.match(/^([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\s+(\d{1,2})\s*(.*)$/);
       if (match) return importedCardFromLine(match[1], match[2], match[3] || "", sectionType);
 
-      match = compact.match(/^([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\s*(.*)$/);
+      match = compact.match(/^([A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+)\s*(.*)$/);
       if (match) return importedCardFromLine(match[1], 1, match[2] || "", sectionType);
 
       return null;

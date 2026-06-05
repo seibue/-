@@ -20,7 +20,11 @@ test("apiCardType: 원격 타입 문자열을 내부 타입으로 매핑", () =>
 function makeApi(catalog = {}) {
   let counter = 0;
   return createDeckImport({
-    normalizeCardNumber: (v) => String(v || "").trim().toUpperCase(),
+    normalizeCardNumber: (v) => {
+      const c = String(v || "").trim().toUpperCase().replace(/\s+/g, "");
+      const b = c.match(/^[A-Z]+[0-9]*-[0-9]+/);
+      return b ? b[0] : c.replace(/[^A-Z0-9-]/g, "");
+    },
     normalizeLevel: (v) => String(v || ""),
     remoteCardImageUrl: (n) => `img:${n}`,
     uid: (prefix) => `${prefix}-${(counter += 1)}`,
@@ -63,6 +67,19 @@ test("parseDeckTextLine: 명시적 digiEgg 섹션이면 카탈로그 없어도 d
   const card = api.parseDeckTextLine("4 BT1-001 코로몬", "digiEgg");
   assert.equal(card.type, "digiEgg");
   assert.equal(card.level, "2");
+});
+
+test("parseDeckTextLine: 에라타/언더스코어 변형 번호를 기본 카드번호로 인식", () => {
+  const api = makeApi();
+  // -Errata 접미사 → 기본번호
+  const errata = api.parseDeckTextLine("2 Growlmon EX3-057-Errata", "main");
+  assert.equal(errata.cardNumber, "EX3-057");
+  assert.equal(errata.count, 2);
+  // _P2 언더스코어 변형 → 줄이 버려지지 않고 기본번호로
+  const promo = api.parseDeckTextLine("3 Offense Training P-103_P2", "main");
+  assert.ok(promo, "언더스코어 번호 줄이 파싱돼야 함");
+  assert.equal(promo.cardNumber, "P-103");
+  assert.equal(promo.count, 3);
 });
 
 test("parseDeckTextImport: 한국어 섹션 헤더('메인'/'디지타마')도 인식한다", () => {

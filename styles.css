@@ -1664,6 +1664,69 @@ button:disabled {
   display: flex;
   gap: 6px;
 }
+.event-region-panel {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 10px;
+  border: 1px solid rgba(25, 231, 255, 0.24);
+  border-radius: 6px;
+  background:
+    linear-gradient(135deg, rgba(25, 231, 255, 0.08), rgba(255, 212, 47, 0.05)),
+    rgba(4, 10, 20, 0.42);
+}
+.event-region-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.event-region-summary strong {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 900;
+}
+.event-region-summary span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.event-region-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.region-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: rgba(4, 10, 20, 0.55);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.region-chip span {
+  min-width: 20px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: rgba(148, 188, 214, 0.14);
+  color: var(--muted);
+  font-size: 10px;
+}
+.region-chip.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(25, 231, 255, 0.35) inset;
+  color: #e7fbff;
+}
+.region-chip.active span {
+  background: rgba(25, 231, 255, 0.18);
+  color: var(--accent);
+}
 .control-button.compact,
 .primary-action.compact {
   padding: 6px 10px;
@@ -1751,6 +1814,30 @@ button:disabled {
 .event-actions a { text-decoration: none; }
 
 @media (max-width: 540px) {
+  .calendar-toolbar {
+    flex-wrap: wrap;
+  }
+  .calendar-tools {
+    width: 100%;
+    margin-left: 0;
+  }
+  .event-region-panel {
+    padding: 8px;
+  }
+  .event-region-summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .event-region-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .region-chip {
+    flex: 0 0 auto;
+  }
   .calendar-grid { gap: 3px; }
   .calendar-cell { min-height: 54px; padding: 3px; }
   .calendar-cell .cal-ev { font-size: 9px; }

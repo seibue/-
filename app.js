@@ -178,6 +178,7 @@
     shareDate: "",
     tournamentEvents: [],
     eventsLoaded: false,
+    eventRegionFilters: new Set(),
     calendarYear: new Date().getFullYear(),
     calendarMonth: new Date().getMonth(),
     selectedCalendarDate: "",
@@ -2538,12 +2539,64 @@
     URL.revokeObjectURL(url);
   }
 
+  function eventRegion(event) {
+    const location = String(event?.location || "").trim();
+    if (!location) return "지역 없음";
+    return location.split("·")[0].trim() || "지역 없음";
+  }
+
+  function tournamentEventRegionOptions(events = state.tournamentEvents) {
+    const counts = new Map();
+    events.forEach((event) => {
+      const region = eventRegion(event);
+      counts.set(region, (counts.get(region) || 0) + 1);
+    });
+    return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0], "ko"));
+  }
+
+  function filteredTournamentEvents() {
+    if (!state.eventRegionFilters.size) return state.tournamentEvents;
+    return state.tournamentEvents.filter((event) => state.eventRegionFilters.has(eventRegion(event)));
+  }
+
+  function renderEventRegionFilters(events) {
+    const regions = tournamentEventRegionOptions(events);
+    if (!regions.length) return "";
+    const selectedCount = state.eventRegionFilters.size;
+    return `
+      <div class="event-region-panel" aria-label="대회 일정 지역 필터">
+        <div class="event-region-summary">
+          <strong>지역</strong>
+          <span>${selectedCount ? `${selectedCount}개 지역 선택 중` : "전체 지역 표시"}</span>
+        </div>
+        <div class="event-region-chips">
+          <button class="region-chip ${selectedCount ? "" : "active"}" type="button" data-action="event-region-clear">
+            전체
+            <span>${events.length}</span>
+          </button>
+          ${regions
+            .map(([region, count]) => {
+              const active = state.eventRegionFilters.has(region);
+              return `
+                <button class="region-chip ${active ? "active" : ""}" type="button" data-action="event-region-toggle" data-region="${escapeHTML(region)}" aria-pressed="${active ? "true" : "false"}">
+                  ${escapeHTML(region)}
+                  <span>${count}</span>
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+    `;
+  }
+
   function renderEventsView() {
     if (!state.eventsLoaded) loadTournamentEvents();
     const year = state.calendarYear;
     const month = state.calendarMonth;
     const matrix = monthMatrix(year, month, todayISO());
-    const byDate = groupEventsByLocalDate(state.tournamentEvents);
+    const visibleEvents = filteredTournamentEvents();
+    const byDate = groupEventsByLocalDate(visibleEvents);
     const selDate = state.selectedCalendarDate;
     const admin = isAdminUser();
     const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
@@ -2554,11 +2607,11 @@
           <strong class="calendar-title">${year}년 ${month + 1}월</strong>
           <button class="icon-button" type="button" data-action="calendar-next-month" aria-label="다음 달">›</button>
           <div class="calendar-tools">
-            ${state.tournamentEvents.length ? `<button class="control-button compact" type="button" data-action="ics-download-all">전체 .ics</button>` : ""}
             ${admin ? `<button class="control-button active compact" type="button" data-action="add-event">＋ 일정 추가</button>` : ""}
           </div>
         </div>
         ${!state.eventsLoaded ? `<div class="mini-text">대회 일정 불러오는 중…</div>` : ""}
+        ${state.eventsLoaded ? renderEventRegionFilters(state.tournamentEvents) : ""}
         <div class="calendar-grid">
           ${weekdays.map((w, i) => `<div class="calendar-weekday${i === 0 ? " sun" : i === 6 ? " sat" : ""}">${w}</div>`).join("")}
           ${matrix.weeks
@@ -4788,6 +4841,18 @@
       render();
       return;
     }
+    if (action === "event-region-toggle") {
+      const region = target.dataset.region || "";
+      if (state.eventRegionFilters.has(region)) state.eventRegionFilters.delete(region);
+      else state.eventRegionFilters.add(region);
+      render();
+      return;
+    }
+    if (action === "event-region-clear") {
+      state.eventRegionFilters.clear();
+      render();
+      return;
+    }
     if (action === "add-event") {
       if (!isAdminUser()) return;
       state.modal = "event";
@@ -4817,7 +4882,7 @@
       return;
     }
     if (action === "ics-download-all") {
-      downloadIcs(state.tournamentEvents, icsFileName());
+      downloadIcs(filteredTournamentEvents(), icsFileName());
       return;
     }
     if (action === "delete-match") {

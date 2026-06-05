@@ -210,6 +210,20 @@
         if (parsed.every((item) => item && typeof item === "object" && (item.cardNumber || item.no))) {
           return [{ name: fallbackName || "가져온 덱", colors: ["blue"], note: "", cards: parsed }];
         }
+        // digimonmeta 형식: 카드 번호 문자열 배열(헤더 + 번호가 매수만큼 반복).
+        // 예: ["Exported from digimonmeta.com","EX5-001","EX5-001",...] → 번호별 매수 집계
+        if (parsed.some((item) => typeof item === "string")) {
+          const counts = new Map();
+          parsed.forEach((item) => {
+            const cardNumber = String(item || "").trim().toUpperCase();
+            if (!/^[A-Z0-9]+-[A-Z0-9]+$/.test(cardNumber)) return; // "Exported from..." 같은 헤더/잡문자 제외
+            counts.set(cardNumber, (counts.get(cardNumber) || 0) + 1);
+          });
+          if (counts.size) {
+            const cards = [...counts.entries()].map(([cardNumber, count]) => ({ cardNumber, count }));
+            return [{ name: fallbackName || "가져온 덱", colors: ["blue"], note: "", cards }];
+          }
+        }
         return parsed;
       }
       if (!parsed || typeof parsed !== "object") return [];

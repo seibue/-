@@ -98,6 +98,29 @@ test("parseDeckImportSource: JSON 파싱 실패 시 텍스트 파서로 폴백",
   assert.ok(decks[0].cards.some((c) => c.cardNumber === "EX5-001"));
 });
 
+test("decksFromJsonImport: digimonmeta 형식(번호 문자열 반복)을 매수로 집계", () => {
+  const api = makeApi();
+  const decks = api.decksFromJsonImport(
+    ["Exported from digimonmeta.com", "EX5-001", "EX5-001", "EX5-001", "EX5-001", "EX5-007", "EX5-007", "P-186"],
+    "내 덱"
+  );
+  assert.equal(decks.length, 1);
+  assert.equal(decks[0].name, "내 덱");
+  assert.equal(decks[0].cards.length, 3); // 헤더 제외, 번호 3종
+  assert.equal(decks[0].cards.find((c) => c.cardNumber === "EX5-001").count, 4);
+  assert.equal(decks[0].cards.find((c) => c.cardNumber === "EX5-007").count, 2);
+  assert.equal(decks[0].cards.find((c) => c.cardNumber === "P-186").count, 1);
+});
+
+test("parseDeckImportSource: digimonmeta JSON 문자열도 파싱", () => {
+  const api = makeApi();
+  const code = JSON.stringify(["Exported from digimonmeta.com", "bt16-020", "bt16-020"]);
+  const decks = api.parseDeckImportSource(code, "코드 덱");
+  assert.equal(decks.length, 1);
+  assert.equal(decks[0].cards[0].cardNumber, "BT16-020"); // 대문자 정규화
+  assert.equal(decks[0].cards[0].count, 2);
+});
+
 test("uniqueImportedDeckName: 중복 이름에 번호를 붙인다", () => {
   const api = createDeckImport({
     normalizeCardNumber: (v) => v,

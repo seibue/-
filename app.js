@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260606-card-number-variants";
+  const APP_VERSION = "20260606-deck-sort";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -170,6 +170,7 @@
     deckCardType: "all",
     deckAdvancedOpen: false,
     deckBuilderView: "catalog",
+    deckTraySort: "level",
     deckCardFilters: createDefaultDeckCardFilters(),
     matchupDeckId: "",
     matchupOpponent: "",
@@ -1581,6 +1582,18 @@
 
   function sortDeckCards(cards) {
     return normalizeCards(cards).sort(compareDeckCards);
+  }
+
+  // 덱 목록 표시용 정렬 (레벨순 / 번호순 / 종류순)
+  function sortDeckCardsBy(cards, mode) {
+    const list = normalizeCards(cards);
+    if (mode === "number") {
+      return list.sort((a, b) => normalizeCardNumber(a.cardNumber).localeCompare(normalizeCardNumber(b.cardNumber), "ko", { numeric: true }));
+    }
+    if (mode === "level") {
+      return list.sort((a, b) => (Number(a.level) || 99) - (Number(b.level) || 99) || compareDeckCards(a, b));
+    }
+    return list.sort(compareDeckCards); // "type" 기본
   }
 
   function printDraftDeckRecipe() {
@@ -4256,8 +4269,9 @@
   }
 
   function renderDeckThumbSections(cards) {
-    const mainCards = cards.filter((c) => c.type !== "digiEgg");
-    const eggCards  = cards.filter((c) => c.type === "digiEgg");
+    const mode = state.deckTraySort || "level";
+    const mainCards = sortDeckCardsBy(cards.filter((c) => c.type !== "digiEgg"), mode);
+    const eggCards = sortDeckCardsBy(cards.filter((c) => c.type === "digiEgg"), mode);
     const parts = [];
     if (mainCards.length) {
       parts.push(`
@@ -4444,6 +4458,11 @@
                 cards.length
                   ? `
                     <div class="deck-list-tools">
+                      <select class="select deck-sort-select" data-deck-tray-sort aria-label="덱 목록 정렬">
+                        <option value="level"${selectedAttr(state.deckTraySort, "level")}>레벨순</option>
+                        <option value="number"${selectedAttr(state.deckTraySort, "number")}>번호순</option>
+                        <option value="type"${selectedAttr(state.deckTraySort, "type")}>종류순</option>
+                      </select>
                       <button class="deck-tool-button danger" type="button" data-action="clear-deck-draft-cards">모든 카드 비우기</button>
                     </div>
                   `
@@ -5762,6 +5781,13 @@
     if (deckFilterSelect) {
       cacheDeckDraftForm(event.target.closest("#deck-form"));
       setDeckFilterValue(deckFilterSelect.dataset.deckFilterSelect, deckFilterSelect.value);
+      renderKeepingDeckScroll();
+      return;
+    }
+    const deckTraySort = event.target.closest("[data-deck-tray-sort]");
+    if (deckTraySort) {
+      cacheDeckDraftForm(event.target.closest("#deck-form"));
+      state.deckTraySort = ["level", "number", "type"].includes(deckTraySort.value) ? deckTraySort.value : "level";
       renderKeepingDeckScroll();
       return;
     }

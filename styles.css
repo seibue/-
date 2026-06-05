@@ -3620,9 +3620,22 @@ button:disabled {
 
 .deck-list-tools {
   grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 7px;
+}
+
+.deck-sort-select {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 34px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.deck-list-tools .deck-tool-button {
+  flex: 1 1 120px;
 }
 
 .deck-tool-button {

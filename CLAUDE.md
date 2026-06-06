@@ -230,22 +230,28 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 
 ---
 
-## 작업 우선순위 (2026-05-27 기준)
+## 작업 우선순위 (2026-06-06 기준)
+
+> ⚠️ 새 작업 제안 전, **반드시 실제 코드로 구현 여부를 확인**할 것. 아래 목록만 믿지 말 것.
 
 - [x] GitHub 저장소 초기화 및 연결
 - [x] CLAUDE.md 작성
-- [ ] 전적 기록 — 대회 라운드 뱃지 (`[스위스 R2]`, `[토너먼트 4강]`)
-- [ ] 홈 — 최근 N게임 트렌드 표시 ("최근 10전 7승")
-- [ ] 통계 — 선공/후공 승률 분리
-- [ ] 설정 — 카드 데이터 최종 갱신일 표시
+- [x] 전적 기록 — 대회 라운드 뱃지 — `roundText()`로 구현됨
+- [x] 홈 — 최근 N게임 트렌드 — `homeTrendRows()` ("최근 N전 N승")
+- [~] 통계 — 선공/후공 승률 — **부분**: 매치업 리포트 내 선공/후공 분리는 있음(`matchupBreakdownRows(…, "playOrder")`). 통계 상단의 *독립 선후공 카드*는 미구현.
+- [ ] 설정 — 카드 데이터 최종 갱신일 표시 — 미구현(유일하게 남은 항목)
 
 ## 이미 구현된 것 (제안 전 확인)
 
-- 덱 카드 수량 +/- 버튼 — `renderDeckListRow()`의 `deck-count-stepper` 완전 구현됨
-- 덱 코드 복사 (digimonmeta 호환 배열) — 덱 카드 `copy-deck-code` 버튼 / `deckExportCodeText()`
-- 덱 JSON 내보내기/가져오기 — `export-deck`(다운로드), 가져오기 모달(텍스트·JSON·파일)
-- 대회 카드 라운드 전적 인라인 수정 — `renderTournamentCard()`의 행별 ✎ (`edit-match`)
-- 설정 → X(트위터) 문의 카드 — `renderContactSettingsCard()`
+- 덱 카드 수량 +/- 버튼 — `renderDeckListRow()`/`renderDeckThumb()` 스테퍼 (모바일 4모서리 배치)
+- 덱 목록 카드 정렬(레벨/번호/종류순) — 빌더 tray, `state.deckTraySort`/`sortDeckCardsBy()`
+- 덱 코드 복사/가져오기 — `copy-deck-code`(digimonmeta 배열), 가져오기(텍스트·JSON·digimonmeta·파일, 에라타/변형번호 처리)
+- 덱 버전 스냅샷 + 버전별 승률 — `save-deck-version`, `deck.versions`, `deckVersionRecords()`
+- 대회 라운드 전적 인라인 수정 — `renderTournamentCard()` 행별 ✎
+- **대회일정 캘린더** — `events` 탭, `js/calendar.js`(월간격자·구글캘린더링크·.ics+알람), 관리자 일정 CRUD(Supabase `tournament_events`), 지역 필터칩
+- 통계 기간 필터 + 메타 대시보드(테스트 플레이 제외) — `statsScopedMatches()`, `opponentMetaRows()`
+- 상단 ⚙ 설정 아이콘(설정 탭은 하단 네비에서 제거됨), X 문의 카드, PWA 설치 브라우저별 안내
+- 보안: Supabase RLS(`jeonjeokmon_user_data`·`tournament_events`), `vercel.json` 보안 헤더, LICENSE
 
 ---
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260606-pwa-install-guide";
+const CACHE_NAME = "jeonjeokmon-shell-20260606-install-button";
 const CORE_ASSETS = [
   "/",
   "/index.html",

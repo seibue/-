@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260606-pwa-install-guide";
+  const APP_VERSION = "20260606-install-button";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3649,14 +3649,17 @@
         ${
           installed
             ? ""
-            : state.installPrompt
-              ? `<div class="backup-row"><button class="control-button active" type="button" data-action="install-pwa">＋ 홈 화면에 추가</button></div>`
-              : `<div class="install-guide">
-                  <div class="mini-text">이 브라우저는 자동 설치 버튼을 지원하지 않습니다. 아래 방법으로 직접 추가하세요.</div>
+            : `<div class="backup-row"><button class="control-button active" type="button" data-action="install-pwa">＋ 홈 화면에 추가</button></div>
+                ${
+                  state.installPrompt
+                    ? ""
+                    : `<div class="install-guide">
+                  <div class="mini-text">버튼을 눌러도 설치 창이 뜨지 않으면, 이 브라우저는 자동 설치를 지원하지 않는 것이니 아래 방법으로 직접 추가하세요.</div>
                   <div class="install-guide-row"><strong>크롬 (안드로이드)</strong><span>우측 상단 메뉴 <b>⋮</b> → <b>앱 설치</b> 또는 <b>홈 화면에 추가</b></span></div>
                   <div class="install-guide-row"><strong>삼성 인터넷 (갤럭시)</strong><span>하단/우측 메뉴 <b>≡</b> → <b>현재 페이지 추가</b> → <b>홈 화면</b></span></div>
                   <div class="install-guide-row"><strong>아이폰·아이패드 (사파리)</strong><span>공유 <b>⬆︎</b> → <b>홈 화면에 추가</b></span></div>
                 </div>`
+                }`
         }
       </article>
     `;

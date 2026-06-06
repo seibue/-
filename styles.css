@@ -3618,6 +3618,31 @@ button:disabled {
   font-size: 12px;
 }
 
+.install-guide {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+.install-guide-row {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(4, 10, 20, 0.42);
+}
+.install-guide-row strong {
+  font-size: 12px;
+  color: var(--accent);
+}
+.install-guide-row span {
+  font-size: 13px;
+  color: var(--text);
+}
+.install-guide-row b {
+  color: var(--gold);
+}
+
 .deck-list-tools {
   grid-column: 1 / -1;
   display: flex;

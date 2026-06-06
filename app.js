@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260606-deck-sort";
+  const APP_VERSION = "20260606-pwa-install-guide";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3645,10 +3645,19 @@
           <h2 class="settings-title">앱 설치</h2>
           <span class="sync-badge ${installed ? "ok" : "offline"}">${installed ? "설치됨" : "선택 가능"}</span>
         </div>
-        <div class="mini-text">${installed ? "홈 화면 앱 모드로 실행 중입니다." : "휴대폰이나 PC 홈 화면에 전적몬을 앱처럼 추가할 수 있습니다."}</div>
-        <div class="backup-row">
-          <button class="control-button ${state.installPrompt ? "active" : ""}" type="button" data-action="install-pwa">${state.installPrompt ? "홈 화면에 추가" : "설치 안내"}</button>
-        </div>
+        <div class="mini-text">${installed ? "홈 화면 앱 모드로 실행 중입니다." : "휴대폰·태블릿·PC 홈 화면에 전적몬을 앱처럼 추가할 수 있습니다."}</div>
+        ${
+          installed
+            ? ""
+            : state.installPrompt
+              ? `<div class="backup-row"><button class="control-button active" type="button" data-action="install-pwa">＋ 홈 화면에 추가</button></div>`
+              : `<div class="install-guide">
+                  <div class="mini-text">이 브라우저는 자동 설치 버튼을 지원하지 않습니다. 아래 방법으로 직접 추가하세요.</div>
+                  <div class="install-guide-row"><strong>크롬 (안드로이드)</strong><span>우측 상단 메뉴 <b>⋮</b> → <b>앱 설치</b> 또는 <b>홈 화면에 추가</b></span></div>
+                  <div class="install-guide-row"><strong>삼성 인터넷 (갤럭시)</strong><span>하단/우측 메뉴 <b>≡</b> → <b>현재 페이지 추가</b> → <b>홈 화면</b></span></div>
+                  <div class="install-guide-row"><strong>아이폰·아이패드 (사파리)</strong><span>공유 <b>⬆︎</b> → <b>홈 화면에 추가</b></span></div>
+                </div>`
+        }
       </article>
     `;
   }

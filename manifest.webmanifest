@@ -12,13 +12,7 @@
   "icons": [
     {
       "src": "/icon-d-cardback.png?v=20260528-icon",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icon-d-cardback.png?v=20260528-icon",
-      "sizes": "512x512",
+      "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "any"
     },

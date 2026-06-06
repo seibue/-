@@ -115,7 +115,10 @@ function parseCards(html, sourceUrl, fetchedAt) {
       const mainEffect = findDlValue(item, "상단 텍스트");
       const sourceEffect = findDlValue(item, "하단 텍스트");
       const securityEffect = findDlValue(item, "시큐리티 효과");
-      if (!mainEffect && !sourceEffect && !securityEffect) return null;
+      // 효과가 없어도 정발된 카드(예: 효과 없는 디지타마 BT21-001~006)는 한글 이름을
+      // 보존하기 위해 포함한다. 앱은 hasEffect:false로 안전하게 처리한다.
+      // 이름이 없는 항목(비카드)만 제외.
+      if (!name) return null;
       return {
         cardNumber,
         name,

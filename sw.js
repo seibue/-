@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260606-catalog-trim";
+const CACHE_NAME = "jeonjeokmon-shell-20260606-egg-effects";
 const CORE_ASSETS = [
   "/",
   "/index.html",

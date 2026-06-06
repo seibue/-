@@ -94,10 +94,17 @@ function normalizeColor(value) {
 function normalizeImage(value) {
   const text = String(value || "").trim();
   if (!text) return "";
-  if (/^https?:\/\//i.test(text)) return text;
-  if (text.startsWith("//")) return `https:${text}`;
-  if (text.startsWith("/")) return `https://dgchub.com${text}`;
-  return `https://dgchub.com/${text.replace(/^\.?\//, "")}`;
+  const url = /^https?:\/\//i.test(text)
+    ? text
+    : text.startsWith("//")
+      ? `https:${text}`
+      : text.startsWith("/")
+        ? `https://dgchub.com${text}`
+        : `https://dgchub.com/${text.replace(/^\.?\//, "")}`;
+  // 앱은 런타임에서 dgchub 이미지를 쓰지 않고 images.digimoncard.io로 대체한다
+  // (app.js normalizeCatalogCard 참고). 죽은 URL을 카탈로그에 싣지 않도록 비운다.
+  if (/dgchub\.com/i.test(url)) return "";
+  return url;
 }
 
 function sourceCards(parsed) {

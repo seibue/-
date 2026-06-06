@@ -108,32 +108,63 @@ function sourceCards(parsed) {
   throw new Error("No card array found in DGCHub payload.");
 }
 
+// DGCHub는 카드 이름/이미지를 localeCardData[]에 언어별로 담는다(KOR/ENG/JPN).
+// 한국어 우선, 없으면 영어, 그래도 없으면 첫 항목으로 폴백.
+function localeEntry(card) {
+  const list = Array.isArray(card?.localeCardData) ? card.localeCardData : [];
+  return (
+    list.find((entry) => String(entry?.locale).toUpperCase() === "KOR") ||
+    list.find((entry) => String(entry?.locale).toUpperCase() === "ENG") ||
+    list[0] ||
+    {}
+  );
+}
+
 function normalizeCard(card) {
-  const no = normalizeCardNumber(pick(card, ["no", "cardNo", "cardNumber", "number", "id"]));
-  const name = cleanText(pick(card, ["name", "nameKo", "cardName", "cardNameKo", "korName", "koName"]));
+  const no = normalizeCardNumber(pick(card, ["cardNo", "no", "cardNumber", "number", "id"]));
+  const locale = localeEntry(card);
+  const name = cleanText(
+    pick(locale, ["name", "nameKo", "cardName"]) ||
+      pick(card, ["name", "nameKo", "cardName", "cardNameKo", "korName", "koName"])
+  );
   if (!no || !name) return null;
 
   return {
     no,
-    lv: cleanText(pick(card, ["lv", "level"])).replace(/\D/g, "").slice(0, 1),
+    lv: String(pick(card, ["lv", "level"])).replace(/\D/g, "").slice(0, 1),
     name,
-    type: normalizeType(pick(card, ["type", "cardType", "card_type"])),
-    color: normalizeColor(pick(card, ["color", "color1", "mainColor"])),
+    type: normalizeType(pick(card, ["cardType", "type", "card_type"])),
+    color: normalizeColor(pick(card, ["color1", "color", "mainColor"])),
     color2: normalizeColor(pick(card, ["color2", "subColor", "secondaryColor"])),
     rarity: cleanText(pick(card, ["rarity", "rare", "cardRarity"])),
-    img: normalizeImage(pick(card, ["img", "image", "imageUrl", "smallImgUrl", "smallImageUrl", "imgUrl", "webp"])),
+    img: normalizeImage(
+      pick(locale, ["smallImgUrl", "smallImageUrl", "imgUrl", "img", "image"]) ||
+        pick(card, ["img", "image", "imageUrl", "smallImgUrl", "smallImageUrl", "imgUrl", "webp"])
+    ),
   };
 }
+
+// 소스 구조가 또 바뀌어 대량 누락이 생겨도 빈/반토막 카탈로그를 덮어쓰지 않도록 하한선.
+const MIN_EXPECTED_CARDS = 4000;
 
 async function main() {
   const body = await fetchText(SOURCE_URL);
   const parsed = JSON.parse(body);
+  const rawCount = sourceCards(parsed).length;
   const cards = sourceCards(parsed).map(normalizeCard).filter(Boolean);
+
+  if (cards.length < MIN_EXPECTED_CARDS) {
+    throw new Error(
+      `카탈로그 카드 수가 비정상적으로 적습니다(${cards.length}/${rawCount}). ` +
+        `소스 구조가 바뀌었을 수 있어 기존 card-catalog.js를 보호하기 위해 중단합니다.`
+    );
+  }
+
   const output = `window.DIGIMON_CARD_CATALOG = ${JSON.stringify(cards)};\n`;
   fs.writeFileSync(OUTPUT_FILE, output, "utf8");
 
   const missingImages = cards.filter((card) => !card.img).length;
-  console.log(`Wrote ${cards.length} cards to ${OUTPUT_FILE}`);
+  console.log(`Wrote ${cards.length}/${rawCount} cards to ${OUTPUT_FILE}`);
   console.log(`Cards without image URL: ${missingImages}`);
 }
 

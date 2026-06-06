@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260606-install-button";
+const CACHE_NAME = "jeonjeokmon-shell-20260606-card-data";
 const CORE_ASSETS = [
   "/",
   "/index.html",

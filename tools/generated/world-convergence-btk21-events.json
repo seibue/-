@@ -1,0 +1,578 @@
+[
+  {
+    "import_id": "world-convergence-btk21-1회차-카드냥-당산",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T18:00:00+09:00",
+    "ends_at": "2026-05-31T20:00:00+09:00",
+    "location": "서울 · 카드냥 당산",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-카드냥-당산",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-03T18:00:00+09:00",
+    "ends_at": "2026-06-03T20:00:00+09:00",
+    "location": "서울 · 카드냥 당산",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-목동-듀얼파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T12:00:00+09:00",
+    "ends_at": "2026-05-31T14:00:00+09:00",
+    "location": "서울 · 목동 듀얼파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-목동-듀얼파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-03T13:00:00+09:00",
+    "ends_at": "2026-06-03T15:00:00+09:00",
+    "location": "서울 · 목동 듀얼파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-아현-카드킹덤",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T17:00:00+09:00",
+    "ends_at": "2026-05-31T19:00:00+09:00",
+    "location": "서울 · 아현 카드킹덤",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-아현-카드킹덤",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T17:00:00+09:00",
+    "ends_at": "2026-06-06T19:00:00+09:00",
+    "location": "서울 · 아현 카드킹덤",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-이수-듀얼파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-06-03T17:00:00+09:00",
+    "ends_at": "2026-06-03T19:00:00+09:00",
+    "location": "서울 · 이수 듀얼파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-이수-듀얼파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-05T20:00:00+09:00",
+    "ends_at": "2026-06-05T22:00:00+09:00",
+    "location": "서울 · 이수 듀얼파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-카드숲",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T17:00:00+09:00",
+    "ends_at": "2026-05-30T19:00:00+09:00",
+    "location": "서울 · 카드숲",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-카드숲",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T17:00:00+09:00",
+    "ends_at": "2026-06-06T19:00:00+09:00",
+    "location": "서울 · 카드숲",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-카드스퀘어",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T14:30:00+09:00",
+    "ends_at": "2026-05-30T16:30:00+09:00",
+    "location": "서울 · 카드스퀘어",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-카드스퀘어",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T14:30:00+09:00",
+    "ends_at": "2026-06-06T16:30:00+09:00",
+    "location": "서울 · 카드스퀘어",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-만수-듀얼존",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T15:00:00+09:00",
+    "ends_at": "2026-05-31T17:00:00+09:00",
+    "location": "인천 · 만수 듀얼존",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-만수-듀얼존",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T15:00:00+09:00",
+    "ends_at": "2026-06-07T17:00:00+09:00",
+    "location": "인천 · 만수 듀얼존",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-부평-히어로즈",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T13:30:00+09:00",
+    "ends_at": "2026-05-31T15:30:00+09:00",
+    "location": "인천 · 부평 히어로즈",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-부평-히어로즈",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-05T19:00:00+09:00",
+    "ends_at": "2026-06-05T21:00:00+09:00",
+    "location": "인천 · 부평 히어로즈",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-주안-티씨지아레나",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T13:30:00+09:00",
+    "ends_at": "2026-05-30T15:30:00+09:00",
+    "location": "인천 · 주안 티씨지아레나",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-주안-티씨지아레나",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T13:30:00+09:00",
+    "ends_at": "2026-06-06T15:30:00+09:00",
+    "location": "인천 · 주안 티씨지아레나",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-구리-듀얼파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T12:30:00+09:00",
+    "ends_at": "2026-05-31T14:30:00+09:00",
+    "location": "경기 · 구리 듀얼파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-구리-듀얼파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T12:30:00+09:00",
+    "ends_at": "2026-06-07T14:30:00+09:00",
+    "location": "경기 · 구리 듀얼파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-금정-배틀시티",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T14:00:00+09:00",
+    "ends_at": "2026-05-31T16:00:00+09:00",
+    "location": "경기 · 금정 배틀시티",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-금정-배틀시티",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T13:30:00+09:00",
+    "ends_at": "2026-06-07T15:30:00+09:00",
+    "location": "경기 · 금정 배틀시티",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-대화-듀얼-위너",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T17:00:00+09:00",
+    "ends_at": "2026-05-30T19:00:00+09:00",
+    "location": "경기 · 대화 듀얼 위너",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-대화-듀얼-위너",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T17:00:00+09:00",
+    "ends_at": "2026-06-06T19:00:00+09:00",
+    "location": "경기 · 대화 듀얼 위너",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-야탑-배틀시티",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-06-06T14:00:00+09:00",
+    "ends_at": "2026-06-06T16:00:00+09:00",
+    "location": "경기 · 야탑 배틀시티",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-야탑-배틀시티",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T11:30:00+09:00",
+    "ends_at": "2026-06-07T13:30:00+09:00",
+    "location": "경기 · 야탑 배틀시티",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-역곡-스카이-스크레이퍼",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T20:00:00+09:00",
+    "ends_at": "2026-05-30T22:00:00+09:00",
+    "location": "경기 · 역곡 스카이 스크레이퍼",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-역곡-스카이-스크레이퍼",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T20:00:00+09:00",
+    "ends_at": "2026-06-06T22:00:00+09:00",
+    "location": "경기 · 역곡 스카이 스크레이퍼",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-일산듀얼팩토리",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T13:00:00+09:00",
+    "ends_at": "2026-05-30T15:00:00+09:00",
+    "location": "경기 · 일산듀얼팩토리",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-일산듀얼팩토리",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T13:00:00+09:00",
+    "ends_at": "2026-06-06T15:00:00+09:00",
+    "location": "경기 · 일산듀얼팩토리",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-카드빌리지",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T13:00:00+09:00",
+    "ends_at": "2026-05-31T15:00:00+09:00",
+    "location": "경기 · 카드빌리지",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-카드빌리지",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T13:00:00+09:00",
+    "ends_at": "2026-06-07T15:00:00+09:00",
+    "location": "경기 · 카드빌리지",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-수원-카드플래닛",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T13:00:00+09:00",
+    "ends_at": "2026-05-30T15:00:00+09:00",
+    "location": "경기 · 수원 카드플래닛",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-수원-카드플래닛",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-05T19:00:00+09:00",
+    "ends_at": "2026-06-05T21:00:00+09:00",
+    "location": "경기 · 수원 카드플래닛",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-티씨지-트레이서즈-tcg-tracerz",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T16:30:00+09:00",
+    "ends_at": "2026-05-31T18:30:00+09:00",
+    "location": "경기 · 티씨지 트레이서즈(Tcg Tracerz)",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-티씨지-트레이서즈-tcg-tracerz",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T16:30:00+09:00",
+    "ends_at": "2026-06-07T18:30:00+09:00",
+    "location": "경기 · 티씨지 트레이서즈(Tcg Tracerz)",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-원주-카드스페이스",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T14:00:00+09:00",
+    "ends_at": "2026-05-31T16:00:00+09:00",
+    "location": "강원 · 원주 카드스페이스",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-원주-카드스페이스",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T14:00:00+09:00",
+    "ends_at": "2026-06-06T16:00:00+09:00",
+    "location": "강원 · 원주 카드스페이스",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-대전-스카이-스크레이퍼",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T13:00:00+09:00",
+    "ends_at": "2026-05-30T15:00:00+09:00",
+    "location": "대전 · 대전 스카이 스크레이퍼",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-대전-스카이-스크레이퍼",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T11:30:00+09:00",
+    "ends_at": "2026-06-06T13:30:00+09:00",
+    "location": "대전 · 대전 스카이 스크레이퍼",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-대전-듀얼몰",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-06-06T14:00:00+09:00",
+    "ends_at": "2026-06-06T16:00:00+09:00",
+    "location": "대전 · 대전 듀얼몰",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-광주-티씨지플레이어",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T15:00:00+09:00",
+    "ends_at": "2026-05-31T17:00:00+09:00",
+    "location": "광주 · 광주 티씨지플레이어",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-광주-티씨지플레이어",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T13:00:00+09:00",
+    "ends_at": "2026-06-06T15:00:00+09:00",
+    "location": "광주 · 광주 티씨지플레이어",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-윈앤헌트-win-hunt",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T14:00:00+09:00",
+    "ends_at": "2026-05-30T16:00:00+09:00",
+    "location": "광주 · 윈앤헌트(WIN&HUNT)",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-윈앤헌트-win-hunt",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T16:00:00+09:00",
+    "ends_at": "2026-06-07T18:00:00+09:00",
+    "location": "광주 · 윈앤헌트(WIN&HUNT)",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-전주-디마켓",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T14:30:00+09:00",
+    "ends_at": "2026-05-31T16:30:00+09:00",
+    "location": "전북 · 전주 디마켓",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-전주-디마켓",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T14:30:00+09:00",
+    "ends_at": "2026-06-07T16:30:00+09:00",
+    "location": "전북 · 전주 디마켓",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-대구-ss듀얼샵",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T15:00:00+09:00",
+    "ends_at": "2026-05-31T17:00:00+09:00",
+    "location": "대구 · 대구 ss듀얼샵",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-대구-ss듀얼샵",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T16:30:00+09:00",
+    "ends_at": "2026-06-07T18:30:00+09:00",
+    "location": "대구 · 대구 ss듀얼샵",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-듀얼스파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T14:00:00+09:00",
+    "ends_at": "2026-05-31T16:00:00+09:00",
+    "location": "대구 · 듀얼스파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-듀얼스파크",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T14:00:00+09:00",
+    "ends_at": "2026-06-07T16:00:00+09:00",
+    "location": "대구 · 듀얼스파크",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-진주-tcg팩토리",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T13:00:00+09:00",
+    "ends_at": "2026-05-30T15:00:00+09:00",
+    "location": "경남 · 진주 TCG팩토리",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-진주-tcg팩토리",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-05-31T13:00:00+09:00",
+    "ends_at": "2026-05-31T15:00:00+09:00",
+    "location": "경남 · 진주 TCG팩토리",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-창원-앨리스",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T14:00:00+09:00",
+    "ends_at": "2026-05-30T16:00:00+09:00",
+    "location": "경남 · 창원 앨리스",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-창원-앨리스",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T14:00:00+09:00",
+    "ends_at": "2026-06-06T16:00:00+09:00",
+    "location": "경남 · 창원 앨리스",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-창원-티씨지짐",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T17:00:00+09:00",
+    "ends_at": "2026-05-30T19:00:00+09:00",
+    "location": "경남 · 창원 티씨지짐",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-창원-티씨지짐",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-05-31T15:00:00+09:00",
+    "ends_at": "2026-05-31T17:00:00+09:00",
+    "location": "경남 · 창원 티씨지짐",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-카드엘릭서",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T18:00:00+09:00",
+    "ends_at": "2026-05-30T20:00:00+09:00",
+    "location": "경남 · 카드엘릭서",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-카드엘릭서",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-14T18:00:00+09:00",
+    "ends_at": "2026-06-14T20:00:00+09:00",
+    "location": "경남 · 카드엘릭서",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-카드캐처",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T17:00:00+09:00",
+    "ends_at": "2026-05-30T19:00:00+09:00",
+    "location": "경남 · 카드캐처",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-카드캐처",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T14:00:00+09:00",
+    "ends_at": "2026-06-07T16:00:00+09:00",
+    "location": "경남 · 카드캐처",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-울산-듀얼팩토리",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T15:00:00+09:00",
+    "ends_at": "2026-05-30T17:00:00+09:00",
+    "location": "울산 · 울산 듀얼팩토리",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-울산-듀얼팩토리",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-07T15:00:00+09:00",
+    "ends_at": "2026-06-07T17:00:00+09:00",
+    "location": "울산 · 울산 듀얼팩토리",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-던전다이스",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T12:00:00+09:00",
+    "ends_at": "2026-05-31T14:00:00+09:00",
+    "location": "울산 · 던전다이스",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-던전다이스",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T12:00:00+09:00",
+    "ends_at": "2026-06-06T14:00:00+09:00",
+    "location": "울산 · 던전다이스",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-j클로버",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T18:00:00+09:00",
+    "ends_at": "2026-05-30T20:00:00+09:00",
+    "location": "부산 · J클로버",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-j클로버",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-06T18:00:00+09:00",
+    "ends_at": "2026-06-06T20:00:00+09:00",
+    "location": "부산 · J클로버",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-경성대-티씨지드로우",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-31T14:00:00+09:00",
+    "ends_at": "2026-05-31T16:00:00+09:00",
+    "location": "부산 · 경성대 티씨지드로우",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-경성대-티씨지드로우",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-03T18:30:00+09:00",
+    "ends_at": "2026-06-03T20:30:00+09:00",
+    "location": "부산 · 경성대 티씨지드로우",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-동래-셔플",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-05-30T15:00:00+09:00",
+    "ends_at": "2026-05-30T17:00:00+09:00",
+    "location": "부산 · 동래 셔플",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-2회차-동래-셔플",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 2회차",
+    "starts_at": "2026-06-05T18:00:00+09:00",
+    "ends_at": "2026-06-05T20:00:00+09:00",
+    "location": "부산 · 동래 셔플",
+    "description": "최대인원 24명"
+  },
+  {
+    "import_id": "world-convergence-btk21-1회차-서면-듀얼존",
+    "title": "WORLD CONVERGENCE【BTK-21】발매기념대회 1회차",
+    "starts_at": "2026-06-03T14:00:00+09:00",
+    "ends_at": "2026-06-03T16:00:00+09:00",
+    "location": "부산 · 서면 듀얼존",
+    "description": "최대인원 24명"
+  }
+]

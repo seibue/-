@@ -1,0 +1,482 @@
+[
+  {
+    "import_id": "welcome-tamers-exchange-1회차-카드냥-당산",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T13:00:00+09:00",
+    "ends_at": "2026-06-07T15:00:00+09:00",
+    "location": "서울 · 카드냥 당산",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-카드냥-당산",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T13:00:00+09:00",
+    "ends_at": "2026-06-28T15:00:00+09:00",
+    "location": "서울 · 카드냥 당산",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-도곡-듀얼샵",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-05T17:00:00+09:00",
+    "ends_at": "2026-06-05T19:00:00+09:00",
+    "location": "서울 · 도곡 듀얼샵",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-도곡-듀얼샵",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-19T17:00:00+09:00",
+    "ends_at": "2026-06-19T19:00:00+09:00",
+    "location": "서울 · 도곡 듀얼샵",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-목동-듀얼파크",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T12:00:00+09:00",
+    "ends_at": "2026-06-07T14:00:00+09:00",
+    "location": "서울 · 목동 듀얼파크",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-목동-듀얼파크",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T12:00:00+09:00",
+    "ends_at": "2026-06-28T14:00:00+09:00",
+    "location": "서울 · 목동 듀얼파크",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-아현-카드킹덤",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-13T13:00:00+09:00",
+    "ends_at": "2026-06-13T15:00:00+09:00",
+    "location": "서울 · 아현 카드킹덤",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-아현-카드킹덤",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-27T13:00:00+09:00",
+    "ends_at": "2026-06-27T15:00:00+09:00",
+    "location": "서울 · 아현 카드킹덤",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-카드숲",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-06T17:00:00+09:00",
+    "ends_at": "2026-06-06T19:00:00+09:00",
+    "location": "서울 · 카드숲",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-카드숲",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-13T17:00:00+09:00",
+    "ends_at": "2026-06-13T19:00:00+09:00",
+    "location": "서울 · 카드숲",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-카드스퀘어",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-06T15:00:00+09:00",
+    "ends_at": "2026-06-06T17:00:00+09:00",
+    "location": "서울 · 카드스퀘어",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-카드스퀘어",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-20T15:00:00+09:00",
+    "ends_at": "2026-06-20T17:00:00+09:00",
+    "location": "서울 · 카드스퀘어",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-만수-듀얼존",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-14T15:00:00+09:00",
+    "ends_at": "2026-06-14T17:00:00+09:00",
+    "location": "인천 · 만수 듀얼존",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-만수-듀얼존",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-27T15:00:00+09:00",
+    "ends_at": "2026-06-27T17:00:00+09:00",
+    "location": "인천 · 만수 듀얼존",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-부평-히어로즈",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-21T14:00:00+09:00",
+    "ends_at": "2026-06-21T16:00:00+09:00",
+    "location": "인천 · 부평 히어로즈",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-부평-히어로즈",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T14:00:00+09:00",
+    "ends_at": "2026-06-28T16:00:00+09:00",
+    "location": "인천 · 부평 히어로즈",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-주안-티씨지아레나",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-12T15:00:00+09:00",
+    "ends_at": "2026-06-12T17:00:00+09:00",
+    "location": "인천 · 주안 티씨지아레나",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-주안-티씨지아레나",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-26T15:00:00+09:00",
+    "ends_at": "2026-06-26T17:00:00+09:00",
+    "location": "인천 · 주안 티씨지아레나",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-금정-배틀시티",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-12T19:00:00+09:00",
+    "ends_at": "2026-06-12T21:00:00+09:00",
+    "location": "경기 · 금정 배틀시티",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-금정-배틀시티",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-26T19:00:00+09:00",
+    "ends_at": "2026-06-26T21:00:00+09:00",
+    "location": "경기 · 금정 배틀시티",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-대화-듀얼-위너",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-20T16:00:00+09:00",
+    "ends_at": "2026-06-20T18:00:00+09:00",
+    "location": "경기 · 대화 듀얼 위너",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-대화-듀얼-위너",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-27T16:00:00+09:00",
+    "ends_at": "2026-06-27T18:00:00+09:00",
+    "location": "경기 · 대화 듀얼 위너",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-일산듀얼팩토리",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-06T14:00:00+09:00",
+    "ends_at": "2026-06-06T16:00:00+09:00",
+    "location": "경기 · 일산듀얼팩토리",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-일산듀얼팩토리",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-13T14:00:00+09:00",
+    "ends_at": "2026-06-13T16:00:00+09:00",
+    "location": "경기 · 일산듀얼팩토리",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-카드빌리지",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-13T15:00:00+09:00",
+    "ends_at": "2026-06-13T17:00:00+09:00",
+    "location": "경기 · 카드빌리지",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-카드빌리지",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-27T15:00:00+09:00",
+    "ends_at": "2026-06-27T17:00:00+09:00",
+    "location": "경기 · 카드빌리지",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-수원-카드플래닛",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T14:00:00+09:00",
+    "ends_at": "2026-06-07T16:00:00+09:00",
+    "location": "경기 · 수원 카드플래닛",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-수원-카드플래닛",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-14T14:00:00+09:00",
+    "ends_at": "2026-06-14T16:00:00+09:00",
+    "location": "경기 · 수원 카드플래닛",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-티씨지-트레이서즈-tcg-tracerz",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T14:00:00+09:00",
+    "ends_at": "2026-06-07T16:00:00+09:00",
+    "location": "경기 · 티씨지 트레이서즈(Tcg Tracerz)",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-티씨지-트레이서즈-tcg-tracerz",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T14:00:00+09:00",
+    "ends_at": "2026-06-28T16:00:00+09:00",
+    "location": "경기 · 티씨지 트레이서즈(Tcg Tracerz)",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-원주-카드스페이스",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-13T12:00:00+09:00",
+    "ends_at": "2026-06-13T14:00:00+09:00",
+    "location": "강원 · 원주 카드스페이스",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-원주-카드스페이스",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-20T12:00:00+09:00",
+    "ends_at": "2026-06-20T14:00:00+09:00",
+    "location": "강원 · 원주 카드스페이스",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-대전-스카이-스크레이퍼",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T13:00:00+09:00",
+    "ends_at": "2026-06-07T15:00:00+09:00",
+    "location": "대전 · 대전 스카이 스크레이퍼",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-대전-스카이-스크레이퍼",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-14T13:00:00+09:00",
+    "ends_at": "2026-06-14T15:00:00+09:00",
+    "location": "대전 · 대전 스카이 스크레이퍼",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-광주-티씨지플레이어",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-21T16:30:00+09:00",
+    "ends_at": "2026-06-21T18:30:00+09:00",
+    "location": "광주 · 광주 티씨지플레이어",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-광주-티씨지플레이어",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T16:30:00+09:00",
+    "ends_at": "2026-06-28T18:30:00+09:00",
+    "location": "광주 · 광주 티씨지플레이어",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-윈앤헌트-win-hunt",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T14:00:00+09:00",
+    "ends_at": "2026-06-07T16:00:00+09:00",
+    "location": "광주 · 윈앤헌트(WIN&HUNT)",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-윈앤헌트-win-hunt",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-14T14:00:00+09:00",
+    "ends_at": "2026-06-14T16:00:00+09:00",
+    "location": "광주 · 윈앤헌트(WIN&HUNT)",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-대구-ss듀얼샵",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-21T14:00:00+09:00",
+    "ends_at": "2026-06-21T16:00:00+09:00",
+    "location": "대구 · 대구 ss듀얼샵",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-대구-ss듀얼샵",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T14:00:00+09:00",
+    "ends_at": "2026-06-28T16:00:00+09:00",
+    "location": "대구 · 대구 ss듀얼샵",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-듀얼스파크",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-06T17:00:00+09:00",
+    "ends_at": "2026-06-06T19:00:00+09:00",
+    "location": "대구 · 듀얼스파크",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-듀얼스파크",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-14T17:00:00+09:00",
+    "ends_at": "2026-06-14T19:00:00+09:00",
+    "location": "대구 · 듀얼스파크",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-진주-tcg팩토리",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T12:00:00+09:00",
+    "ends_at": "2026-06-07T14:00:00+09:00",
+    "location": "경남 · 진주 TCG팩토리",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-진주-tcg팩토리",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-14T12:00:00+09:00",
+    "ends_at": "2026-06-14T14:00:00+09:00",
+    "location": "경남 · 진주 TCG팩토리",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-창원-티씨지짐",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-20T15:00:00+09:00",
+    "ends_at": "2026-06-20T17:00:00+09:00",
+    "location": "경남 · 창원 티씨지짐",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-창원-티씨지짐",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-27T15:00:00+09:00",
+    "ends_at": "2026-06-27T17:00:00+09:00",
+    "location": "경남 · 창원 티씨지짐",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-카드엘릭서",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-14T14:30:00+09:00",
+    "ends_at": "2026-06-14T16:30:00+09:00",
+    "location": "경남 · 카드엘릭서",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-카드엘릭서",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T14:30:00+09:00",
+    "ends_at": "2026-06-28T16:30:00+09:00",
+    "location": "경남 · 카드엘릭서",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-카드캐처",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T16:00:00+09:00",
+    "ends_at": "2026-06-07T18:00:00+09:00",
+    "location": "경남 · 카드캐처",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-카드캐처",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-28T16:00:00+09:00",
+    "ends_at": "2026-06-28T18:00:00+09:00",
+    "location": "경남 · 카드캐처",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-울산-듀얼팩토리",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-07T15:00:00+09:00",
+    "ends_at": "2026-06-07T17:00:00+09:00",
+    "location": "울산 · 울산 듀얼팩토리",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-울산-듀얼팩토리",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-14T15:00:00+09:00",
+    "ends_at": "2026-06-14T17:00:00+09:00",
+    "location": "울산 · 울산 듀얼팩토리",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-j클로버",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-20T12:00:00+09:00",
+    "ends_at": "2026-06-20T14:00:00+09:00",
+    "location": "부산 · J클로버",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-j클로버",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-27T12:00:00+09:00",
+    "ends_at": "2026-06-27T14:00:00+09:00",
+    "location": "부산 · J클로버",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-경성대-티씨지드로우",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-14T14:00:00+09:00",
+    "ends_at": "2026-06-14T16:00:00+09:00",
+    "location": "부산 · 경성대 티씨지드로우",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-경성대-티씨지드로우",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-21T14:00:00+09:00",
+    "ends_at": "2026-06-21T16:00:00+09:00",
+    "location": "부산 · 경성대 티씨지드로우",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-동래-셔플",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-03T14:00:00+09:00",
+    "ends_at": "2026-06-03T16:00:00+09:00",
+    "location": "부산 · 동래 셔플",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-동래-셔플",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-12T19:00:00+09:00",
+    "ends_at": "2026-06-12T21:00:00+09:00",
+    "location": "부산 · 동래 셔플",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-1회차-서면-듀얼존",
+    "title": "웰컴테이머즈 교류회 1회차",
+    "starts_at": "2026-06-06T14:00:00+09:00",
+    "ends_at": "2026-06-06T16:00:00+09:00",
+    "location": "부산 · 서면 듀얼존",
+    "description": ""
+  },
+  {
+    "import_id": "welcome-tamers-exchange-2회차-서면-듀얼존",
+    "title": "웰컴테이머즈 교류회 2회차",
+    "starts_at": "2026-06-14T14:00:00+09:00",
+    "ends_at": "2026-06-14T16:00:00+09:00",
+    "location": "부산 · 서면 듀얼존",
+    "description": ""
+  }
+]

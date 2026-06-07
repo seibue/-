@@ -12561,7 +12561,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744",
     "fetchedAt": "2026-06-07T11:50:49.751Z",
     "mainEffect": "",
-    "sourceEffect": "【서로의 턴】 진화원에 「베무몬」이 4장 이상 있는 이 디지몬의 DP를 +3000 한다.",
+    "sourceEffect": "【서로의 턴】 진화원에 「뱀몬」이 4장 이상 있는 이 디지몬의 DP를 +3000 한다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true

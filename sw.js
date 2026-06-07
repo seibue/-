@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260607-hide-unofficial-label";
+const CACHE_NAME = "jeonjeokmon-shell-20260607-promo-effects";
 const CORE_ASSETS = [
   "/",
   "/index.html",

@@ -178,6 +178,7 @@
         securityEffect: effect.securityEffect || "",
         altEffect: effect.altEffect || "",
         hasEffect: Boolean(effect.mainEffect || effect.sourceEffect || effect.securityEffect || effect.altEffect),
+        unofficial: Boolean(effect.unofficial),
         staticCache: true,
       };
     }

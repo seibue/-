@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260607-jp-catalog";
+const CACHE_NAME = "jeonjeokmon-shell-20260607-effect-overrides";
 const CORE_ASSETS = [
   "/",
   "/index.html",

@@ -156,6 +156,51 @@ function cardListUrl(category, page = 1) {
   return url.toString();
 }
 
+const OVERRIDES_FILE = path.resolve(process.cwd(), "tools", "effect-overrides.json");
+
+// 한국 공식이 효과를 누락한 카드를, tools/effect-overrides.json 의 비공식 한글 번역으로 보강한다.
+// 규칙: 해당 필드가 비어 있을 때만 채우고 unofficial:true 로 표시한다(공식이 채우면 공식 우선).
+function applyOverrides(cards, fetchedAt) {
+  if (!fs.existsSync(OVERRIDES_FILE)) return 0;
+  let overrides;
+  try {
+    overrides = JSON.parse(fs.readFileSync(OVERRIDES_FILE, "utf8"));
+  } catch (error) {
+    console.warn("효과 오버라이드 로드 실패(건너뜀):", error.message);
+    return 0;
+  }
+  let applied = 0;
+  Object.keys(overrides).forEach((key) => {
+    if (key.startsWith("_")) return;
+    const cardNumber = normalizeCardNumber(key);
+    if (!cardNumber) return;
+    const ov = overrides[key] || {};
+    const existing = cards.get(cardNumber) || {
+      name: "",
+      sourceUrl: "",
+      fetchedAt,
+      mainEffect: "",
+      sourceEffect: "",
+      securityEffect: "",
+      altEffect: "",
+    };
+    let touched = false;
+    ["mainEffect", "sourceEffect", "securityEffect", "altEffect"].forEach((field) => {
+      const value = meaningfulText(ov[field]);
+      if (value && !existing[field]) {
+        existing[field] = value;
+        touched = true;
+      }
+    });
+    if (touched) {
+      existing.unofficial = true;
+      cards.set(cardNumber, existing);
+      applied += 1;
+    }
+  });
+  return applied;
+}
+
 function writeCache(cards) {
   const sorted = Object.fromEntries(
     [...cards.entries()].sort(([a], [b]) => a.localeCompare(b, "en")).map(([cardNumber, card]) => [
@@ -168,6 +213,7 @@ function writeCache(cards) {
         sourceEffect: card.sourceEffect,
         securityEffect: card.securityEffect,
         altEffect: card.altEffect,
+        ...(card.unofficial ? { unofficial: true } : {}),
       },
     ])
   );
@@ -210,8 +256,10 @@ async function main() {
     await sleep(DELAY_MS);
   }
 
+  const overridden = applyOverrides(cards, fetchedAt);
   writeCache(cards);
   console.log(`Wrote ${cards.size} cards from ${fetchedPages} pages to ${OUTPUT_FILE}`);
+  if (overridden) console.log(`비공식 번역 보강: ${overridden}장`);
 }
 
 main().catch((error) => {

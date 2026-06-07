@@ -13430,6 +13430,206 @@ window.KOREAN_CARD_EFFECTS = {
     "securityEffect": "【시큐리티】이 카드를 코스트를 지불하지 않고 등장시킨다.",
     "altEffect": ""
   },
+  "BT25-001": {
+    "name": "토코몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.231Z",
+    "mainEffect": "",
+    "sourceEffect": "【어택 시】 [턴에 1번] 이 디지몬이 특징 「TS」를 가졌다면, ≪1드로우≫.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-002": {
+    "name": "와냐몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "",
+    "sourceEffect": "【자신의 턴】 [턴에 1번] 특징 「세이버즈」를 가진 자신의 테이머가 등장했을 때, 서로 ≪1드로우≫.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-003": {
+    "name": "프리몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "",
+    "sourceEffect": "【어택 시】 [턴에 1번] 자신의 시큐리티를 위에서 1장 파기하는 것으로, 이 디지몬을 패의 특징 「그로잉던」을 가진 카드로 지불하는 코스트 -1로 진화할 수 있다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-004": {
+    "name": "탭몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "",
+    "sourceEffect": "【자신의 턴】 [턴에 1번] 이 디지몬에 특징 「소셜」/「내비」/「게임」을 가진 카드가 링크할 때, 지불하는 코스트 -1 할 수 있다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-005": {
+    "name": "퍼그몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "",
+    "sourceEffect": "【자신의 턴】 [턴에 1번] 이 디지몬의 진화원에 특징 「삼총사」를 가진 카드가 놓였을 때, 이 디지몬을 패의 「삼총사」가 기재되어 있거나 특징 「TS」를 가진 디지몬 카드로 지불하는 코스트 -2로 진화할 수 있다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-006": {
+    "name": "도리몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "",
+    "sourceEffect": "【상대의 턴】 [턴에 1번] 상대의 디지몬이 어택했을 때, 자신의 패 1장을 파기하는 것으로, 특징 「타이탄족」을 가진 자신의 디지몬 1마리를 액티브로 한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-007": {
+    "name": "서치몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【등장 시】 자신의 덱 위에서 3장 오픈한다. 그중 특징 「어플몬」을 가진 카드 1장과 특징 「소셜」/「내비」/「재기동」/「창조」를 가진 카드 1장을 패에 추가한다. 나머지는 덱 아래로 되돌린다.",
+    "sourceEffect": "",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-008": {
+    "name": "코로나몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【이동 시】【등장 시】 자신의 패에서 특징 「일리아스」/「TS」를 가진 카드 2장까지를 파기하는 것으로, 파기한 1장마다 ≪1드로우≫.",
+    "sourceEffect": "【자신의 턴】 이 디지몬의 DP를 +2000 한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-009": {
+    "name": "베어몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【자신의 메인 페이즈 시작 시】 메모리가 4 이하라면, 이 디지몬을 패의 특징에 「짐승」을 포함하거나 특징 「TS」를 가진 디지몬 카드로 코스트를 지불하지 않고 진화할 수 있다.",
+    "sourceEffect": "【서로의 턴】 이 디지몬의 DP를 +1000 한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-010": {
+    "name": "호크몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【자신의 턴】 이 디지몬이 특징에 「새」/「짐승」을 포함하는 디지몬 카드로 진화할 때, 지불하는 코스트 -1.",
+    "sourceEffect": "【자신의 턴】 이 디지몬의 DP를 +2000 한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-011": {
+    "name": "아큐라몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "≪돌진≫ 【등장 시】【진화 시】 상대 디지몬 1마리를 레스트시킨다. 그 후, 자신의 턴이라면, 자신의 디지몬 2마리로 패의 「실피드몬」으로 조그레스 진화할 수 있다.",
+    "sourceEffect": "【자신의 턴】 이 디지몬의 DP를 +2000 한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-012": {
+    "name": "그리즈몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【등장 시】【진화 시】 턴 종료까지, 특징에 「짐승」을 포함하거나 특징 「신인형」/「TS」를 가진 자신의 디지몬 1마리는 ≪돌진≫을 얻고, DP +3000.",
+    "sourceEffect": "【서로의 턴】 이 디지몬의 DP를 +1000 한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-013": {
+    "name": "파이라몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【등장 시】【진화 시】 자신의 패 1장을 파기하는 것으로, 자신의 트래시에서 특징 「일리아스」를 가진 빨강/파랑 디지몬 카드 1장을 패로 되돌릴 수 있다. 【자신의 턴】 자신의 디지몬이 등장/진화했을 때, 그 디지몬이 파랑이라면, 이 디지몬을 패의 「플레어몬」으로 지불하는 코스트 -1로 진화할 수 있다.",
+    "sourceEffect": "【자신의 턴】 이 디지몬의 DP를 +2000 한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-014": {
+    "name": "메라몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【메인】 [턴에 1번] 자신의 패에서 특징 「화염형」/「TS」를 가진 카드 1장을 파기하는 것으로, DP4000 이하의 상대 디지몬 1마리를 소멸시킨다. 이 효과로 소멸하지 않았다면, ≪2드로우≫.",
+    "sourceEffect": "【어택 시】 DP4000 이하의 상대 디지몬 1마리를 소멸시킨다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-015": {
+    "name": "가루다몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "≪돌진≫≪불굴≫ 【등장 시】【진화 시】 DP6000 이하의 상대 디지몬 1마리를 소멸시킨다.",
+    "sourceEffect": "【서로의 턴】 [턴에 1번] 이 디지몬이 배틀로 상대 디지몬을 소멸시켰을 때, 상대의 시큐리티를 위에서 1장 파기한다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-016": {
+    "name": "아이언레오몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【등장 시】【진화 시】 턴 종료까지, 자신의 디지몬 1마리를 DP +3000. 그 후, 자신의 디지몬 1마리로 어택할 수 있다. 【서로의 턴】 DP13000 이상의 디지몬이 어택했을 때, 이 디지몬을 패의 「마르스몬」/「칼리스몬」으로 코스트를 지불하지 않고 진화할 수 있다.",
+    "sourceEffect": "≪S어택 +1≫(이 디지몬이 체크하는 매수 +1)",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-017": {
+    "name": "플레어몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "【등장 시】【진화 시】 이 디지몬으로 어택할 수 있다. 그 후, 자신의 패 1장을 파기하는 것으로, DP7000 이하의 상대 디지몬 1마리를 소멸시킨다. 【자신의 턴】 자신의 디지몬이 등장/진화했을 때, 그 디지몬이 파랑이라면, 이 디지몬을 패의 「아폴로몬」으로 지불하는 코스트 -2로 진화할 수 있다.",
+    "sourceEffect": "≪S어택 +1≫(이 디지몬이 체크하는 매수 +1)",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-018": {
+    "name": "아폴로몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "이 카드가 등장할 때, DP12000 이상의 상대 디지몬이 있다면, 지불하는 코스트 -5. 【등장 시】【진화 시】 턴 종료까지, 상대 디지몬 전부를 자신의 디지몬 1마리마다 DP -2000. 그 후, 이 디지몬의 DP 이하의 상대 디지몬 1마리를 소멸시킨다. 【자신의 턴 종료 시】 자신의 디지몬 2마리로 패의 「그레이스노바몬」으로 조그레스 진화할 수 있다. 그 후, 자신의 디지몬 1마리로 어택할 수 있다.",
+    "sourceEffect": "【어택 시】 [턴에 1번] 이 디지몬의 DP 이하의 상대 디지몬 1마리를 소멸시킨다.",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-019": {
+    "name": "얼티메이트브라키몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "≪재기동≫≪블로커≫ 【등장 시】【진화 시】 DP가 가장 높은 상대 디지몬 1마리를 소멸시킨다. 【자신의 턴 종료 시】 [턴에 1번] 메모리가 상대 쪽으로 5 이상이라면, 상대의 턴 종료까지, 이 디지몬은 상대 디지몬의 효과를 받지 않는다. 그 후, 메모리가 상대 쪽으로 5 이하라면, 상대의 턴 종료까지, 이 디지몬은 상대 옵션의 효과를 받지 않는다. 〈룰〉 특징: 타입 「공룡형」을 가진다.",
+    "sourceEffect": "",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
+  "BT25-020": {
+    "name": "마르스몬",
+    "sourceUrl": "",
+    "fetchedAt": "2026-06-07T12:55:04.232Z",
+    "mainEffect": "이 카드가 등장할 때, DP13000 이상의 디지몬이 있다면, 지불하는 코스트 -5. 【등장 시】【진화 시】【어택 시】 턴 종료까지, 자신의 디지몬 1마리를 DP +3000. 그 후, 자신의 디지몬 1마리와 상대 디지몬 1마리로 배틀할 수 있다. 【서로의 턴】 [턴에 1번] 특징 「TS」를 가진 자신의 디지몬이 배틀에 이겼을 때, 상대의 시큐리티를 위에서 1장 파기한다.",
+    "sourceEffect": "",
+    "securityEffect": "",
+    "altEffect": "",
+    "unofficial": true
+  },
   "BT3-001": {
     "name": "포로몬",
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=2300",

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260607-promo-effects";
+const CACHE_NAME = "jeonjeokmon-shell-20260607-bt25-batch1";
 const CORE_ASSETS = [
   "/",
   "/index.html",

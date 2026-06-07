@@ -185,6 +185,12 @@ function applyOverrides(cards, fetchedAt) {
       altEffect: "",
     };
     let touched = false;
+    // 미발매 카드는 한국 공식 이름이 없으므로 번역 이름도 채운다(공식 이름이 있으면 공식 우선).
+    const ovName = meaningfulText(ov.name);
+    if (ovName && !existing.name) {
+      existing.name = ovName;
+      touched = true;
+    }
     ["mainEffect", "sourceEffect", "securityEffect", "altEffect"].forEach((field) => {
       const value = meaningfulText(ov[field]);
       if (value && !existing[field]) {

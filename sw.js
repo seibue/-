@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260608-dgchub-import";
+const CACHE_NAME = "jeonjeokmon-shell-20260608-st23-24";
 const CORE_ASSETS = [
   "/",
   "/index.html",

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260607-effect-overrides-2";
+  const APP_VERSION = "20260607-hide-unofficial-label";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3783,11 +3783,8 @@
     ]
       .filter(([, text]) => text)
       .map(([title, text]) => renderCardEffectBlock(title, text));
-    if (!blocks.length) return "";
-    const unofficialNote = remoteEffect.unofficial
-      ? `<div class="card-preview-unofficial">⚠ 비공식 번역(일본판 기준) · 한국 공식 효과가 등록되면 자동 교체됩니다</div>`
-      : "";
-    return `${unofficialNote}${blocks.join("")}`;
+    if (blocks.length) return blocks.join("");
+    return "";
   }
 
   function renderCardEffectBlock(title, koreanText, originalText = "", badge = "") {

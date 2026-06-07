@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260606-egg-effects";
+const CACHE_NAME = "jeonjeokmon-shell-20260607-deck-image-filename";
 const CORE_ASSETS = [
   "/",
   "/index.html",

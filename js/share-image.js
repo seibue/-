@@ -564,7 +564,11 @@
         const layout = options.layout || state.deckImageLayout || "x";
         const result = await drawDeckShareImage(canvas, printableDeck, date, { layout, preloadedImages: inspection.images });
         const suffix = layout === "archive" ? "large" : "x";
-        const fileName = `jeonjeokmon-${safeFileName(printableDeck.name)}-${date}-${suffix}.png`;
+        // 시각 토큰(HHMMSS)을 붙여 같은 덱·같은 날 여러 번 저장해도 파일명이 겹치지 않게 한다.
+        // (파일명이 같으면 브라우저가 예전 파일을 그대로 두고 (1)을 붙여, 덱을 수정해도
+        //  사용자가 다운로드 폴더에서 옛 버전 이미지를 열게 되는 혼선을 막는다.)
+        const stamp = new Date().toTimeString().slice(0, 8).replace(/:/g, "");
+        const fileName = `jeonjeokmon-${safeFileName(printableDeck.name)}-${date}-${suffix}-${stamp}.png`;
         await downloadCanvasPng(canvas, fileName);
         if (notify) {
           notifyToast(

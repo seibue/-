@@ -218,6 +218,14 @@ node tools/refresh-card-data.js --version=20260527-card-data
 
 GitHub에 올릴 파일: `index.html`, `app.js`, `js/`, `styles.css`, `card-catalog.js`, `korean-card-effects.js`, `sw.js`, `tools/`, `tests/`, `package.json`
 
+### 데이터 소스 (중요)
+- **카탈로그**(`card-catalog.js`) ← **일본 공식 `digimoncard.com/cards`**(HTML 크롤). 번호·색·형태(레벨)·종류·레어도 추출. **dgchub 의존 제거됨.**
+  - 한글 이름은 `korean-card-effects.js`에서 번호로 매칭해 채우고, **미발매(일본 선행) 카드는 일본어 이름**으로 남음(한국 정발 후 효과 재크롤 시 자동 한글화).
+  - `img`는 빈 값으로 두어 런타임에 `images.digimoncard.io`를 쓰게 함(이미지는 dgchub 안 씀).
+  - 빌드 순서 의존: **효과 → 카탈로그**(카탈로그가 한글 이름을 효과 파일에서 읽음). `update-card-data.js`가 이 순서로 실행.
+  - 안전장치: 파싱 카드 수가 4000 미만이면 빌더가 **중단**(빈/반토막 카탈로그 덮어쓰기 방지).
+- **정발 효과**(`korean-card-effects.js`) ← **한국 공식 `digimoncard.co.kr/cardlist`**(HTML 크롤). 효과 없는 정발 카드도 이름 보존 위해 포함.
+
 ---
 
 ## 배포 흐름

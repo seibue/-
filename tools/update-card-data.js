@@ -6,16 +6,17 @@ const node = process.execPath;
 
 const tasks = [
   {
-    name: "card catalog",
-    label: "카드 카탈로그",
-    script: path.join(root, "tools", "build-card-catalog-cache.js"),
-    flag: "--catalog-only",
-  },
-  {
+    // 카탈로그가 한글 이름을 korean-card-effects.js에서 가져오므로 효과를 먼저 빌드한다.
     name: "korean effects",
     label: "정발 효과",
     script: path.join(root, "tools", "build-korean-card-effects-cache.js"),
     flag: "--effects-only",
+  },
+  {
+    name: "card catalog",
+    label: "카드 카탈로그",
+    script: path.join(root, "tools", "build-card-catalog-cache.js"),
+    flag: "--catalog-only",
   },
 ];
 

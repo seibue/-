@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260609-search-effects";
+  const APP_VERSION = "20260609-remove-mobile-quick";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -987,16 +987,6 @@
             `
           )
           .join("")}
-      </div>
-    `;
-  }
-
-  function renderMobileQuickActions() {
-    return `
-      <div class="mobile-quick-actions" aria-label="빠른 실행">
-        <button class="mobile-quick-button primary" type="button" data-action="open-match">기록</button>
-        <button class="mobile-quick-button" type="button" data-action="open-deck">덱</button>
-        <button class="mobile-quick-button" type="button" data-action="open-daily-share-panel">공유</button>
       </div>
     `;
   }
@@ -2337,7 +2327,6 @@
         ${renderModal()}
         ${renderCardPreview()}
         ${renderToastStack()}
-        ${renderMobileQuickActions()}
       </div>
     `;
     // 모달이 열려 있을 때 배경 페이지 스크롤 차단

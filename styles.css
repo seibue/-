@@ -4709,7 +4709,7 @@ button:disabled {
   }
 
   .content {
-    padding: 12px 12px calc(142px + env(safe-area-inset-bottom));
+    padding: 12px 12px calc(78px + env(safe-area-inset-bottom));
   }
 
   .mobile-quick-actions {
@@ -5587,7 +5587,7 @@ button:disabled {
   }
 
   .content {
-    padding: 10px 8px calc(136px + env(safe-area-inset-bottom));
+    padding: 10px 8px calc(74px + env(safe-area-inset-bottom));
   }
 
   .brand-icon {

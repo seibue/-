@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260608-home-card-search";
+  const APP_VERSION = "20260608-deck-card-preview";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3126,8 +3126,9 @@
           ${cards
             .map((card) => {
               const stats = statsForDeckCard(deck.id, card);
+              const cardNo = normalizeCardNumber(card.cardNumber);
               return `
-                <div class="card-rate-row">
+                <div class="card-rate-row card-rate-row-tap" role="button" tabindex="0" data-action="preview-catalog-card" data-card-no="${escapeHTML(cardNo)}" aria-label="${escapeHTML(cardDisplayName(card))} 효과 보기">
                   <div class="card-rate-main">
                     <strong>${escapeHTML(cardDisplayName(card))}</strong>
                     <span>${escapeHTML(cardMetaText(card))}</span>
@@ -3136,6 +3137,7 @@
                     <strong>${stats.total ? `${stats.rate}%` : "-"}</strong>
                     <span>${stats.total}전 ${stats.wins}승</span>
                   </div>
+                  <span class="card-rate-chevron" aria-hidden="true">›</span>
                 </div>
               `;
             })
@@ -5777,6 +5779,14 @@
       event.preventDefault();
       closeCardPreview();
       return;
+    }
+    if (event.key === "Enter" || event.key === " ") {
+      const previewRow = event.target.closest('[role="button"][data-action="preview-catalog-card"]');
+      if (previewRow) {
+        event.preventDefault();
+        openCardPreview(previewRow.dataset.cardNo);
+        return;
+      }
     }
     const deckCardSearch = event.target.closest("[data-deck-card-search]");
     if (!deckCardSearch || event.key !== "Enter" || event.isComposing) return;

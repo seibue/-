@@ -1774,6 +1774,36 @@ button:disabled {
   font-size: 16px;
 }
 
+.card-rate-row-tap {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.card-rate-row-tap:hover,
+.card-rate-row-tap:focus-visible {
+  border-color: rgba(25, 231, 255, 0.55);
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 8px),
+    rgba(25, 231, 255, 0.1);
+  outline: none;
+}
+
+.card-rate-row-tap:active {
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 8px),
+    rgba(25, 231, 255, 0.16);
+}
+
+.card-rate-chevron {
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0 2px 0 4px;
+}
+
 .stats-period-row {
   display: flex;
   flex-wrap: wrap;

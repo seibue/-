@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260608-promo-tokens";
+  const APP_VERSION = "20260608-home-card-search";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -167,6 +167,7 @@
     deckDraftForm: null,
     deckDraftCards: [],
     deckCardSearch: "",
+    homeCardSearch: "",
     deckCardType: "all",
     deckAdvancedOpen: false,
     deckBuilderView: "catalog",
@@ -211,6 +212,7 @@
   };
   let searchTimer = null;
   let deckSearchTimer = null;
+  let homeSearchTimer = null;
   const effectLoadingCards = new Set();
 
   // 모듈 분리 A5: 진단(diagnostics)은 js/diagnostics.js 로 이동.
@@ -864,6 +866,67 @@
         </button>
       </article>
     `;
+  }
+
+  const HOME_CARD_SEARCH_LIMIT = 18;
+
+  function homeCardSearchMatches() {
+    const query = state.homeCardSearch.trim().toLowerCase();
+    if (!query) return [];
+    const compactQuery = normalizeCatalogQuery(state.homeCardSearch);
+    return CARD_CATALOG.filter((card) => {
+      if (cardNumberMatchesQuery(card.no, query)) return true;
+      const searchText = catalogSearchText(card);
+      return searchText.includes(query) || normalizeCatalogQuery(searchText).includes(compactQuery);
+    })
+      .sort(compareCatalogCards)
+      .slice(0, HOME_CARD_SEARCH_LIMIT);
+  }
+
+  function renderHomeCardSearchResults() {
+    if (!state.homeCardSearch.trim()) {
+      return `<div class="home-card-search-hint">카드 이름이나 번호를 입력하면 카드를 찾아 효과를 볼 수 있습니다.</div>`;
+    }
+    const cards = homeCardSearchMatches();
+    if (!cards.length) {
+      return `<div class="home-card-search-hint">검색 결과가 없습니다. 번호는 BT1-084, bt1 084처럼 입력해도 됩니다.</div>`;
+    }
+    return cards
+      .map((card) => {
+        const imageSrc = catalogImageSource(card);
+        const no = escapeHTML(card.no);
+        return `
+          <button class="home-card-result" type="button" data-action="preview-catalog-card" data-card-no="${no}" title="${no} ${escapeHTML(card.name)}">
+            <span class="home-card-result-thumb">${
+              imageSrc
+                ? `<img src="${escapeHTML(imageSrc)}" alt="${escapeHTML(card.name)}" loading="lazy" />`
+                : `<span>${no}</span>`
+            }</span>
+            <span class="home-card-result-info">
+              <strong>${escapeHTML(card.name)}</strong>
+              <small>${no} · ${escapeHTML(catalogMetaText(card))}</small>
+            </span>
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  function renderHomeCardSearch() {
+    return `
+      <article class="home-panel home-card-search">
+        <div class="home-card-search-head">
+          <strong>카드 검색</strong>
+          <input class="input" type="search" value="${escapeHTML(state.homeCardSearch)}" placeholder="카드명·번호·효과 (예: 오메가몬, BT1-084)" data-home-card-search autocomplete="off" />
+        </div>
+        <div class="home-card-search-results" data-home-card-search-results>${renderHomeCardSearchResults()}</div>
+      </article>
+    `;
+  }
+
+  function updateHomeCardSearchResults() {
+    const container = document.querySelector("[data-home-card-search-results]");
+    if (container) container.innerHTML = renderHomeCardSearchResults();
   }
 
   function renderAuthControlsInner() {
@@ -2047,7 +2110,7 @@
     return `
       <section class="home-dashboard">
         ${shouldShowStarterGuide() ? renderHomeStarterCard() : ""}
-        ${renderSaveStatusStrip()}
+        ${renderHomeCardSearch()}
         <div class="home-hero-grid">
           <article class="home-panel home-today" style="--rate: ${displayRate}%">
             <div class="home-panel-head">
@@ -5843,6 +5906,15 @@
       }
       return;
     }
+    const homeCardSearch = event.target.closest("[data-home-card-search]");
+    if (homeCardSearch) {
+      state.homeCardSearch = homeCardSearch.value;
+      clearTimeout(homeSearchTimer);
+      if (!event.isComposing) {
+        homeSearchTimer = setTimeout(updateHomeCardSearchResults, 180);
+      }
+      return;
+    }
     const newCardField = event.target.closest("[data-new-card-number], [data-new-card-level]");
     if (newCardField) {
       sanitizeNewCardField(newCardField);
@@ -5864,6 +5936,13 @@
   });
 
   document.addEventListener("compositionend", (event) => {
+    const homeCardSearch = event.target.closest("[data-home-card-search]");
+    if (homeCardSearch) {
+      state.homeCardSearch = homeCardSearch.value;
+      clearTimeout(homeSearchTimer);
+      updateHomeCardSearchResults();
+      return;
+    }
     const deckCardSearch = event.target.closest("[data-deck-card-search]");
     if (!deckCardSearch) return;
     commitDeckCardSearch(deckCardSearch);

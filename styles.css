@@ -533,16 +533,9 @@ button:disabled {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: 8px;
-}
-
-/* 마우스(데스크톱)에서만 내부 스크롤 박스로 컴팩트하게.
-   터치 기기는 내부 스크롤을 없애 페이지 흐름으로 둬야 탭이 안정적이다
-   (스크롤 영역 안의 카드 탭이 스크롤에 흡수되어 무반응되는 문제 방지). */
-@media (hover: hover) and (pointer: fine) {
-  .home-card-search-results {
-    max-height: 320px;
-    overflow-y: auto;
-  }
+  /* 내부 스크롤 박스를 두지 않는다. 스크롤 컨테이너 경계에서 마지막 줄 카드의
+     클릭이 클리핑/흡수되어 무반응되던 문제 때문(데스크톱·터치 공통).
+     결과는 패널·페이지 흐름에 자연스럽게 쌓이고 페이지가 스크롤된다. */
 }
 
 .home-card-search-hint {

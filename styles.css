@@ -3919,7 +3919,6 @@ button:disabled {
 
 .deck-thumb-item:hover .deck-thumb-overlay {
   opacity: 1;
-  pointer-events: auto;
 }
 
 .deck-thumb-btn {
@@ -3935,6 +3934,12 @@ button:disabled {
   justify-content: center;
   line-height: 1;
   transition: transform 0.1s, opacity 0.1s;
+  /* 기본은 캡처 안 함 → 카드 art 탭이 미리보기로 통과. 버튼이 보일 때(호버)만 캡처. */
+  pointer-events: none;
+}
+
+.deck-thumb-item:hover .deck-thumb-btn {
+  pointer-events: auto;
 }
 
 .deck-thumb-btn:hover  { opacity: 0.85; }
@@ -3943,6 +3948,50 @@ button:disabled {
 .deck-thumb-btn.minus  { background: rgba(255, 94, 122, 0.92); color: #fff; }
 .deck-thumb-btn.plus   { background: rgba(25, 231, 255, 0.92); color: #000; }
 .deck-thumb-btn.remove { background: rgba(255, 50, 70, 0.92);  color: #fff; font-size: 12px; }
+
+/* 터치 기기(태블릿 포함, 화면 폭 무관): 카드 art 탭=미리보기, 버튼만 캡처.
+   hover가 없으므로 +/-/× 는 4모서리에 항상 표시한다. */
+@media (hover: none) and (pointer: coarse) {
+  .deck-thumb-overlay {
+    opacity: 1;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0);
+    display: block;
+    padding: 0;
+  }
+  .deck-thumb-btn {
+    position: absolute;
+    pointer-events: auto;
+    width: 28px;
+    height: 28px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  }
+  .deck-thumb-btn.minus,
+  .deck-thumb-btn.plus {
+    display: flex;
+  }
+  .deck-thumb-count {
+    top: 3px;
+    bottom: auto;
+    left: 3px;
+  }
+  .deck-thumb-btn.minus {
+    bottom: 3px;
+    left: 3px;
+  }
+  .deck-thumb-btn.plus {
+    bottom: 3px;
+    right: 3px;
+  }
+  .deck-thumb-btn.remove {
+    top: 3px;
+    right: 3px;
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    background: rgba(255, 50, 70, 0.9);
+  }
+}
 
 .deck-list-row {
   display: grid;

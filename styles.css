@@ -533,8 +533,16 @@ button:disabled {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: 8px;
-  max-height: 320px;
-  overflow-y: auto;
+}
+
+/* 마우스(데스크톱)에서만 내부 스크롤 박스로 컴팩트하게.
+   터치 기기는 내부 스크롤을 없애 페이지 흐름으로 둬야 탭이 안정적이다
+   (스크롤 영역 안의 카드 탭이 스크롤에 흡수되어 무반응되는 문제 방지). */
+@media (hover: hover) and (pointer: fine) {
+  .home-card-search-results {
+    max-height: 320px;
+    overflow-y: auto;
+  }
 }
 
 .home-card-search-hint {
@@ -558,6 +566,20 @@ button:disabled {
   text-align: left;
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
+  /* 터치 안정화: 탭 지연/더블탭 줌 제거, 이미지 드래그·텍스트 선택이 탭을 가로채지 않게 */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 버튼 내부 이미지/텍스트는 탭을 통과시켜 항상 버튼이 탭 대상이 되게 한다 */
+.home-card-result * {
+  pointer-events: none;
+}
+
+.home-card-result-thumb img {
+  -webkit-user-drag: none;
 }
 
 .home-card-result:hover {

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260608-deck-thumb-tap";
+  const APP_VERSION = "20260608-preview-scroll";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2322,6 +2322,7 @@
   }
 
   let pendingDeckScroll = null;
+  let previewReturnScroll = null;
   function renderKeepingDeckScroll() {
     // 데스크톱은 내부 컨테이너(.deck-modal-panel/.catalog-grid)가 스크롤되고,
     // 모바일은 .deck-modal-backdrop(페이지)이 스크롤된다 → 양쪽 모두 저장/복원.
@@ -4575,9 +4576,16 @@
   }
 
   function closeCardPreview() {
+    const inDeckModal = state.modal === "deck";
+    const returnScroll = previewReturnScroll;
+    previewReturnScroll = null;
     state.previewCardNo = "";
-    if (state.modal === "deck") renderKeepingDeckScroll();
-    else render();
+    if (inDeckModal) {
+      renderKeepingDeckScroll();
+      return;
+    }
+    render();
+    if (returnScroll != null) window.scrollTo(0, returnScroll);
   }
 
   function syncMatchFormMode(form) {
@@ -4623,6 +4631,11 @@
     const normalized = normalizeCardNumber(cardNumber);
     if (!normalized) return;
     cacheDeckDraftForm(document.querySelector("#deck-form"));
+    // 일반 화면(덱 모달 밖)에서 미리보기를 열 때 현재 페이지 스크롤 위치를 저장해두고,
+    // 닫을 때 그대로 복원한다(미리보기 후 화면이 위/아래로 튀는 문제 방지).
+    if (!state.previewCardNo && state.modal !== "deck") {
+      previewReturnScroll = window.scrollY;
+    }
     state.previewCardNo = normalized;
     if (state.modal === "deck") renderKeepingDeckScroll();
     else render();

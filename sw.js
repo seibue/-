@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260608-deck-thumb-tap";
+const CACHE_NAME = "jeonjeokmon-shell-20260608-preview-scroll";
 const CORE_ASSETS = [
   "/",
   "/index.html",

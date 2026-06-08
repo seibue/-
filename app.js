@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260609-home-search-flow";
+  const APP_VERSION = "20260609-search-effects";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -876,8 +876,7 @@
     const compactQuery = normalizeCatalogQuery(state.homeCardSearch);
     return CARD_CATALOG.filter((card) => {
       if (cardNumberMatchesQuery(card.no, query)) return true;
-      const searchText = catalogSearchText(card);
-      return searchText.includes(query) || normalizeCatalogQuery(searchText).includes(compactQuery);
+      return catalogTextMatches(card, query, compactQuery);
     })
       .sort(compareCatalogCards)
       .slice(0, HOME_CARD_SEARCH_LIMIT);
@@ -1391,7 +1390,33 @@
 
   // 카드 번호(이름/색/종류 제외) 텍스트
   function catalogSearchText(card) {
-    return `${card.name} ${cardTypeLabel(card.type)} ${colorLabel(card.color)} ${colorLabel(card.color2)} ${card.rarity}`.toLowerCase();
+    const eff = KOREAN_CARD_EFFECTS[card.no] || {};
+    const effectText = `${eff.mainEffect || ""} ${eff.sourceEffect || ""} ${eff.securityEffect || ""} ${eff.altEffect || ""}`;
+    return `${card.name} ${cardTypeLabel(card.type)} ${colorLabel(card.color)} ${colorLabel(card.color2)} ${card.rarity} ${effectText}`.toLowerCase();
+  }
+
+  // 카드명·종류·색·레어도 + 효과 텍스트를 합친 검색 인덱스(번호→{text, compact}).
+  // 정적 데이터(KOREAN_CARD_EFFECTS)라 1회만 만들어 키 입력마다 재사용한다.
+  let catalogSearchIndex = null;
+  function catalogSearchEntry(card) {
+    if (!catalogSearchIndex) {
+      catalogSearchIndex = new Map();
+      CARD_CATALOG.forEach((item) => {
+        const text = catalogSearchText(item);
+        catalogSearchIndex.set(item.no, { text, compact: normalizeCatalogQuery(text) });
+      });
+    }
+    const hit = catalogSearchIndex.get(card.no);
+    if (hit) return hit;
+    const text = catalogSearchText(card);
+    return { text, compact: normalizeCatalogQuery(text) };
+  }
+
+  // 카드 어디든(이름/효과/색/종류) 질의가 포함되면 매칭. compact는 공백·기호 제거 비교.
+  function catalogTextMatches(card, query, compactQuery) {
+    const entry = catalogSearchEntry(card);
+    if (entry.text.includes(query)) return true;
+    return Boolean(compactQuery) && entry.compact.includes(compactQuery);
   }
 
   // 카드 번호 검색은 세트코드 경계를 인식한다.
@@ -1468,8 +1493,7 @@
       if (filters.setPrefix !== "all" && cardSetPrefix(card) !== filters.setPrefix) return false;
       if (!query) return true;
       if (cardNumberMatchesQuery(card.no, query)) return true;
-      const searchText = catalogSearchText(card);
-      return searchText.includes(query) || normalizeCatalogQuery(searchText).includes(compactQuery);
+      return catalogTextMatches(card, query, compactQuery);
     }).sort(compareCatalogCards);
   }
 

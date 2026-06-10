@@ -38,7 +38,9 @@ DegiLog/
 │   ├── deck-import.js        # 덱 텍스트/JSON 가져오기 파서 (createDeckImport)
 │   ├── stats.js             # 통계/매치업 계산 (createStats)
 │   ├── deck.js              # 덱 편집(draft) 로직 (createDeck)
-│   └── cloud.js             # Supabase 클라우드 동기화 (createCloud)
+│   ├── cloud.js             # Supabase 클라우드 동기화 (createCloud)
+│   ├── calendar.js          # 대회일정 캘린더 (월간격자·구글캘린더·.ics)
+│   └── views-stats.js       # 통계 탭 뷰(렌더) 함수군 (createStatsViews) — views 분리 1호
 ├── tests/                   # node --test 단위 테스트 (모듈별, npm test 로 실행)
 │   └── *.test.js
 ├── api/

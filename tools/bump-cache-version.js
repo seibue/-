@@ -36,6 +36,7 @@ updateFile("index.html", [
   [/js\/deck\.js\?v=[^"]+/g, `js/deck.js?v=${version}`],
   [/js\/cloud\.js\?v=[^"]+/g, `js/cloud.js?v=${version}`],
   [/js\/calendar\.js\?v=[^"]+/g, `js/calendar.js?v=${version}`],
+  [/js\/views-stats\.js\?v=[^"]+/g, `js/views-stats.js?v=${version}`],
   [/app\.js\?v=[^"]+/g, `app.js?v=${version}`],
 ]);
 

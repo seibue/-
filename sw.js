@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260609-remove-mobile-quick";
+const CACHE_NAME = "jeonjeokmon-shell-20260609-views-stats";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -14,6 +14,7 @@ const CORE_ASSETS = [
   "/js/deck.js",
   "/js/cloud.js",
   "/js/calendar.js",
+  "/js/views-stats.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

@@ -38,6 +38,7 @@ updateFile("index.html", [
   [/js\/calendar\.js\?v=[^"]+/g, `js/calendar.js?v=${version}`],
   [/js\/views-stats\.js\?v=[^"]+/g, `js/views-stats.js?v=${version}`],
   [/js\/views-settings\.js\?v=[^"]+/g, `js/views-settings.js?v=${version}`],
+  [/js\/views-tournaments\.js\?v=[^"]+/g, `js/views-tournaments.js?v=${version}`],
   [/app\.js\?v=[^"]+/g, `app.js?v=${version}`],
 ]);
 

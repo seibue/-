@@ -41,7 +41,8 @@ DegiLog/
 │   ├── cloud.js             # Supabase 클라우드 동기화 (createCloud)
 │   ├── calendar.js          # 대회일정 캘린더 (월간격자·구글캘린더·.ics)
 │   ├── views-stats.js       # 통계 탭 뷰(렌더) 함수군 (createStatsViews) — views 분리 1호
-│   └── views-settings.js    # 설정 탭 뷰(렌더) 함수군 (createSettingsViews) — views 분리 2호
+│   ├── views-settings.js    # 설정 탭 뷰(렌더) 함수군 (createSettingsViews) — views 분리 2호
+│   └── views-tournaments.js # 대회 탭 뷰(렌더) 함수군 (createTournamentViews) — views 분리 3호
 ├── tests/                   # node --test 단위 테스트 (모듈별, npm test 로 실행)
 │   └── *.test.js
 ├── api/

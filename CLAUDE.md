@@ -40,7 +40,8 @@ DegiLog/
 │   ├── deck.js              # 덱 편집(draft) 로직 (createDeck)
 │   ├── cloud.js             # Supabase 클라우드 동기화 (createCloud)
 │   ├── calendar.js          # 대회일정 캘린더 (월간격자·구글캘린더·.ics)
-│   └── views-stats.js       # 통계 탭 뷰(렌더) 함수군 (createStatsViews) — views 분리 1호
+│   ├── views-stats.js       # 통계 탭 뷰(렌더) 함수군 (createStatsViews) — views 분리 1호
+│   └── views-settings.js    # 설정 탭 뷰(렌더) 함수군 (createSettingsViews) — views 분리 2호
 ├── tests/                   # node --test 단위 테스트 (모듈별, npm test 로 실행)
 │   └── *.test.js
 ├── api/

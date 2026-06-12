@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260609-views-tournaments";
+const CACHE_NAME = "jeonjeokmon-shell-20260609-views-matches";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -17,6 +17,7 @@ const CORE_ASSETS = [
   "/js/views-stats.js",
   "/js/views-settings.js",
   "/js/views-tournaments.js",
+  "/js/views-matches.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

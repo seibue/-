@@ -44,7 +44,8 @@ DegiLog/
 │   ├── views-settings.js    # 설정 탭 뷰(렌더) 함수군 (createSettingsViews) — views 분리 2호
 │   ├── views-tournaments.js # 대회 탭 뷰(렌더) 함수군 (createTournamentViews) — views 분리 3호
 │   ├── views-matches.js     # 전적 탭 뷰(렌더) 함수군 (createMatchesViews) — views 분리 4호
-│   └── views-home.js        # 홈 대시보드 뷰(렌더) 함수군 (createHomeViews) — views 분리 5호 (카드검색은 app.js 잔류)
+│   ├── views-home.js        # 홈 대시보드 뷰(렌더) 함수군 (createHomeViews) — views 분리 5호 (카드검색은 app.js 잔류)
+│   └── views-decks.js       # 덱 탭 목록 뷰(렌더) 함수군 (createDeckViews) — views 분리 6호 (빌더 모달은 app.js 잔류)
 ├── tests/                   # node --test 단위 테스트 (모듈별, npm test 로 실행)
 │   └── *.test.js
 ├── api/

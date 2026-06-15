@@ -389,17 +389,23 @@
       });
     }
 
-    // 메인 덱을 레벨(테이머·옵션은 'T/O')별 매수로 집계. 코스트 값이 없어 레벨 기준으로 곡선을 그린다.
+    // 메인 덱을 레벨별(디지몬)·테이머·옵션으로 나눠 매수 집계. 코스트 값이 없어 레벨 기준으로 그린다.
     function deckLevelBuckets(mainCards) {
       const totals = new Map();
       mainCards.forEach((card) => {
         const lvNum = parseInt(card.level, 10);
-        const key = Number.isFinite(lvNum) ? String(lvNum) : "T";
+        let key;
+        if (card.type === "tamer") key = "tamer";
+        else if (card.type === "option") key = "option";
+        else if (Number.isFinite(lvNum)) key = String(lvNum);
+        else key = "etc";
         totals.set(key, (totals.get(key) || 0) + (Number(card.count) || 0));
       });
-      const numericKeys = [...totals.keys()].filter((key) => key !== "T").map(Number).sort((a, b) => a - b);
+      const numericKeys = [...totals.keys()].filter((key) => /^\d+$/.test(key)).map(Number).sort((a, b) => a - b);
       const buckets = numericKeys.map((n) => ({ label: `Lv${n}`, value: totals.get(String(n)) }));
-      if (totals.has("T")) buckets.push({ label: "테/옵", value: totals.get("T") });
+      if (totals.has("tamer")) buckets.push({ label: "테이머", value: totals.get("tamer") });
+      if (totals.has("option")) buckets.push({ label: "옵션", value: totals.get("option") });
+      if (totals.has("etc")) buckets.push({ label: "기타", value: totals.get("etc") });
       return buckets;
     }
 

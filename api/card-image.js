@@ -1,7 +1,7 @@
 const https = require("https");
 
-const ALLOWED_HOSTS = new Set(["images.digimoncard.io"]);
-const API_VERSION = "20260524-digimoncardio-image-proxy";
+const ALLOWED_HOSTS = new Set(["digimoncard.com"]);
+const API_VERSION = "20260616-digimoncardcom-image-proxy";
 
 function sendText(response, statusCode, text) {
   if (typeof response.status === "function") {
@@ -35,7 +35,7 @@ function proxyImage(imageUrl, response, redirects = 0) {
       {
         headers: {
           Accept: "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
-          Referer: "https://digimoncard.io/",
+          Referer: "https://digimoncard.com/",
           "User-Agent": "Mozilla/5.0 (compatible; Jeonjeokmon/1.0; +https://jeonjeokmon.vercel.app/)",
         },
       },
@@ -57,7 +57,7 @@ function proxyImage(imageUrl, response, redirects = 0) {
           return;
         }
 
-        const contentType = upstream.headers["content-type"] || "image/webp";
+        const contentType = upstream.headers["content-type"] || "image/png";
         const headers = {
           "Access-Control-Allow-Origin": "*",
           "Cache-Control": "s-maxage=604800, stale-while-revalidate=2592000",

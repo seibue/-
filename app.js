@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260616-card-illust-gallery";
+  const APP_VERSION = "20260616-jp-card-art";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -92,7 +92,6 @@
     return list;
   })();
   const REMOTE_CARD_API_URL = "https://digimoncard.io/api-public/search";
-  const REMOTE_CARD_IMAGE_BASE_URL = "https://images.digimoncard.io/images/cards";
   const CARD_IMAGE_LOAD_TIMEOUT_MS = 7000;
   const KOREAN_CARD_PREVIEWS = {};
   const KOREAN_CARD_EFFECTS = window.KOREAN_CARD_EFFECTS && typeof window.KOREAN_CARD_EFFECTS === "object" ? window.KOREAN_CARD_EFFECTS : {};
@@ -1273,8 +1272,8 @@
     return remoteCardImageUrls(cardNumber)[0] || "";
   }
 
-  // 일본 공식(digimoncard.com)은 같은 카드번호의 패럴렐(다른 일러스트)을
-  // {번호}.png + {번호}_P1.png, _P2.png … 로 호스팅한다. (images.digimoncard.io 는 기본 일러만 제공)
+  // 카드 이미지는 일본 공식(digimoncard.com)으로 통일.
+  // 기본 일러는 {번호}.png, 패럴렐(다른 일러스트)은 {번호}_P1.png, _P2.png … 로 호스팅한다.
   const JP_OFFICIAL_CARD_IMAGE_BASE = "https://digimoncard.com/images/cardlist/card";
   function jpOfficialCardImageUrl(cardNumber, suffix = "") {
     const normalized = normalizeCardNumber(cardNumber);
@@ -1314,9 +1313,10 @@
   }
 
   function remoteCardImageUrls(cardNumber) {
-    const extensions = ["webp", "jpg", "png"];
+    // 카드 이미지는 일본 공식(digimoncard.com)으로 통일. 카탈로그가 이 사이트에서 생성되므로
+    // 정규화한 카드번호가 곧 파일명({번호}.png)이며 프로모(P-)·ST·EX·LM 등 전 시리즈를 커버한다.
     return cardImageNumberVariants(cardNumber)
-      .flatMap((variant) => extensions.map((extension) => `${REMOTE_CARD_IMAGE_BASE_URL}/${encodeURIComponent(variant)}.${extension}`))
+      .map((variant) => `${JP_OFFICIAL_CARD_IMAGE_BASE}/${encodeURIComponent(variant)}.png`)
       .filter((src, index, sources) => sources.indexOf(src) === index);
   }
 
@@ -1334,7 +1334,7 @@
     try {
       const url = new URL(src, window.location.href);
       if (url.origin === window.location.origin) return url.toString();
-      if (url.hostname === "images.digimoncard.io") {
+      if (url.hostname === "digimoncard.com") {
         return `/api/card-image?src=${encodeURIComponent(url.toString())}&v=${encodeURIComponent(APP_VERSION)}`;
       }
     } catch (error) {

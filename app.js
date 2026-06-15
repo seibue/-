@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260616-deck-curve-split";
+  const APP_VERSION = "20260616-deck-card-art";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -1325,6 +1325,8 @@
   }
 
   function deckCardImageSource(card) {
+    // 덱 카드가 특정 일러(패럴렐)를 지정했으면 그 이미지를, 아니면 기본 일러를 쓴다.
+    if (card.art) return jpOfficialCardImageUrl(card.cardNumber, card.art);
     const catalogCard = catalogCardByNumber(card.cardNumber);
     return catalogCard?.img || remoteCardImageUrl(card.cardNumber);
   }
@@ -1346,7 +1348,9 @@
   function shareCardImageSources(card) {
     const normalized = normalizeCardNumber(card.cardNumber);
     const catalogCard = catalogCardByNumber(normalized);
-    return [catalogCard?.img || "", ...remoteCardImageUrls(normalized)]
+    // 지정 일러(있으면)를 최우선으로, 실패 시 기본 일러로 폴백
+    const artUrl = card.art ? jpOfficialCardImageUrl(normalized, card.art) : "";
+    return [artUrl, catalogCard?.img || "", ...remoteCardImageUrls(normalized)]
       .filter(Boolean)
       .map(proxiedShareImageUrl)
       .filter((src, index, sources) => sources.indexOf(src) === index);
@@ -2650,6 +2654,11 @@
     const activeIndex = Math.min(Math.max(state.previewActiveImage || 0, 0), Math.max(images.length - 1, 0));
     const mainSrc = images[activeIndex] || baseImage;
     const showThumbs = images.length > 1;
+    // 덱 수정 중이고 이 카드가 덱에 들어있으면, 일러를 골라 덱 카드에 저장할 수 있게 한다.
+    const draftCard = state.modal === "deck" ? (state.deckDraftCards || []).find((c) => normalizeCardNumber(c.cardNumber) === card.no) : null;
+    const savedArtIndex = draftCard ? imageIndexFromArt(draftCard.art) : -1;
+    const canPickArt = !!draftCard && showThumbs;
+    const activeIsSaved = imageIndexToArt(activeIndex) === (draftCard?.art || "");
     return `
       <div class="card-preview-backdrop">
         <section class="card-preview-panel" role="dialog" aria-modal="true" aria-label="${escapeHTML(card.name)} 미리보기">
@@ -2667,18 +2676,35 @@
                   ${images
                     .map(
                       (url, index) => `
-                      <button class="card-preview-thumb${index === activeIndex ? " active" : ""}" type="button" role="tab" aria-selected="${index === activeIndex}" data-action="preview-set-image" data-img-index="${index}" aria-label="일러스트 ${index + 1}">
+                      <button class="card-preview-thumb${index === activeIndex ? " active" : ""}${index === savedArtIndex ? " saved" : ""}" type="button" role="tab" aria-selected="${index === activeIndex}" data-action="preview-set-image" data-img-index="${index}" aria-label="일러스트 ${index + 1}${index === savedArtIndex ? " (덱에 저장된 일러)" : ""}">
                         <img src="${escapeHTML(url)}" alt="" loading="lazy" />
+                        ${index === savedArtIndex ? `<span class="card-preview-thumb-flag">덱</span>` : ""}
                       </button>`
                     )
                     .join("")}
                 </div>`
               : ""
           }
+          ${
+            canPickArt
+              ? `<button class="primary-action compact card-preview-art-save" type="button" data-action="save-deck-card-art" ${activeIsSaved ? "disabled" : ""}>
+                  ${activeIsSaved ? "덱에 저장된 일러입니다" : "이 일러로 덱에 저장"}
+                </button>`
+              : ""
+          }
           ${renderKoreanCardPreview(card)}
         </section>
       </div>
     `;
+  }
+
+  // 일러 갤러리 인덱스 ↔ 저장 접미사 변환 (0 = 기본, n = "_Pn")
+  function imageIndexToArt(index) {
+    return index > 0 ? `_P${index}` : "";
+  }
+  function imageIndexFromArt(art) {
+    const match = /^_P(\d+)$/.exec(String(art || ""));
+    return match ? Number(match[1]) : 0;
   }
 
   function renderKoreanCardPreview(card) {
@@ -3523,7 +3549,9 @@
       previewReturnScroll = window.scrollY;
     }
     state.previewCardNo = normalized;
-    state.previewActiveImage = 0;
+    // 덱 수정 중 덱에 있는 카드면, 저장된 일러를 기본 선택으로 연다.
+    const draftCard = state.modal === "deck" ? (state.deckDraftCards || []).find((c) => normalizeCardNumber(c.cardNumber) === normalized) : null;
+    state.previewActiveImage = draftCard ? imageIndexFromArt(draftCard.art) : 0;
     if (state.modal === "deck") renderKeepingDeckScroll();
     else render();
     if (!KOREAN_CARD_PREVIEWS[normalized]?.effect) fetchAndCacheCardEffect(normalized);
@@ -3638,6 +3666,15 @@
       state.previewActiveImage = Number.isFinite(index) ? index : 0;
       if (state.modal === "deck") renderKeepingDeckScroll();
       else render();
+      return;
+    }
+    if (action === "save-deck-card-art") {
+      const draftCard = (state.deckDraftCards || []).find((c) => normalizeCardNumber(c.cardNumber) === state.previewCardNo);
+      if (draftCard) {
+        draftCard.art = imageIndexToArt(state.previewActiveImage || 0);
+        notifyToast("일러 저장", `${cardDisplayName(draftCard)} 일러를 덱에 저장했습니다.`, "success", 1600);
+        renderKeepingDeckScroll();
+      }
       return;
     }
     if (action === "login-google") {

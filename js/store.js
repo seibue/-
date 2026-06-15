@@ -115,6 +115,8 @@
           name,
           count: Math.max(1, Math.min(4, Number(card.count) || 1)),
           type: cardTypeLabels[card.type] ? card.type : "digimon",
+          // 선택한 일러스트(패럴렐) 접미사. "" = 기본, "_P1"·"_P2"… = 패럴렐
+          art: /^_P\d+$/.test(String(card.art || "")) ? card.art : "",
         };
         const existing = merged.get(cardNumber);
         if (existing) {
@@ -122,6 +124,7 @@
           existing.level = normalized.level || existing.level;
           existing.name = normalized.name || existing.name;
           existing.type = normalized.type || existing.type;
+          if (normalized.art) existing.art = normalized.art;
         } else {
           merged.set(cardNumber, normalized);
         }

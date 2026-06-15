@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260614-views-decks";
+  const APP_VERSION = "20260616-card-illust-gallery";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -164,6 +164,7 @@
     editingDeckId: null,
     importingDecks: false,
     previewCardNo: "",
+    previewActiveImage: 0,
     deckDraftForm: null,
     deckDraftCards: [],
     deckCardSearch: "",
@@ -1272,6 +1273,32 @@
     return remoteCardImageUrls(cardNumber)[0] || "";
   }
 
+  // 일본 공식(digimoncard.com)은 같은 카드번호의 패럴렐(다른 일러스트)을
+  // {번호}.png + {번호}_P1.png, _P2.png … 로 호스팅한다. (images.digimoncard.io 는 기본 일러만 제공)
+  const JP_OFFICIAL_CARD_IMAGE_BASE = "https://digimoncard.com/images/cardlist/card";
+  function jpOfficialCardImageUrl(cardNumber, suffix = "") {
+    const normalized = normalizeCardNumber(cardNumber);
+    if (!normalized) return "";
+    return `${JP_OFFICIAL_CARD_IMAGE_BASE}/${normalized}${suffix}.png`;
+  }
+
+  function probeImageLoad(url, timeoutMs = 6000) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      let done = false;
+      const finish = (ok) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        resolve(ok);
+      };
+      const timer = setTimeout(() => finish(false), timeoutMs);
+      img.onload = () => finish(img.naturalWidth > 1);
+      img.onerror = () => finish(false);
+      img.src = url;
+    });
+  }
+
   function cardImageNumberVariants(cardNumber) {
     const normalized = normalizeCardNumber(cardNumber);
     if (!normalized) return [];
@@ -2102,6 +2129,26 @@
 
   let pendingDeckScroll = null;
   let previewReturnScroll = null;
+  // 카드번호 → 패럴렐(추가 일러스트) 이미지 URL 배열. 탐색이 끝난 카드만 저장(기본 일러는 제외).
+  const previewParallelCache = {};
+  async function loadCardParallelImages(cardNumber) {
+    const normalized = normalizeCardNumber(cardNumber);
+    if (!normalized || previewParallelCache[normalized]) return;
+    const parallels = [];
+    // _P1, _P2 … 순차 탐색. 첫 실패에서 중단(파일명이 연속이라 안전).
+    for (let n = 1; n <= 12; n += 1) {
+      const url = jpOfficialCardImageUrl(normalized, `_P${n}`);
+      // eslint-disable-next-line no-await-in-loop
+      if (await probeImageLoad(url)) parallels.push(url);
+      else break;
+    }
+    previewParallelCache[normalized] = parallels;
+    // 탐색 중 미리보기가 닫히거나 다른 카드로 바뀌지 않았고, 패럴렐이 있으면 갤러리를 다시 그린다.
+    if (parallels.length && state.previewCardNo === normalized) {
+      if (state.modal === "deck") renderKeepingDeckScroll();
+      else render();
+    }
+  }
   function renderKeepingDeckScroll() {
     // 데스크톱은 내부 컨테이너(.deck-modal-panel/.catalog-grid)가 스크롤되고,
     // 모바일은 .deck-modal-backdrop(페이지)이 스크롤된다 → 양쪽 모두 저장/복원.
@@ -2596,18 +2643,38 @@
     if (!state.previewCardNo) return "";
     const card = cardPreviewData(state.previewCardNo);
     if (!card) return "";
-    const imageSrc = card.img || remoteCardImageUrl(card.no);
+    const baseImage = card.img || remoteCardImageUrl(card.no);
+    // 기본 일러(현행 소스) + 일본 공식 패럴렐(있으면) 을 합쳐 갤러리 구성
+    const parallels = previewParallelCache[card.no] || [];
+    const images = [baseImage, ...parallels].filter(Boolean);
+    const activeIndex = Math.min(Math.max(state.previewActiveImage || 0, 0), Math.max(images.length - 1, 0));
+    const mainSrc = images[activeIndex] || baseImage;
+    const showThumbs = images.length > 1;
     return `
       <div class="card-preview-backdrop">
         <section class="card-preview-panel" role="dialog" aria-modal="true" aria-label="${escapeHTML(card.name)} 미리보기">
           <button class="icon-button card-preview-close" type="button" title="닫기" aria-label="미리보기 닫기" data-action="close-card-preview">×</button>
           <div class="card-preview-image">
             ${
-              imageSrc
-                ? `<img src="${escapeHTML(imageSrc)}" alt="${escapeHTML(card.name)}" loading="eager" />`
+              mainSrc
+                ? `<img src="${escapeHTML(mainSrc)}" alt="${escapeHTML(card.name)}" loading="eager" />`
                 : `<span class="catalog-image-empty">${escapeHTML(card.no)}</span>`
             }
           </div>
+          ${
+            showThumbs
+              ? `<div class="card-preview-thumbs" role="tablist" aria-label="일러스트 선택">
+                  ${images
+                    .map(
+                      (url, index) => `
+                      <button class="card-preview-thumb${index === activeIndex ? " active" : ""}" type="button" role="tab" aria-selected="${index === activeIndex}" data-action="preview-set-image" data-img-index="${index}" aria-label="일러스트 ${index + 1}">
+                        <img src="${escapeHTML(url)}" alt="" loading="lazy" />
+                      </button>`
+                    )
+                    .join("")}
+                </div>`
+              : ""
+          }
           ${renderKoreanCardPreview(card)}
         </section>
       </div>
@@ -3456,9 +3523,11 @@
       previewReturnScroll = window.scrollY;
     }
     state.previewCardNo = normalized;
+    state.previewActiveImage = 0;
     if (state.modal === "deck") renderKeepingDeckScroll();
     else render();
     if (!KOREAN_CARD_PREVIEWS[normalized]?.effect) fetchAndCacheCardEffect(normalized);
+    loadCardParallelImages(normalized);
   }
 
   function startDeckDraft(deck) {
@@ -3562,6 +3631,13 @@
     }
     if (action === "close-card-preview") {
       closeCardPreview();
+      return;
+    }
+    if (action === "preview-set-image") {
+      const index = parseInt(target.dataset.imgIndex, 10);
+      state.previewActiveImage = Number.isFinite(index) ? index : 0;
+      if (state.modal === "deck") renderKeepingDeckScroll();
+      else render();
       return;
     }
     if (action === "login-google") {

@@ -351,7 +351,7 @@
       ctx.stroke();
     }
 
-    function drawDeckShareCard(ctx, card, image, x, y, width, height) {
+    function drawDeckShareCard(ctx, card, image, x, y, width, height, opts = {}) {
       ctx.save();
       ctx.shadowColor = "rgba(0, 0, 0, 0.46)";
       ctx.shadowBlur = 0;
@@ -368,6 +368,8 @@
       drawShareRoundRect(ctx, x, y, width, height, 10);
       ctx.stroke();
 
+      // 수량만큼 카드를 반복 배치하는 레이아웃에서는 뱃지를 생략(매수가 그대로 보임).
+      if (opts.showCount === false) return;
       const badgeSize = Math.max(30, Math.round(width * 0.24));
       const badgeX = x + width - badgeSize / 2 - 8;
       const badgeY = y + badgeSize / 2 + 8;
@@ -387,12 +389,82 @@
       });
     }
 
-    function deckShareImageLayoutOptions(layout, cardCount) {
-      if (layout === "archive") {
-        return { columns: 10, width: 1600, padding: 40, gap: 10, headerHeight: 96, sectionHeader: 40, sectionGap: 24 };
-      }
-      const columns = cardCount > 42 ? 16 : cardCount > 30 ? 14 : cardCount > 24 ? 12 : 10;
-      return { columns, width: 1600, padding: 38, gap: 8, headerHeight: 86, sectionHeader: 34, sectionGap: 18 };
+    // 메인 덱을 레벨(테이머·옵션은 'T/O')별 매수로 집계. 코스트 값이 없어 레벨 기준으로 곡선을 그린다.
+    function deckLevelBuckets(mainCards) {
+      const totals = new Map();
+      mainCards.forEach((card) => {
+        const lvNum = parseInt(card.level, 10);
+        const key = Number.isFinite(lvNum) ? String(lvNum) : "T";
+        totals.set(key, (totals.get(key) || 0) + (Number(card.count) || 0));
+      });
+      const numericKeys = [...totals.keys()].filter((key) => key !== "T").map(Number).sort((a, b) => a - b);
+      const buckets = numericKeys.map((n) => ({ label: `Lv${n}`, value: totals.get(String(n)) }));
+      if (totals.has("T")) buckets.push({ label: "테/옵", value: totals.get("T") });
+      return buckets;
+    }
+
+    // 레벨별 매수 막대그래프(코스트 커브). 다크 테마의 네온 블루 막대.
+    function drawDeckCostCurve(ctx, x, y, width, height, buckets) {
+      if (!buckets.length) return;
+      const labelArea = 30;
+      const countArea = 26;
+      const chartHeight = Math.max(20, height - labelArea - countArea);
+      const slot = width / buckets.length;
+      const barWidth = Math.min(96, slot * 0.6);
+      const maxValue = Math.max(1, ...buckets.map((bucket) => bucket.value));
+      const baseY = y + countArea + chartHeight;
+
+      // 기준선
+      ctx.strokeStyle = "rgba(25, 231, 255, 0.22)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, baseY + 0.5);
+      ctx.lineTo(x + width, baseY + 0.5);
+      ctx.stroke();
+
+      buckets.forEach((bucket, index) => {
+        const centerX = x + slot * index + slot / 2;
+        const barHeight = Math.round((bucket.value / maxValue) * chartHeight);
+        const barX = centerX - barWidth / 2;
+        const barY = baseY - barHeight;
+        const barGradient = ctx.createLinearGradient(0, barY, 0, baseY);
+        barGradient.addColorStop(0, "#5ff0ff");
+        barGradient.addColorStop(1, "#1b8fd6");
+        ctx.fillStyle = barGradient;
+        drawShareRoundRect(ctx, barX, barY, barWidth, Math.max(barHeight, 3), 6);
+        ctx.fill();
+        // 매수
+        fillShareText(ctx, String(bucket.value), centerX, barY - 13, {
+          size: 22,
+          weight: 900,
+          color: "#ffffff",
+          align: "center",
+          baseline: "middle",
+        });
+        // 레벨 라벨
+        fillShareText(ctx, bucket.label, centerX, baseY + 17, {
+          size: 19,
+          weight: 900,
+          color: "#8bb9da",
+          align: "center",
+          baseline: "middle",
+        });
+      });
+    }
+
+    function deckShareImageLayoutOptions(layout) {
+      // 수량만큼 카드를 반복 배치하므로 10열 고정(레퍼런스 배열과 유사, 카드가 충분히 큼).
+      const base = { columns: 10, width: 1600, padding: 40, gap: 12, headerHeight: 110, curveHeight: 150, sectionHeader: 38, sectionGap: 26 };
+      if (layout === "archive") return base;
+      return base;
+    }
+
+    // 카드를 매수만큼 펼친다(4장 → 4개 항목). 정렬 순서는 유지.
+    function expandDeckCardsByCount(cards) {
+      return cards.flatMap((card) => {
+        const count = Math.max(1, Number(card.count) || 1);
+        return Array.from({ length: count }, () => card);
+      });
     }
 
     async function drawDeckShareImage(canvas, deck, date, options = {}) {
@@ -400,26 +472,29 @@
       const cards = sortDeckCards(deckCards(deck));
       const mainCards = cards.filter((card) => card.type !== "digiEgg");
       const eggCards = cards.filter((card) => card.type === "digiEgg");
+      const mainExpanded = expandDeckCardsByCount(mainCards);
+      const eggExpanded = expandDeckCardsByCount(eggCards);
       const selectedLayout = options.layout || state.deckImageLayout || "x";
-      const layout = deckShareImageLayoutOptions(selectedLayout, cards.length);
-      const { columns, width, padding, gap, headerHeight, sectionHeader, sectionGap } = layout;
+      const layout = deckShareImageLayoutOptions(selectedLayout);
+      const { columns, width, padding, gap, headerHeight, curveHeight, sectionHeader, sectionGap } = layout;
       const cardWidth = (width - padding * 2 - gap * (columns - 1)) / columns;
       const cardHeight = cardWidth * 1.4;
-      const eggSectionGap = eggCards.length ? sectionGap : 0;
-      const mainRows = Math.max(1, Math.ceil(mainCards.length / columns));
-      const eggRows = eggCards.length ? Math.ceil(eggCards.length / columns) : 0;
+      const buckets = deckLevelBuckets(mainCards);
+      const curveBlock = buckets.length ? curveHeight : 0;
+      const mainRows = Math.max(1, Math.ceil(mainExpanded.length / columns));
+      const eggRows = eggExpanded.length ? Math.ceil(eggExpanded.length / columns) : 0;
       const summary = deckCountSummary(cards);
+      const sectionBlock = (rows) => sectionHeader + rows * cardHeight + Math.max(0, rows - 1) * gap;
       const calculatedHeight = Math.ceil(
         padding +
           headerHeight +
-          sectionHeader +
-          mainRows * cardHeight +
-          Math.max(0, mainRows - 1) * gap +
-          eggSectionGap +
-          (eggRows ? sectionHeader + eggRows * cardHeight + Math.max(0, eggRows - 1) * gap : 0) +
+          curveBlock +
+          (eggRows ? sectionBlock(eggRows) + sectionGap : 0) +
+          sectionBlock(mainRows) +
           padding
       );
-      const height = selectedLayout === "x" ? Math.max(900, calculatedHeight) : calculatedHeight;
+      // 수량 반복 그리드는 콘텐츠 높이로 맞춘다(작은 덱에서 하단 여백 방지).
+      const height = calculatedHeight;
 
       canvas.width = width;
       canvas.height = height;
@@ -449,19 +524,29 @@
       ctx.fillStyle = deckGradient;
       ctx.fillRect(0, 0, width, height);
 
-      fillShareText(ctx, deck.name || "이름 없는 덱", padding, selectedLayout === "archive" ? 56 : 52, {
-        size: selectedLayout === "archive" ? 40 : 38,
+      fillShareText(ctx, deck.name || "이름 없는 덱", padding, 56, {
+        size: 40,
         weight: 900,
         color: "#ffffff",
-        maxWidth: width - padding * 2 - 300,
+        maxWidth: width - padding * 2 - 520,
       });
-      fillShareText(ctx, `${date} · 메인 ${summary.main}/${DECK_LIMITS.main} · 디지타마 ${summary.digiEgg}/${DECK_LIMITS.digiEgg}`, padding, selectedLayout === "archive" ? 96 : 88, {
-        size: selectedLayout === "archive" ? 24 : 22,
+      fillShareText(ctx, `${date} · 메인 ${summary.main}/${DECK_LIMITS.main} · 디지타마 ${summary.digiEgg}/${DECK_LIMITS.digiEgg}`, padding, 96, {
+        size: 24,
         weight: 900,
         color: "#ffd21f",
       });
-      fillShareText(ctx, "전적몬", width - padding, selectedLayout === "archive" ? 60 : 56, { size: selectedLayout === "archive" ? 38 : 36, weight: 900, color: "#19e7ff", align: "right" });
-      fillShareText(ctx, "DECK IMAGE", width - padding, selectedLayout === "archive" ? 98 : 90, { size: 18, weight: 900, color: "#8bb9da", align: "right" });
+      fillShareText(ctx, "전적몬", width - padding, 56, { size: 38, weight: 900, color: "#19e7ff", align: "right" });
+      fillShareText(ctx, "DECK IMAGE", width - padding, 92, { size: 18, weight: 900, color: "#8bb9da", align: "right" });
+
+      // 코스트 커브(레벨별 매수): 헤더 아래 전용 밴드(콘텐츠 폭 전체)
+      if (buckets.length) {
+        fillShareText(ctx, "레벨별 매수", padding, padding + headerHeight + 18, {
+          size: 20,
+          weight: 900,
+          color: "#8bb9da",
+        });
+        drawDeckCostCurve(ctx, padding, padding + headerHeight + 28, width - padding * 2, curveHeight - 34, buckets);
+      }
 
       const images =
         options.preloadedImages instanceof Map
@@ -471,9 +556,9 @@
             );
       const missingImageCount = cards.filter((card) => !images.get(normalizeCardNumber(card.cardNumber))).length;
 
-      let cursorY = padding + headerHeight;
+      let cursorY = padding + headerHeight + curveBlock;
       const drawSection = (title, sectionCards) => {
-        fillShareText(ctx, title, padding, cursorY + 28, {
+        fillShareText(ctx, title, padding, cursorY + 26, {
           size: 26,
           weight: 900,
           color: "#ffd21f",
@@ -484,17 +569,19 @@
           const row = Math.floor(index / columns);
           const x = padding + col * (cardWidth + gap);
           const y = cursorY + row * (cardHeight + gap);
-          drawDeckShareCard(ctx, card, images.get(normalizeCardNumber(card.cardNumber)), x, y, cardWidth, cardHeight);
+          drawDeckShareCard(ctx, card, images.get(normalizeCardNumber(card.cardNumber)), x, y, cardWidth, cardHeight, { showCount: false });
         });
         const rows = Math.max(1, Math.ceil(sectionCards.length / columns));
         cursorY += rows * cardHeight + Math.max(0, rows - 1) * gap;
       };
 
-      drawSection("메인 덱", mainCards);
-      if (eggCards.length) {
-        cursorY += eggSectionGap;
-        drawSection("디지타마 덱", eggCards);
+      // 디지타마를 상단에, 그 아래 메인 덱(둘 다 매수만큼 반복 배치)
+      if (eggExpanded.length) {
+        drawSection(`디지타마 (${summary.digiEgg})`, eggExpanded);
+        cursorY += sectionGap;
       }
+      drawSection(`메인 덱 (${summary.main})`, mainExpanded);
+
       if (missingImageCount) {
         fillShareText(ctx, `이미지 대체 표시 ${missingImageCount}종`, width - padding, height - 18, {
           size: 16,

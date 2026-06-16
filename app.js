@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260616-preview-swipe-calendar";
+  const APP_VERSION = "20260616-calendar-localtime-fix";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2336,6 +2336,15 @@
         </div>
       </div>
     `;
+  }
+
+  // 로컬 날짜/시간 포맷 헬퍼 (캘린더 일정 패널·이벤트 수정 모달에서 사용).
+  // ※ 전적 뷰 분리(views-matches) 때 모듈로 옮겨가며 app.js에서 누락됐던 것을 복원.
+  function localDateStr(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+  function localTimeStr(d) {
+    return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
   }
 
   function renderEventsView() {

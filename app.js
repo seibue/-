@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260616-calendar-localtime-fix";
+  const APP_VERSION = "20260616-preview-compact";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2662,24 +2662,24 @@
     const images = [baseImage, ...parallels].filter(Boolean);
     const activeIndex = Math.min(Math.max(state.previewActiveImage || 0, 0), Math.max(images.length - 1, 0));
     const mainSrc = images[activeIndex] || baseImage;
-    const showThumbs = images.length > 1;
+    const hasGallery = images.length > 1;
     // 덱 수정 중이고 이 카드가 덱에 들어있으면, 일러를 골라 덱 카드에 저장할 수 있게 한다.
     const draftCard = state.modal === "deck" ? (state.deckDraftCards || []).find((c) => normalizeCardNumber(c.cardNumber) === card.no) : null;
-    const savedArtIndex = draftCard ? imageIndexFromArt(draftCard.art) : -1;
-    const canPickArt = !!draftCard && showThumbs;
     const activeIsSaved = imageIndexToArt(activeIndex) === (draftCard?.art || "");
+    // 현재 보고 있는 일러가 덱 저장본과 다를 때만 저장 버튼을 노출(저장본일 땐 버튼/문구 없음).
+    const showArtSave = !!draftCard && hasGallery && !activeIsSaved;
     return `
       <div class="card-preview-backdrop">
         <section class="card-preview-panel" role="dialog" aria-modal="true" aria-label="${escapeHTML(card.name)} 미리보기">
           <button class="icon-button card-preview-close" type="button" title="닫기" aria-label="미리보기 닫기" data-action="close-card-preview">×</button>
-          <div class="card-preview-image${showThumbs ? " has-gallery" : ""}" data-img-count="${images.length}">
+          <div class="card-preview-image${hasGallery ? " has-gallery" : ""}" data-img-count="${images.length}">
             ${
               mainSrc
                 ? `<img src="${escapeHTML(mainSrc)}" alt="${escapeHTML(card.name)}" loading="eager" />`
                 : `<span class="catalog-image-empty">${escapeHTML(card.no)}</span>`
             }
             ${
-              showThumbs
+              hasGallery
                 ? `<button class="card-preview-nav prev" type="button" data-action="preview-set-image" data-img-index="${activeIndex - 1}" aria-label="이전 일러스트"${activeIndex === 0 ? " hidden" : ""}>‹</button>
                   <button class="card-preview-nav next" type="button" data-action="preview-set-image" data-img-index="${activeIndex + 1}" aria-label="다음 일러스트"${activeIndex === images.length - 1 ? " hidden" : ""}>›</button>
                   <span class="card-preview-counter">${activeIndex + 1} / ${images.length}</span>`
@@ -2687,25 +2687,8 @@
             }
           </div>
           ${
-            showThumbs
-              ? `<div class="card-preview-thumbs" role="tablist" aria-label="일러스트 선택">
-                  ${images
-                    .map(
-                      (url, index) => `
-                      <button class="card-preview-thumb${index === activeIndex ? " active" : ""}${index === savedArtIndex ? " saved" : ""}" type="button" role="tab" aria-selected="${index === activeIndex}" data-action="preview-set-image" data-img-index="${index}" aria-label="일러스트 ${index + 1}${index === savedArtIndex ? " (덱에 저장된 일러)" : ""}">
-                        <img src="${escapeHTML(url)}" alt="" loading="lazy" />
-                        ${index === savedArtIndex ? `<span class="card-preview-thumb-flag">덱</span>` : ""}
-                      </button>`
-                    )
-                    .join("")}
-                </div>`
-              : ""
-          }
-          ${
-            canPickArt
-              ? `<button class="primary-action compact card-preview-art-save" type="button" data-action="save-deck-card-art" ${activeIsSaved ? "disabled" : ""}>
-                  ${activeIsSaved ? "덱에 저장된 일러입니다" : "이 일러로 덱에 저장"}
-                </button>`
+            showArtSave
+              ? `<button class="primary-action compact card-preview-art-save" type="button" data-action="save-deck-card-art">이 일러로 덱에 저장</button>`
               : ""
           }
           ${renderKoreanCardPreview(card)}

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260616-calendar-localtime-fix";
+const CACHE_NAME = "jeonjeokmon-shell-20260616-preview-compact";
 const CORE_ASSETS = [
   "/",
   "/index.html",

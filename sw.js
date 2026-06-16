@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260616-preview-nav-close";
+const CACHE_NAME = "jeonjeokmon-shell-20260617-region-scroll";
 const CORE_ASSETS = [
   "/",
   "/index.html",

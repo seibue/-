@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260616-preview-nav-close";
+  const APP_VERSION = "20260617-region-scroll";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2153,6 +2153,18 @@
       else render();
     }
   }
+  // 대회일정 지역 칩 행은 모바일에서 가로 스크롤(overflow-x:auto)이라, 칩을 누르면
+  // 전체 재렌더로 scrollLeft 이 0으로 리셋돼 맨 왼쪽으로 튄다 → 가로 스크롤 위치를 보존한다.
+  function renderKeepingRegionScroll() {
+    const prevLeft = document.querySelector(".event-region-chips")?.scrollLeft || 0;
+    render();
+    if (prevLeft) {
+      window.requestAnimationFrame(() => {
+        const chips = document.querySelector(".event-region-chips");
+        if (chips) chips.scrollLeft = prevLeft;
+      });
+    }
+  }
   function renderKeepingDeckScroll() {
     // 데스크톱은 내부 컨테이너(.deck-modal-panel/.catalog-grid)가 스크롤되고,
     // 모바일은 .deck-modal-backdrop(페이지)이 스크롤된다 → 양쪽 모두 저장/복원.
@@ -3897,12 +3909,12 @@
       const region = target.dataset.region || "";
       if (state.eventRegionFilters.has(region)) state.eventRegionFilters.delete(region);
       else state.eventRegionFilters.add(region);
-      render();
+      renderKeepingRegionScroll();
       return;
     }
     if (action === "event-region-clear") {
       state.eventRegionFilters.clear();
-      render();
+      renderKeepingRegionScroll();
       return;
     }
     if (action === "add-event") {

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260617-region-scroll";
+  const APP_VERSION = "20260617-region-scroll-2";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2158,12 +2158,13 @@
   function renderKeepingRegionScroll() {
     const prevLeft = document.querySelector(".event-region-chips")?.scrollLeft || 0;
     render();
-    if (prevLeft) {
-      window.requestAnimationFrame(() => {
-        const chips = document.querySelector(".event-region-chips");
-        if (chips) chips.scrollLeft = prevLeft;
-      });
-    }
+    if (!prevLeft) return;
+    const restore = () => {
+      const chips = document.querySelector(".event-region-chips");
+      if (chips) chips.scrollLeft = prevLeft;
+    };
+    restore(); // 동기 복원(innerHTML 직후 새 칩 행이 이미 존재)
+    window.requestAnimationFrame(restore); // 레이아웃 후 한 번 더 보정
   }
   function renderKeepingDeckScroll() {
     // 데스크톱은 내부 컨테이너(.deck-modal-panel/.catalog-grid)가 스크롤되고,

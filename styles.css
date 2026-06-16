@@ -2887,9 +2887,9 @@ button:disabled {
 
 .card-preview-close {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  z-index: 1;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
   background: var(--danger);
   color: #fff;
 }
@@ -2925,19 +2925,17 @@ button:disabled {
 
 .card-preview-nav {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 56px;
+  top: 0;
+  bottom: 0;
+  width: 64px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 900;
   color: #fff;
-  background: rgba(4, 12, 24, 0.62);
   border: none;
   cursor: pointer;
+  z-index: 1;
 }
 
 .card-preview-nav[hidden] {
@@ -2946,12 +2944,18 @@ button:disabled {
 
 .card-preview-nav.prev {
   left: 0;
-  border-radius: 0 8px 8px 0;
+  justify-content: flex-start;
+  padding-left: 10px;
+  border-radius: 8px 0 0 8px;
+  background: linear-gradient(to right, rgba(4, 12, 24, 0.6), rgba(4, 12, 24, 0));
 }
 
 .card-preview-nav.next {
   right: 0;
-  border-radius: 8px 0 0 8px;
+  justify-content: flex-end;
+  padding-right: 10px;
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(to left, rgba(4, 12, 24, 0.6), rgba(4, 12, 24, 0));
 }
 
 .card-preview-counter {

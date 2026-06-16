@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260616-deck-card-art";
+const CACHE_NAME = "jeonjeokmon-shell-20260616-preview-swipe-calendar";
 const CORE_ASSETS = [
   "/",
   "/index.html",

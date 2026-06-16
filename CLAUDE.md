@@ -265,7 +265,8 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - 대회 라운드 전적 인라인 수정 — `renderTournamentCard()` 행별 ✎
 - **대회일정 캘린더** — `events` 탭, `js/calendar.js`(월간격자·구글캘린더링크·.ics+알람), 관리자 일정 CRUD(Supabase `tournament_events`), 지역 필터칩
 - 통계 기간 필터 + 메타 대시보드(테스트 플레이 제외) — `statsScopedMatches()`, `opponentMetaRows()`
-- 카드 미리보기 일러스트 갤러리 — `renderCardPreview()` 썸네일 스트립. 기본 일러 + 일본 공식(digimoncard.com) 패럴렐 `_P1.._Pn` 을 런타임 탐색(`loadCardParallelImages`/`probeImageLoad`, `previewParallelCache`). 카드 이미지 전부 일본 공식 통일. 덱 구성·검색은 번호당 1장 유지
+- 카드 미리보기 일러스트 갤러리 — `renderCardPreview()` 썸네일 스트립 + 메인 이미지 좌우 스와이프(터치)/화살표/카운터(`previewActiveImage`, touchstart·touchend). 기본 일러 + 일본 공식(digimoncard.com) 패럴렐 `_P1.._Pn` 을 런타임 탐색(`loadCardParallelImages`/`probeImageLoad`, `previewParallelCache`). 카드 이미지 전부 일본 공식 통일. 덱 구성·검색은 번호당 1장 유지
+- 대회일정 날짜 선택 시 일정 패널로 스크롤(`#calendar-day-panel` scrollIntoView) — 모바일에서 패널이 하단 네비에 가려 안 보이던 문제 해결
 - 덱 카드별 일러 선택 — 덱 수정 중 미리보기에서 패럴렐을 골라 덱 카드에 저장(`save-deck-card-art`, 덱 카드 `art` 필드 `""`/`_Pn`, `imageIndexToArt`/`imageIndexFromArt`). `deckCardImageSource`/`shareCardImageSources`가 `art` 반영 → 썸네일·공유 이미지·버전 스냅샷에 적용. `normalizeCards`(store.js)가 `art` 보존
 - 상단 ⚙ 설정 아이콘(설정 탭은 하단 네비에서 제거됨), X 문의 카드, PWA 설치 브라우저별 안내
 - 보안: Supabase RLS(`jeonjeokmon_user_data`·`tournament_events`), `vercel.json` 보안 헤더, LICENSE

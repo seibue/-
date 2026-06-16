@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260616-deck-card-art";
+  const APP_VERSION = "20260616-preview-swipe-calendar";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2387,7 +2387,7 @@
 
   function renderCalendarDayPanel(date, events, admin) {
     return `
-      <div class="settings-card" style="margin-top: 12px;">
+      <div class="settings-card" id="calendar-day-panel" style="margin-top: 12px;">
         <h2 class="settings-title">${escapeHTML(formatDate(date))} 일정</h2>
         ${
           events.length
@@ -2663,11 +2663,18 @@
       <div class="card-preview-backdrop">
         <section class="card-preview-panel" role="dialog" aria-modal="true" aria-label="${escapeHTML(card.name)} 미리보기">
           <button class="icon-button card-preview-close" type="button" title="닫기" aria-label="미리보기 닫기" data-action="close-card-preview">×</button>
-          <div class="card-preview-image">
+          <div class="card-preview-image${showThumbs ? " has-gallery" : ""}" data-img-count="${images.length}">
             ${
               mainSrc
                 ? `<img src="${escapeHTML(mainSrc)}" alt="${escapeHTML(card.name)}" loading="eager" />`
                 : `<span class="catalog-image-empty">${escapeHTML(card.no)}</span>`
+            }
+            ${
+              showThumbs
+                ? `<button class="card-preview-nav prev" type="button" data-action="preview-set-image" data-img-index="${activeIndex - 1}" aria-label="이전 일러스트"${activeIndex === 0 ? " hidden" : ""}>‹</button>
+                  <button class="card-preview-nav next" type="button" data-action="preview-set-image" data-img-index="${activeIndex + 1}" aria-label="다음 일러스트"${activeIndex === images.length - 1 ? " hidden" : ""}>›</button>
+                  <span class="card-preview-counter">${activeIndex + 1} / ${images.length}</span>`
+                : ""
             }
           </div>
           ${
@@ -3885,6 +3892,12 @@
     if (action === "select-calendar-day") {
       state.selectedCalendarDate = state.selectedCalendarDate === target.dataset.date ? "" : target.dataset.date;
       render();
+      // 선택한 날짜의 일정 패널이 캘린더 아래(모바일은 하단 네비에 가림)에 생기므로 보이게 스크롤한다.
+      if (state.selectedCalendarDate) {
+        requestAnimationFrame(() => {
+          document.getElementById("calendar-day-panel")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+      }
       return;
     }
     if (action === "event-region-toggle") {
@@ -4701,6 +4714,41 @@
       handleAction(actionTarget.dataset.action, actionTarget);
     }
   });
+
+  // 카드 미리보기: 메인 이미지를 좌우 스와이프해 일러스트(패럴렐)를 넘긴다.
+  let previewSwipeStart = null;
+  document.addEventListener(
+    "touchstart",
+    (event) => {
+      const imageBox = event.target.closest(".card-preview-image.has-gallery");
+      if (!imageBox || event.touches.length !== 1) {
+        previewSwipeStart = null;
+        return;
+      }
+      const touch = event.touches[0];
+      previewSwipeStart = { x: touch.clientX, y: touch.clientY, count: Number(imageBox.dataset.imgCount) || 1 };
+    },
+    { passive: true }
+  );
+  document.addEventListener(
+    "touchend",
+    (event) => {
+      if (!previewSwipeStart || !state.previewCardNo) return;
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - previewSwipeStart.x;
+      const dy = touch.clientY - previewSwipeStart.y;
+      const count = previewSwipeStart.count;
+      previewSwipeStart = null;
+      if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return; // 가로 스와이프만
+      const current = state.previewActiveImage || 0;
+      const next = dx < 0 ? Math.min(current + 1, count - 1) : Math.max(current - 1, 0);
+      if (next === current) return;
+      state.previewActiveImage = next;
+      if (state.modal === "deck") renderKeepingDeckScroll();
+      else render();
+    },
+    { passive: true }
+  );
 
   document.addEventListener("submit", (event) => {
     event.preventDefault();

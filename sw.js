@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260616-preview-compact";
+const CACHE_NAME = "jeonjeokmon-shell-20260616-calendar-scroll-top";
 const CORE_ASSETS = [
   "/",
   "/index.html",

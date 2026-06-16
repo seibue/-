@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260616-preview-compact";
+  const APP_VERSION = "20260616-calendar-scroll-top";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3885,9 +3885,10 @@
       state.selectedCalendarDate = state.selectedCalendarDate === target.dataset.date ? "" : target.dataset.date;
       render();
       // 선택한 날짜의 일정 패널이 캘린더 아래(모바일은 하단 네비에 가림)에 생기므로 보이게 스크롤한다.
+      // 대회가 많아 패널이 길어도 항상 패널 '상단'(제목·첫 대회)부터 보이도록 block:start 로.
       if (state.selectedCalendarDate) {
         requestAnimationFrame(() => {
-          document.getElementById("calendar-day-panel")?.scrollIntoView({ behavior: "smooth", block: "center" });
+          document.getElementById("calendar-day-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
         });
       }
       return;

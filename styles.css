@@ -2972,6 +2972,11 @@ button:disabled {
   justify-content: center;
 }
 
+/* 일정 패널로 스크롤할 때 화면 맨 위에 딱 붙지 않게 약간의 여백 */
+#calendar-day-panel {
+  scroll-margin-top: 12px;
+}
+
 .card-preview-korean {
   display: grid;
   gap: 10px;

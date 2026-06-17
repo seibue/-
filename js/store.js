@@ -57,7 +57,31 @@
         decks: Array.isArray(saved.decks) ? saved.decks.map(normalizeDeck) : [],
         tournaments: Array.isArray(saved.tournaments) ? saved.tournaments.map(normalizeTournament) : [],
         matches: Array.isArray(saved.matches) ? saved.matches.map(normalizeMatch) : [],
+        // 개인 일정(본인만 보이는 대회/메모) — per-user 데이터 블록에 저장돼 RLS로 보호·기기 간 동기화
+        personalEvents: normalizePersonalEvents(saved.personalEvents),
       };
+    }
+
+    function normalizePersonalEvent(event) {
+      if (!event || typeof event !== "object") return null;
+      const title = String(event.title || "").trim();
+      const startsAt = String(event.startsAt || event.starts_at || "").trim();
+      if (!title || !startsAt || Number.isNaN(new Date(startsAt).getTime())) return null;
+      const endsAtRaw = String(event.endsAt || event.ends_at || "").trim();
+      const endsAt = endsAtRaw && !Number.isNaN(new Date(endsAtRaw).getTime()) ? endsAtRaw : "";
+      return {
+        id: event.id || uid("pevt"),
+        title,
+        startsAt,
+        endsAt,
+        location: String(event.location || "").trim(),
+        description: String(event.description || "").trim(),
+      };
+    }
+
+    function normalizePersonalEvents(events) {
+      if (!Array.isArray(events)) return [];
+      return events.map(normalizePersonalEvent).filter(Boolean);
     }
 
     function normalizeTournament(tournament) {
@@ -166,6 +190,7 @@
       normalizeDeckVersions,
       normalizeCards,
       normalizeMatch,
+      normalizePersonalEvents,
     };
   }
 

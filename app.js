@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260617-region-scroll-2";
+  const APP_VERSION = "20260617-personal-events";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -109,7 +109,7 @@
   // createDefaultData/createDemoData/loadData(IO) 와 normalizeCardNumber/normalizeLevel(공용)은 app.js 잔류.
   // app.js가 직접 쓰는 것만 구조분해 (normalizeMatchTypes/Tournament/DeckVersions/Match 는
   // store 내부의 mergeData/normalizeDeck 가 사용하므로 여기서 꺼낼 필요 없음)
-  const { mergeData, normalizeMatchTypeName, normalizeDeck, normalizeCards } = window.JJM.store.createStore({
+  const { mergeData, normalizeMatchTypeName, normalizeDeck, normalizeCards, normalizePersonalEvents } = window.JJM.store.createStore({
     uid,
     todayISO,
     normalizeCardNumber,
@@ -184,6 +184,7 @@
     calendarMonth: new Date().getMonth(),
     selectedCalendarDate: "",
     editingEventId: null,
+    eventModalKind: "personal",
     deckImageLayout: data.settings?.deckImageLayout || "x",
     filters: {
       query: "",
@@ -392,6 +393,7 @@
       decks: [],
       tournaments: [],
       matches: [],
+      personalEvents: [],
     };
   }
 
@@ -2286,6 +2288,43 @@
     if (error) throw error;
   }
 
+  // 개인 일정: 본인 데이터 블록(data.personalEvents)에 저장 → 본인만 보이고, 로그인 시 기기 간 동기화.
+  function personalEventList() {
+    return (data.personalEvents || []).map((event) => ({ ...event, personal: true }));
+  }
+
+  // 공식(클라우드) + 개인(로컬) 일정을 합쳐 캘린더에 표시
+  function allCalendarEvents() {
+    return [...state.tournamentEvents, ...personalEventList()];
+  }
+
+  function savePersonalEvent(payload) {
+    const events = Array.isArray(data.personalEvents) ? [...data.personalEvents] : [];
+    const next = {
+      id: payload.id || uid("pevt"),
+      title: payload.title,
+      startsAt: payload.startsAt,
+      endsAt: payload.endsAt || "",
+      location: payload.location || "",
+      description: payload.description || "",
+    };
+    const idx = payload.id ? events.findIndex((e) => e.id === payload.id) : -1;
+    if (idx >= 0) events[idx] = next;
+    else events.push(next);
+    data.personalEvents = normalizePersonalEvents(events);
+    saveData(); // saveData 가 scheduleCloudSave 까지 호출(로그인 시 클라우드 동기화)
+    return next.id;
+  }
+
+  function deletePersonalEventById(id) {
+    data.personalEvents = (data.personalEvents || []).filter((e) => e.id !== id);
+    saveData();
+  }
+
+  function findCalendarEvent(id) {
+    return allCalendarEvents().find((e) => e.id === id) || null;
+  }
+
   function downloadIcs(events, fileName) {
     if (!events.length) {
       notifyToast("내보낼 일정 없음", "등록된 대회 일정이 없습니다.", "info");
@@ -2306,7 +2345,7 @@
     return location.split("·")[0].trim() || "지역 없음";
   }
 
-  function tournamentEventRegionOptions(events = state.tournamentEvents) {
+  function tournamentEventRegionOptions(events = allCalendarEvents()) {
     const counts = new Map();
     events.forEach((event) => {
       const region = eventRegion(event);
@@ -2316,8 +2355,9 @@
   }
 
   function filteredTournamentEvents() {
-    if (!state.eventRegionFilters.size) return state.tournamentEvents;
-    return state.tournamentEvents.filter((event) => state.eventRegionFilters.has(eventRegion(event)));
+    const events = allCalendarEvents();
+    if (!state.eventRegionFilters.size) return events;
+    return events.filter((event) => state.eventRegionFilters.has(eventRegion(event)));
   }
 
   function renderEventRegionFilters(events) {
@@ -2377,11 +2417,12 @@
           <strong class="calendar-title">${year}년 ${month + 1}월</strong>
           <button class="icon-button" type="button" data-action="calendar-next-month" aria-label="다음 달">›</button>
           <div class="calendar-tools">
-            ${admin ? `<button class="control-button active compact" type="button" data-action="add-event">＋ 일정 추가</button>` : ""}
+            <button class="control-button compact" type="button" data-action="add-personal-event">＋ 내 일정</button>
+            ${admin ? `<button class="control-button active compact" type="button" data-action="add-event">＋ 공식 일정</button>` : ""}
           </div>
         </div>
         ${!state.eventsLoaded ? `<div class="mini-text">대회 일정 불러오는 중…</div>` : ""}
-        ${state.eventsLoaded ? renderEventRegionFilters(state.tournamentEvents) : ""}
+        ${state.eventsLoaded ? renderEventRegionFilters(allCalendarEvents()) : ""}
         <div class="calendar-grid">
           ${weekdays.map((w, i) => `<div class="calendar-weekday${i === 0 ? " sun" : i === 6 ? " sat" : ""}">${w}</div>`).join("")}
           ${matrix.weeks
@@ -2391,7 +2432,7 @@
               return `
                 <button class="calendar-cell${cell.inMonth ? "" : " out"}${cell.isToday ? " today" : ""}${cell.iso === selDate ? " selected" : ""}${evs.length ? " has-ev" : ""}" type="button" data-action="select-calendar-day" data-date="${cell.iso}">
                   <span class="cal-day">${cell.day}</span>
-                  ${evs.slice(0, 2).map((e) => `<span class="cal-ev">${escapeHTML(e.title)}</span>`).join("")}
+                  ${evs.slice(0, 2).map((e) => `<span class="cal-ev${e.personal ? " personal" : ""}">${escapeHTML(e.title)}</span>`).join("")}
                   ${evs.length > 2 ? `<span class="cal-more">+${evs.length - 2}</span>` : ""}
                 </button>
               `;
@@ -2401,7 +2442,7 @@
         ${
           selDate
             ? renderCalendarDayPanel(selDate, byDate[selDate] || [], admin)
-            : `<div class="mini-text" style="margin-top: 10px;">날짜를 누르면 그날의 대회 일정이 표시됩니다.${admin ? " 관리자는 '일정 추가'로 공식 대회를 올릴 수 있습니다." : ""}</div>`
+            : `<div class="mini-text" style="margin-top: 10px;">날짜를 누르면 그날의 일정이 표시됩니다. '내 일정'으로 나만 보이는 일정을 추가할 수 있어요.${admin ? " 관리자는 '공식 일정'으로 공개 대회를 올립니다." : ""}</div>`
         }
       </section>
     `;
@@ -2417,10 +2458,12 @@
                 .map((ev) => {
                   const t = new Date(ev.startsAt);
                   const time = Number.isNaN(t.getTime()) ? "" : localTimeStr(t);
+                  // 개인 일정은 본인이 항상 편집/삭제 가능, 공식 일정은 관리자만.
+                  const canEdit = ev.personal || admin;
                   return `
-                    <div class="event-row">
+                    <div class="event-row${ev.personal ? " personal" : ""}">
                       <div class="event-main">
-                        <strong>${escapeHTML(ev.title)}</strong>
+                        <strong>${ev.personal ? `<span class="event-tag">내 일정</span> ` : ""}${escapeHTML(ev.title)}</strong>
                         <span>${time}${ev.location ? ` · ${escapeHTML(ev.location)}` : ""}</span>
                         ${ev.description ? `<p class="match-memo">${escapeHTML(ev.description)}</p>` : ""}
                       </div>
@@ -2428,7 +2471,7 @@
                         <a class="control-button compact" href="${escapeHTML(googleCalendarUrl(ev))}" target="_blank" rel="noopener noreferrer">📅 구글</a>
                         <button class="control-button compact" type="button" data-action="ics-download" data-event-id="${escapeHTML(ev.id)}">.ics</button>
                         ${
-                          admin
+                          canEdit
                             ? `<button class="icon-button" type="button" data-action="edit-event" data-event-id="${escapeHTML(ev.id)}" aria-label="일정 수정" title="수정">✎</button>
                                <button class="icon-button" type="button" data-action="delete-event" data-event-id="${escapeHTML(ev.id)}" aria-label="일정 삭제" title="삭제">×</button>`
                             : ""
@@ -2445,7 +2488,8 @@
   }
 
   function renderEventModal() {
-    const ev = state.editingEventId ? state.tournamentEvents.find((item) => item.id === state.editingEventId) : null;
+    const ev = state.editingEventId ? findCalendarEvent(state.editingEventId) : null;
+    const isPersonal = ev ? !!ev.personal : state.eventModalKind !== "official";
     const start = ev ? new Date(ev.startsAt) : null;
     const dateVal = start && !Number.isNaN(start.getTime()) ? localDateStr(start) : state.selectedCalendarDate || todayISO();
     const timeVal = start && !Number.isNaN(start.getTime()) ? localTimeStr(start) : "10:00";
@@ -2453,9 +2497,10 @@
     const endVal = end && !Number.isNaN(end.getTime()) ? localTimeStr(end) : "";
     const body = `
       <form class="form-grid" id="event-form">
+        ${isPersonal ? `<p class="mini-text">🔒 나만 보이는 개인 일정입니다.</p>` : ""}
         <label class="field">
-          <span>대회 이름</span>
-          <input class="input" name="title" value="${escapeHTML(ev?.title || "")}" placeholder="예: 6월 매장 대표전" autocomplete="off" required />
+          <span>${isPersonal ? "일정 이름" : "대회 이름"}</span>
+          <input class="input" name="title" value="${escapeHTML(ev?.title || "")}" placeholder="${isPersonal ? "예: 친구와 듀얼, 대회 신청 마감" : "예: 6월 매장 대표전"}" autocomplete="off" required />
         </label>
         <div class="form-row">
           <label class="field">
@@ -2485,11 +2530,14 @@
       <button class="control-button" type="button" data-action="close-modal">취소</button>
       <button class="primary-action" type="submit" form="event-form">${ev ? "저장" : "추가"}</button>
     `;
-    return modalFrame(ev ? "대회 일정 수정" : "대회 일정 추가", body, actions);
+    const titleText = isPersonal ? (ev ? "내 일정 수정" : "내 일정 추가") : ev ? "대회 일정 수정" : "대회 일정 추가";
+    return modalFrame(titleText, body, actions);
   }
 
   async function handleEventSubmit(form) {
-    if (!isAdminUser()) {
+    const editing = state.editingEventId ? findCalendarEvent(state.editingEventId) : null;
+    const isPersonal = editing ? !!editing.personal : state.eventModalKind !== "official";
+    if (!isPersonal && !isAdminUser()) {
       alert("관리자만 공식 일정을 추가할 수 있습니다.");
       return;
     }
@@ -2499,7 +2547,7 @@
     const time = String(formData.get("time") || "");
     const endTime = String(formData.get("endTime") || "");
     if (!title || !date || !time) {
-      alert("대회 이름, 날짜, 시작 시간을 입력해 주세요.");
+      alert("이름, 날짜, 시작 시간을 입력해 주세요.");
       return;
     }
     const start = new Date(`${date}T${time}:00`);
@@ -2508,26 +2556,37 @@
       return;
     }
     const end = endTime ? new Date(`${date}T${endTime}:00`) : null;
+    const payload = {
+      id: state.editingEventId || undefined,
+      title,
+      startsAt: start.toISOString(),
+      endsAt: end && !Number.isNaN(end.getTime()) ? end.toISOString() : "",
+      location: String(formData.get("location") || "").trim(),
+      description: String(formData.get("description") || "").trim(),
+    };
+    const finishUi = () => {
+      state.selectedCalendarDate = date;
+      state.calendarYear = start.getFullYear();
+      state.calendarMonth = start.getMonth();
+      closeModal();
+      notifyToast(isPersonal ? "내 일정 저장됨" : "일정 저장됨", title, "success");
+    };
+    // 개인 일정: 로컬 데이터에 저장(네트워크 불필요)
+    if (isPersonal) {
+      savePersonalEvent(payload);
+      finishUi();
+      return;
+    }
+    // 공식 일정: 클라우드 테이블에 저장(관리자)
     const submitter = document.querySelector('[form="event-form"][type="submit"]');
     if (submitter) {
       submitter.disabled = true;
       submitter.textContent = "저장 중";
     }
     try {
-      await upsertTournamentEvent({
-        id: state.editingEventId || undefined,
-        title,
-        startsAt: start.toISOString(),
-        endsAt: end && !Number.isNaN(end.getTime()) ? end.toISOString() : "",
-        location: String(formData.get("location") || "").trim(),
-        description: String(formData.get("description") || "").trim(),
-      });
+      await upsertTournamentEvent(payload);
       await loadTournamentEvents(true);
-      state.selectedCalendarDate = date;
-      state.calendarYear = start.getFullYear();
-      state.calendarMonth = start.getMonth();
-      closeModal();
-      notifyToast("일정 저장됨", title, "success");
+      finishUi();
     } catch (error) {
       if (submitter) {
         submitter.disabled = false;
@@ -3918,21 +3977,41 @@
       renderKeepingRegionScroll();
       return;
     }
+    if (action === "add-personal-event") {
+      state.modal = "event";
+      state.eventModalKind = "personal";
+      state.editingEventId = null;
+      render();
+      return;
+    }
     if (action === "add-event") {
       if (!isAdminUser()) return;
       state.modal = "event";
+      state.eventModalKind = "official";
       state.editingEventId = null;
       render();
       return;
     }
     if (action === "edit-event") {
-      if (!isAdminUser()) return;
+      const ev = findCalendarEvent(target.dataset.eventId);
+      if (!ev) return;
+      if (!ev.personal && !isAdminUser()) return; // 공식 일정 수정은 관리자만
       state.modal = "event";
+      state.eventModalKind = ev.personal ? "personal" : "official";
       state.editingEventId = target.dataset.eventId;
       render();
       return;
     }
     if (action === "delete-event") {
+      const ev = findCalendarEvent(target.dataset.eventId);
+      if (!ev) return;
+      if (ev.personal) {
+        if (!confirm("이 개인 일정을 삭제할까요?")) return;
+        deletePersonalEventById(ev.id);
+        notifyToast("내 일정 삭제됨", "", "success");
+        render();
+        return;
+      }
       if (!isAdminUser()) return;
       if (!confirm("이 대회 일정을 삭제할까요?")) return;
       deleteTournamentEventById(target.dataset.eventId)
@@ -3942,7 +4021,7 @@
       return;
     }
     if (action === "ics-download") {
-      const ev = state.tournamentEvents.find((item) => item.id === target.dataset.eventId);
+      const ev = findCalendarEvent(target.dataset.eventId);
       if (ev) downloadIcs([ev], `jeonjeokmon-${ev.title}`);
       return;
     }

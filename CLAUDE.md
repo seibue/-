@@ -263,7 +263,8 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - 덱 코드 복사/가져오기 — `copy-deck-code`(digimonmeta 배열), 가져오기(텍스트·JSON·digimonmeta·파일, 에라타/변형번호 처리)
 - 덱 버전 스냅샷 + 버전별 승률 — `save-deck-version`, `deck.versions`, `deckVersionRecords()`
 - 대회 라운드 전적 인라인 수정 — `renderTournamentCard()` 행별 ✎
-- **대회일정 캘린더** — `events` 탭, `js/calendar.js`(월간격자·구글캘린더링크·.ics+알람), 관리자 일정 CRUD(Supabase `tournament_events`), 지역 필터칩
+- **대회일정 캘린더** — `events` 탭, `js/calendar.js`(월간격자·구글캘린더링크·.ics+알람), 관리자 공식 일정 CRUD(Supabase `tournament_events`), 지역 필터칩
+- **개인 일정(본인만 보임)** — 누구나 '내 일정' 추가(`add-personal-event`). `data.personalEvents`(per-user 블록, RLS·기기간 동기화, 로그아웃 시 localStorage)에 저장 → `allCalendarEvents()`가 공식+개인 합쳐 표시. 개인 일정은 금색 칩·'내 일정' 배지, 소유자만 편집/삭제. `normalizePersonalEvents`(store.js), `savePersonalEvent`/`deletePersonalEventById`(app.js), `state.eventModalKind`("personal"/"official")
 - 통계 기간 필터 + 메타 대시보드(테스트 플레이 제외) — `statsScopedMatches()`, `opponentMetaRows()`
 - 카드 미리보기 일러스트 갤러리 — `renderCardPreview()` 메인 이미지 좌우 스와이프(터치)/화살표/카운터(`previewActiveImage`, touchstart·touchend). 썸네일 스트립은 제거(스와이프로 대체), 이미지 높이 `min(52vh,420px)`로 제한. 기본 일러 + 일본 공식(digimoncard.com) 패럴렐 `_P1.._Pn` 을 런타임 탐색(`loadCardParallelImages`/`probeImageLoad`, `previewParallelCache`). 카드 이미지 전부 일본 공식 통일. 덱 구성·검색은 번호당 1장 유지
 - 대회일정 날짜 선택 시 일정 패널로 스크롤(`#calendar-day-panel` scrollIntoView) — 모바일에서 패널이 하단 네비에 가려 안 보이던 문제 해결

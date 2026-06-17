@@ -1962,10 +1962,25 @@ button:disabled {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.calendar-cell .cal-ev.personal {
+  background: rgba(255, 210, 31, 0.2);
+  color: #ffe79a;
+}
 .calendar-cell .cal-more {
   font-size: 10px;
   font-weight: 800;
   color: var(--muted);
+}
+.event-tag {
+  display: inline-block;
+  padding: 0 5px;
+  margin-right: 2px;
+  font-size: 10px;
+  font-weight: 800;
+  vertical-align: middle;
+  color: #08111f;
+  background: var(--gold);
+  border-radius: 4px;
 }
 .event-row {
   display: flex;

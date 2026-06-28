@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260617-tournament-cut-128";
+  const APP_VERSION = "20260617-home-search-more";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -880,8 +880,9 @@
     `;
   }
 
-  const HOME_CARD_SEARCH_LIMIT = 18;
+  const HOME_CARD_SEARCH_LIMIT = 60;
 
+  // 질의에 매칭되는 모든 카드(정렬됨). 표시 개수 제한은 렌더에서 적용.
   function homeCardSearchMatches() {
     const query = state.homeCardSearch.trim().toLowerCase();
     if (!query) return [];
@@ -889,20 +890,22 @@
     return CARD_CATALOG.filter((card) => {
       if (cardNumberMatchesQuery(card.no, query)) return true;
       return catalogTextMatches(card, query, compactQuery);
-    })
-      .sort(compareCatalogCards)
-      .slice(0, HOME_CARD_SEARCH_LIMIT);
+    }).sort(compareCatalogCards);
   }
 
   function renderHomeCardSearchResults() {
     if (!state.homeCardSearch.trim()) {
       return `<div class="home-card-search-hint">카드 이름이나 번호를 입력하면 카드를 찾아 효과를 볼 수 있습니다.</div>`;
     }
-    const cards = homeCardSearchMatches();
-    if (!cards.length) {
+    const all = homeCardSearchMatches();
+    if (!all.length) {
       return `<div class="home-card-search-hint">검색 결과가 없습니다. 번호는 BT1-084, bt1 084처럼 입력해도 됩니다.</div>`;
     }
-    return cards
+    const cards = all.slice(0, HOME_CARD_SEARCH_LIMIT);
+    const countLine = `<div class="home-card-search-count">${all.length}종 검색됨${
+      all.length > HOME_CARD_SEARCH_LIMIT ? ` · 상위 ${HOME_CARD_SEARCH_LIMIT}종 표시 (검색어를 좁히면 더 정확해요)` : ""
+    }</div>`;
+    return countLine + cards
       .map((card) => {
         const imageSrc = catalogImageSource(card);
         const no = escapeHTML(card.no);

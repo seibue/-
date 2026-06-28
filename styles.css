@@ -547,6 +547,14 @@ button:disabled {
   line-height: 1.5;
 }
 
+.home-card-search-count {
+  grid-column: 1 / -1;
+  padding: 2px 4px 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .home-card-result {
   display: flex;
   align-items: center;

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260617-tournament-cut-128";
+const CACHE_NAME = "jeonjeokmon-shell-20260617-home-search-more";
 const CORE_ASSETS = [
   "/",
   "/index.html",

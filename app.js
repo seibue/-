@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260617-home-search-more";
+  const APP_VERSION = "20260617-home-search-scroll";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -880,7 +880,7 @@
     `;
   }
 
-  const HOME_CARD_SEARCH_LIMIT = 60;
+  const HOME_CARD_SEARCH_LIMIT = 300;
 
   // 질의에 매칭되는 모든 카드(정렬됨). 표시 개수 제한은 렌더에서 적용.
   function homeCardSearchMatches() {

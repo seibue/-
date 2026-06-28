@@ -533,9 +533,14 @@ button:disabled {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: 8px;
-  /* 내부 스크롤 박스를 두지 않는다. 스크롤 컨테이너 경계에서 마지막 줄 카드의
-     클릭이 클리핑/흡수되어 무반응되던 문제 때문(데스크톱·터치 공통).
-     결과는 패널·페이지 흐름에 자연스럽게 쌓이고 페이지가 스크롤된다. */
+  /* 매칭되는 카드를 전부(상한 내) 스크롤로 볼 수 있게 한다.
+     마지막 줄 클릭이 경계에서 먹통이던 과거 문제는 padding-bottom 여백 +
+     touch-action:manipulation(결과 버튼)으로 방지. */
+  max-height: 62vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px 2px 12px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .home-card-search-hint {

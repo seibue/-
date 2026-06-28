@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260617-tournament-cut";
+  const APP_VERSION = "20260617-tournament-cut-128";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -72,12 +72,14 @@
     ["swiss", "스위스"],
     ["top", "토너먼트"],
   ];
-  // 스위스 후 토너먼트(컷) 시작 규모 — 대회별로 선택
+  // 스위스 후 토너먼트(컷) 시작 규모 — 대회별로 선택 (대형 대회 대비 128강까지)
   const TOURNAMENT_CUT_OPTIONS = [
     [4, "4강"],
     [8, "8강"],
     [16, "16강"],
     [32, "32강"],
+    [64, "64강"],
+    [128, "128강"],
     [2, "결승만"],
   ];
   const ROUND_STAGE_OPTIONS = [
@@ -1199,7 +1201,7 @@
 
   function tournamentTopCut(tournamentId) {
     const cut = Number(getTournament(tournamentId)?.topCut);
-    return [2, 4, 8, 16, 32, 64].includes(cut) ? cut : 4;
+    return [2, 4, 8, 16, 32, 64, 128].includes(cut) ? cut : 4;
   }
 
   function suggestedRoundLabel(tournamentId, stage = "swiss") {

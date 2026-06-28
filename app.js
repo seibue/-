@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260617-personal-events";
+  const APP_VERSION = "20260617-tournament-cut";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -71,6 +71,14 @@
     ["mixed", "스위스+토너먼트"],
     ["swiss", "스위스"],
     ["top", "토너먼트"],
+  ];
+  // 스위스 후 토너먼트(컷) 시작 규모 — 대회별로 선택
+  const TOURNAMENT_CUT_OPTIONS = [
+    [4, "4강"],
+    [8, "8강"],
+    [16, "16강"],
+    [32, "32강"],
+    [2, "결승만"],
   ];
   const ROUND_STAGE_OPTIONS = [
     ["none", "일반"],
@@ -1177,10 +1185,27 @@
     return "swiss";
   }
 
+  // 컷 규모(예: 16) → 라운드 라벨 순서(예: ["16강","8강","4강","결승"])
+  function topCutLabels(cut) {
+    const labels = [];
+    let n = Math.max(2, Number(cut) || 4);
+    while (n >= 4) {
+      labels.push(`${n}강`);
+      n = Math.floor(n / 2);
+    }
+    labels.push("결승");
+    return labels;
+  }
+
+  function tournamentTopCut(tournamentId) {
+    const cut = Number(getTournament(tournamentId)?.topCut);
+    return [2, 4, 8, 16, 32, 64].includes(cut) ? cut : 4;
+  }
+
   function suggestedRoundLabel(tournamentId, stage = "swiss") {
     const matches = tournamentMatches(tournamentId).filter((match) => (match.roundStage || "none") === stage);
     if (stage === "top") {
-      const labels = ["4강", "결승"];
+      const labels = topCutLabels(tournamentTopCut(tournamentId));
       return labels[Math.min(matches.length, labels.length - 1)] || `토너먼트 ${matches.length + 1}`;
     }
     if (stage === "swiss") return `R${matches.length + 1}`;
@@ -2902,6 +2927,7 @@
   function renderTournamentModal() {
     const tournament = state.editingTournamentId ? getTournament(state.editingTournamentId) : null;
     const selectedFormat = tournament?.format || "mixed";
+    const selectedCut = tournament?.topCut || 4;
     const body = `
       <form class="form-grid" id="tournament-form">
         <label class="field">
@@ -2921,7 +2947,16 @@
               ).join("")}
             </select>
           </label>
+          <label class="field">
+            <span>토너먼트 컷</span>
+            <select class="select" name="topCut">
+              ${TOURNAMENT_CUT_OPTIONS.map(
+                ([value, label]) => `<option value="${value}"${selectedAttr(String(selectedCut), String(value))}>${escapeHTML(label)}</option>`
+              ).join("")}
+            </select>
+          </label>
         </div>
+        <p class="mini-text">스위스 종료 후 토너먼트 라운드가 선택한 컷부터 자동 진행됩니다 (예: 8강 → 4강 → 결승).</p>
         <label class="field">
           <span>장소</span>
           <input class="input" name="location" value="${escapeHTML(tournament?.location || "")}" placeholder="매장명 또는 지역" autocomplete="off" />
@@ -4391,11 +4426,13 @@
       return;
     }
     const formatValue = String(formData.get("format") || "mixed");
+    const cutValue = Number(formData.get("topCut"));
     const tournament = {
       id: state.editingTournamentId || uid("tournament"),
       name,
       date: String(formData.get("date") || todayISO()),
       format: TOURNAMENT_FORMAT_OPTIONS.some(([value]) => value === formatValue) ? formatValue : "mixed",
+      topCut: TOURNAMENT_CUT_OPTIONS.some(([value]) => value === cutValue) ? cutValue : 4,
       location: String(formData.get("location") || "").trim(),
       memo: String(formData.get("memo") || "").trim(),
       createdAt: state.editingTournamentId

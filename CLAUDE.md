@@ -263,6 +263,7 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - 덱 코드 복사/가져오기 — `copy-deck-code`(digimonmeta 배열), 가져오기(텍스트·JSON·digimonmeta·파일, 에라타/변형번호 처리)
 - 덱 버전 스냅샷 + 버전별 승률 — `save-deck-version`, `deck.versions`, `deckVersionRecords()`
 - 대회 라운드 전적 인라인 수정 — `renderTournamentCard()` 행별 ✎
+- 대회별 토너먼트 컷 설정 — 대회 추가/수정 모달의 `topCut`(2 결승만/4/8/16/32강, 기본 4). 스위스 종료 후 토너먼트 라운드 라벨이 컷부터 자동 진행(`topCutLabels`/`tournamentTopCut`로 8강→4강→결승). `TOURNAMENT_CUT_OPTIONS`, `normalizeTournament`(store.js)가 보존
 - **대회일정 캘린더** — `events` 탭, `js/calendar.js`(월간격자·구글캘린더링크·.ics+알람), 관리자 공식 일정 CRUD(Supabase `tournament_events`), 지역 필터칩
 - **개인 일정(본인만 보임)** — 누구나 '내 일정' 추가(`add-personal-event`). `data.personalEvents`(per-user 블록, RLS·기기간 동기화, 로그아웃 시 localStorage)에 저장 → `allCalendarEvents()`가 공식+개인 합쳐 표시. 개인 일정은 금색 칩·'내 일정' 배지, 소유자만 편집/삭제. `normalizePersonalEvents`(store.js), `savePersonalEvent`/`deletePersonalEventById`(app.js), `state.eventModalKind`("personal"/"official")
 - 통계 기간 필터 + 메타 대시보드(테스트 플레이 제외) — `statsScopedMatches()`, `opponentMetaRows()`

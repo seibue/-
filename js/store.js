@@ -94,6 +94,8 @@
         format,
         location: String(tournament.location || "").trim(),
         memo: String(tournament.memo || "").trim(),
+        // 스위스 후 토너먼트(컷) 시작 규모. 2(결승만)/4/8/16/32/64. 미설정 시 기존 동작(4강) 유지.
+        topCut: [2, 4, 8, 16, 32, 64].includes(Number(tournament.topCut)) ? Number(tournament.topCut) : 4,
         createdAt: tournament.createdAt || new Date().toISOString(),
         updatedAt: tournament.updatedAt || tournament.createdAt || new Date().toISOString(),
       };

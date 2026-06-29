@@ -1468,7 +1468,7 @@ button:disabled {
 }
 
 .deck-card {
-  padding: 14px;
+  padding: 18px;
   overflow: hidden;
 }
 
@@ -1482,6 +1482,54 @@ button:disabled {
   border: 2px solid rgba(255, 210, 31, 0.35);
   transform: rotate(45deg);
   pointer-events: none;
+}
+
+/* 덱 관리 탭 — 덱 카드 내부 글자·요소 크기 키움 (빌더 모달엔 영향 없게 .deck-card 한정) */
+.deck-card .deck-name {
+  font-size: 21px;
+}
+.deck-card .mini-text {
+  font-size: 14px;
+}
+.deck-card .deck-readiness {
+  font-size: 13px;
+  padding: 8px 10px;
+}
+.deck-card .deck-readiness strong {
+  font-size: 15px;
+}
+.deck-card .deck-meta-grid span {
+  font-size: 13px;
+  padding: 9px;
+}
+.deck-card .deck-meta-grid strong {
+  font-size: 12px;
+}
+.deck-card .deck-stat {
+  padding: 12px 6px;
+}
+.deck-card .deck-stat strong {
+  font-size: 24px;
+}
+.deck-card .deck-stat span {
+  font-size: 13px;
+}
+.deck-card .card-rate-title,
+.deck-card .card-rate-count {
+  font-size: 14px;
+}
+.deck-card .card-rate-main strong {
+  font-size: 15px;
+}
+.deck-card .card-rate-main span,
+.deck-card .card-rate-score span {
+  font-size: 12px;
+}
+.deck-card .card-rate-score strong {
+  font-size: 19px;
+}
+.deck-card .version-record-head strong {
+  font-size: 14px;
 }
 
 .deck-head {

@@ -78,13 +78,15 @@
       return Math.min(sameNumberAvailable, totalAvailable, zoneAvailable);
     }
 
-    function addDraftCard(card, requestedCount = 1) {
+    function addDraftCard(card, requestedCount = 1, options = {}) {
       const cardNumber = normalizeCardNumber(card.cardNumber);
       const level = normalizeLevel(card.level);
       const name = String(card.name || "").trim();
       const type = cardTypeLabels[card.type] ? card.type : "digimon";
       const count = Math.max(1, Math.min(4, Number(requestedCount) || 1));
-      const needsLevel = type === "digimon" || type === "digiEgg";
+      // 위그드라실_7D6·대죄의 문 등 정식 데이터상 레벨이 없는 특수 카드가 있으므로,
+      // 카탈로그에서 추가할 때(allowMissingLevel)는 Lv 미입력을 허용한다. 수동 입력은 기존대로 요구.
+      const needsLevel = (type === "digimon" || type === "digiEgg") && !options.allowMissingLevel;
       if (!cardNumber || !name || (needsLevel && !level)) {
         alert(needsLevel ? "카드 넘버, Lv, 카드 이름을 모두 입력해 주세요." : "카드 넘버와 카드 이름을 입력해 주세요.");
         return false;

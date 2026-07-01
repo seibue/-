@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260617-tabbar-bigger";
+  const APP_VERSION = "20260617-levelless-cards";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -4236,7 +4236,8 @@
       cacheDeckDraftForm(target.closest(".modal-panel")?.querySelector("#deck-form"));
       const card = CARD_CATALOG.find((item) => item.no === normalizeCardNumber(target.dataset.cardNo));
       if (card) {
-        if (addDraftCard(catalogCardToDraft(card, 1), 1)) renderKeepingDeckScroll();
+        // 카탈로그 카드는 정식 데이터이므로 레벨이 없는 특수 카드(위그드라실_7D6·대죄의 문 등)도 추가 허용
+        if (addDraftCard(catalogCardToDraft(card, 1), 1, { allowMissingLevel: true })) renderKeepingDeckScroll();
       }
       return;
     }

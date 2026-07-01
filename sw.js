@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260617-tabbar-bigger";
+const CACHE_NAME = "jeonjeokmon-shell-20260617-levelless-cards";
 const CORE_ASSETS = [
   "/",
   "/index.html",

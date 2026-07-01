@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260617-levelless-cards";
+const CACHE_NAME = "jeonjeokmon-shell-20260618-typography-up";
 const CORE_ASSETS = [
   "/",
   "/index.html",

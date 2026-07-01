@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260618-typography-up";
+const CACHE_NAME = "jeonjeokmon-shell-20260618-wider-3";
 const CORE_ASSETS = [
   "/",
   "/index.html",

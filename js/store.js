@@ -177,6 +177,9 @@
         tournamentId: String(match.tournamentId || ""),
         roundStage,
         roundLabel: String(match.roundLabel || "").trim(),
+        // 3대3 팀전: 팀 결과(내 결과와 별개) + 내 자리(A/B/C). 3대3이 아니면 빈 값.
+        teamResult: ["win", "loss", "draw"].includes(match.teamResult) ? match.teamResult : "",
+        teamPosition: ["A", "B", "C"].includes(match.teamPosition) ? match.teamPosition : "",
         cardIds: Array.isArray(match.cardIds) ? match.cardIds.map(String) : [],
         cardNames: Array.isArray(match.cardNames) ? match.cardNames.map(String) : [],
         cardNumbers: Array.isArray(match.cardNumbers) ? match.cardNumbers.map(normalizeCardNumber) : [],

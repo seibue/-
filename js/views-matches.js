@@ -194,6 +194,7 @@
                 ? ` · <span class="match-format-badge tournament">${escapeHTML(tournamentFallbackText)}</span>`
                 : ""}
             ${match.opponent ? ` · 상대 ${escapeHTML(match.opponent)}` : ""}
+            ${match.teamResult ? ` · <span class="team3-badge ${escapeHTML(match.teamResult)}">팀 ${escapeHTML(resultLabel(match.teamResult))}${match.teamPosition ? ` · ${escapeHTML(match.teamPosition)}자리` : ""}</span>` : ""}
           </div>
           ${round && roundStage && tournamentName
             ? `<p class="match-tournament-name">🏆 ${escapeHTML(tournamentName)}</p>`

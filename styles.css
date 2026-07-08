@@ -1261,6 +1261,20 @@ button:disabled {
   font-weight: 900;
 }
 
+/* 3대3 팀 결과 뱃지 */
+.team3-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.team3-badge.win { color: #c7ffe7; background: rgba(45, 227, 157, 0.16); border-color: rgba(45, 227, 157, 0.4); }
+.team3-badge.loss { color: #ffd8de; background: rgba(255, 77, 95, 0.16); border-color: rgba(255, 77, 95, 0.4); }
+.team3-badge.draw { color: var(--muted); background: rgba(255, 255, 255, 0.06); }
+
 .match-format-badge.tournament {
   display: inline-flex;
   align-items: center;
@@ -4366,6 +4380,19 @@ button:disabled {
 .match-form.swiss-mode .match-score-field,
 .match-form.swiss-mode .draw-result-option {
   display: none;
+}
+
+/* 3대3 팀전(유형 선택 시)만 자리·팀 결과 필드 노출 */
+.team3-fields {
+  display: none;
+}
+.match-form.team3-mode .team3-fields {
+  display: grid;
+}
+.mini-note {
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 10px;
 }
 
 .segmented-option input,

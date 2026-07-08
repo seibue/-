@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260618-wider-3";
+  const APP_VERSION = "20260618-team3b";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -87,6 +87,9 @@
     ["swiss", "스위스"],
     ["top", "토너먼트"],
   ];
+  // 3대3 팀전: 대전 유형으로 선택하면 폼에 '내 자리(A/B/C)'·'팀 결과'가 나타남
+  const TEAM3_MATCH_TYPE = "3대3 팀전";
+  const TEAM_POSITION_OPTIONS = ["A", "B", "C"];
   // 같은 카드 번호의 다른 아트/레어도 중복은 덱 구성에 불필요하므로 번호 기준 1개만 유지
   // (카드 목록은 첫 등장(보통 기본 레어도)을 대표로 사용)
   const CARD_CATALOG = (() => {
@@ -1205,6 +1208,15 @@
   function tournamentTopCut(tournamentId) {
     const cut = Number(getTournament(tournamentId)?.topCut);
     return [2, 4, 8, 16, 32, 64, 128].includes(cut) ? cut : 4;
+  }
+
+  // 3대3 자리(A/B/C)는 대회당 한 번만 정하면 되게, 같은 대회의 직전 3대3 라운드 자리를 이어받는다.
+  function suggestedTeamPosition(tournamentId) {
+    if (!tournamentId) return "";
+    const prior = tournamentMatches(tournamentId)
+      .filter((match) => match.matchType === TEAM3_MATCH_TYPE && match.teamPosition)
+      .pop();
+    return prior?.teamPosition || "";
   }
 
   function suggestedRoundLabel(tournamentId, stage = "swiss") {
@@ -2998,13 +3010,18 @@
       match?.roundLabel || state.prefillMatchRoundLabel || (selectedTournamentId ? suggestedRoundLabel(selectedTournamentId, selectedRoundStage) : "");
     const selectedDate = match?.date || selectedTournament?.date || todayISO();
     const selectedTournamentProgress = selectedTournament ? tournamentRoundProgress(selectedTournament) : null;
+    // 3대3 팀전: 유형이 3대3이면 폼에 자리·팀 결과 노출. 자리는 같은 대회 직전 라운드에서 이어받음.
+    const isTeam3 = selectedMatchType === TEAM3_MATCH_TYPE;
+    const matchTypeOptions = data.matchTypes.includes(TEAM3_MATCH_TYPE) ? data.matchTypes : [...data.matchTypes, TEAM3_MATCH_TYPE];
+    const selectedTeamResult = match?.teamResult || "win";
+    const selectedTeamPosition = match?.teamPosition || suggestedTeamPosition(selectedTournamentId) || "A";
     const hasQuickDefaults = !match && Boolean(data.settings?.quickMatchDefaults || data.matches[0]);
     const recentDecks = match ? [] : recentDeckOptions(4);
     const recentOpponents = match ? [] : recentOpponentOptions(6);
     const body = `
       <form class="form-grid match-form ${selectedMatchFormat === "match" ? "match-mode" : "single-mode"}${
         selectedRoundStage === "swiss" ? " swiss-mode" : ""
-      }" id="match-form">
+      }${isTeam3 ? " team3-mode" : ""}" id="match-form">
         ${hasQuickDefaults ? `<div class="mini-text">최근 입력한 덱, 상대, 대전 유형을 기본값으로 불러왔습니다.</div>` : ""}
         <label class="field">
           <span>내 덱</span>
@@ -3038,7 +3055,7 @@
           <label class="field">
             <span>대전 유형</span>
             <select class="select" name="matchType">
-              ${data.matchTypes
+              ${matchTypeOptions
                 .map((type) => `<option value="${escapeHTML(type)}"${selectedAttr(selectedMatchType, type)}>${escapeHTML(type)}</option>`)
                 .join("")}
             </select>
@@ -3168,6 +3185,36 @@
                     <label class="segmented-option">
                       <input type="radio" name="playOrder" value="${value}"${checkedAttr(selectedPlayOrder, value)} />
                       <span>${label}</span>
+                    </label>
+                  `
+                )
+                .join("")}
+            </div>
+          </div>
+        </div>
+        <div class="form-row team3-fields">
+          <div class="field">
+            <span>내 자리 <small class="mini-note">대회당 고정·자동 채움</small></span>
+            <div class="segmented-control team3-position-control">
+              ${TEAM_POSITION_OPTIONS.map(
+                (pos) => `
+                  <label class="segmented-option">
+                    <input type="radio" name="teamPosition" value="${pos}"${checkedAttr(selectedTeamPosition, pos)} />
+                    <span>${pos}</span>
+                  </label>
+                `
+              ).join("")}
+            </div>
+          </div>
+          <div class="field">
+            <span>팀 결과 <small class="mini-note">내 결과와 별개</small></span>
+            <div class="segmented-control">
+              ${["win", "loss", "draw"]
+                .map(
+                  (result) => `
+                    <label class="segmented-option result-option ${result === "draw" ? "draw-result-option" : ""}">
+                      <input type="radio" name="teamResult" value="${result}"${checkedAttr(selectedTeamResult, result)} />
+                      <span>${resultLabel(result)}</span>
                     </label>
                   `
                 )
@@ -3627,6 +3674,9 @@
     form.classList.toggle("swiss-mode", isSwiss);
     form.classList.toggle("match-mode", isMatchMode);
     form.classList.toggle("single-mode", !isMatchMode);
+    // 3대3 팀전 유형이면 자리·팀 결과 필드 노출
+    const isTeam3 = (form.querySelector('[name="matchType"]')?.value || "") === TEAM3_MATCH_TYPE;
+    form.classList.toggle("team3-mode", isTeam3);
   }
 
   function applyTournamentDefaultsToMatchForm(form, options = {}) {
@@ -4340,11 +4390,13 @@
     const selectedResult = roundStage === "swiss" && rawResult === "draw" ? "win" : rawResult;
     const gameStats = matchFormat === "match" ? gameStatsFromScore(String(formData.get("matchScore") || "2-0")) : singleGameStats(selectedResult);
     const result = matchFormat === "match" ? resultFromGameStats(gameStats) : selectedResult;
+    const matchType = normalizeMatchTypeName(formData.get("matchType") || data.matchTypes[0] || "대전") || "대전";
+    const isTeam3Type = matchType === TEAM3_MATCH_TYPE;
     const match = {
       id: state.editingMatchId || uid("match"),
       deckId,
       date: String(formData.get("date") || todayISO()),
-      matchType: normalizeMatchTypeName(formData.get("matchType") || data.matchTypes[0] || "대전") || "대전",
+      matchType,
       opponent: String(formData.get("opponent") || "").trim(),
       result,
       matchFormat,
@@ -4355,6 +4407,9 @@
       roundStage,
       roundLabel: tournamentId ? String(formData.get("roundLabel") || "").trim() : "",
       playOrder: String(formData.get("playOrder") || "unknown"),
+      // 3대3 팀전일 때만 팀 결과·자리 저장(다른 유형이면 빈 값)
+      teamResult: isTeam3Type ? String(formData.get("teamResult") || "") : "",
+      teamPosition: isTeam3Type ? String(formData.get("teamPosition") || "") : "",
       memo: String(formData.get("memo") || "").trim(),
       cardIds: [],
       cardNames: [],
@@ -4922,6 +4977,11 @@
       syncMatchFormMode(matchFormat.closest("#match-form"));
       return;
     }
+    const matchTypeSelect = event.target.closest('#match-form [name="matchType"]');
+    if (matchTypeSelect) {
+      syncMatchFormMode(matchTypeSelect.closest("#match-form"));
+      return;
+    }
     const roundStageInput = event.target.closest('input[name="roundStage"]');
     if (roundStageInput) {
       applyTournamentDefaultsToMatchForm(roundStageInput.closest("#match-form"));
@@ -4938,6 +4998,10 @@
       const noneInput = form?.querySelector('input[name="roundStage"][value="none"]');
       if (tournament && noneInput?.checked && stageInput) stageInput.checked = true;
       if (!tournament && noneInput) noneInput.checked = true;
+      // 3대3 자리(A/B/C)는 대회당 고정 → 대회 바꾸면 그 대회 직전 라운드 자리로 자동 세팅
+      const seat = tournament ? suggestedTeamPosition(tournament.id) : "";
+      const seatInput = seat ? form?.querySelector(`input[name="teamPosition"][value="${seat}"]`) : null;
+      if (seatInput) seatInput.checked = true;
       applyTournamentDefaultsToMatchForm(form, { force: true });
       return;
     }

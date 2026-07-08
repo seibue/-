@@ -90,6 +90,16 @@
     const selectedMatchupDeckId = validMatchupDeckId(deckRows);
     const matchupRows = deckMatchupRows(selectedMatchupDeckId, 0, scoped);
     const selectedMatchupOpponent = validMatchupOpponent(matchupRows);
+    // 3대3 팀전: 팀 승률(내 승률과 별개)
+    const team3 = scoped.filter((match) => match.teamResult);
+    const team3Team = {
+      total: team3.length,
+      wins: team3.filter((m) => m.teamResult === "win").length,
+      losses: team3.filter((m) => m.teamResult === "loss").length,
+      draws: team3.filter((m) => m.teamResult === "draw").length,
+    };
+    const team3TeamRate = team3Team.total ? Math.round((team3Team.wins / team3Team.total) * 100) : 0;
+    const team3Mine = statsFromMatches(team3);
 
     return `
       <section>
@@ -127,6 +137,17 @@
                   ${typeRows.map((row) => renderBar(row.type, `${row.total}회`, Math.round((row.total / stats.total) * 100))).join("")}
                 </div>
               </div>
+              ${
+                team3Team.total
+                  ? `<div class="settings-card" style="margin-top: 12px;">
+                      <h2 class="settings-title">3대3 팀전</h2>
+                      <div class="bar-list">
+                        ${renderBar("팀 승률", `${team3Team.total}판 · 팀 ${team3Team.wins}승 ${team3Team.losses}패${team3Team.draws ? ` ${team3Team.draws}무` : ""}`, team3TeamRate)}
+                        ${renderBar("내 승률", `${team3Mine.total}판 · ${team3Mine.wins}승 ${team3Mine.losses}패${team3Mine.draws ? ` ${team3Mine.draws}무` : ""}`, team3Mine.rate)}
+                      </div>
+                    </div>`
+                  : ""
+              }
               ${renderMetaDashboardCard(metaRows)}
               ${renderMatchupReportCard(deckRows, selectedMatchupDeckId, matchupRows, selectedMatchupOpponent, scoped)}
             `

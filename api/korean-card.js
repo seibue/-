@@ -1,7 +1,10 @@
 const https = require("https");
+const { rateLimit, clientKey, tooMany, reportError } = require("./_ops.js");
 
 const API_VERSION = "20260518-debug-parse";
 const KOREAN_CARDLIST_URL = "https://digimoncard.co.kr/";
+// 크롤러는 카드별 1회 조회 후 클라이언트가 캐시하므로 호출 빈도가 낮다.
+const RATE_LIMIT_PER_MIN = 60;
 
 function normalizeCardNumber(value) {
   return String(value || "")
@@ -159,6 +162,11 @@ function sendJson(response, statusCode, payload) {
 
 async function handler(request, response) {
   try {
+    const rl = rateLimit(`korean-card:${clientKey(request)}`, RATE_LIMIT_PER_MIN);
+    if (!rl.ok) {
+      tooMany(response, rl, API_VERSION);
+      return;
+    }
     const url = new URL(request.url || "", "http://localhost");
     const card = normalizeCardNumber(request.query?.card || url.searchParams.get("card"));
     if (!card) {
@@ -177,6 +185,7 @@ async function handler(request, response) {
     }
     sendJson(response, 200, { found: true, ...result });
   } catch (error) {
+    reportError("korean-card.lookup", error, { url: String(request.url || "") });
     sendJson(response, 500, { error: "lookup failed", apiVersion: API_VERSION });
   }
 }

@@ -243,6 +243,11 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 **api/ 폴더는 반드시 GitHub에 포함해야 합니다.**  
 `api/card-image.js`(카드 이미지 프록시)와 `api/korean-card.js`(한글 효과 크롤링)가 Vercel 서버리스 함수로 동작합니다.
 
+### 서버리스 운영 하드닝 (`api/_ops.js`)
+- `_` 접두 파일이라 Vercel이 라우트로 만들지 않는 **공유 헬퍼**입니다(외부 의존성 0).
+- **레이트리밋**(인스턴스 메모리, 베스트에포트): card-image 300/분·korean-card 60/분(IP당). 초과 시 429 + `Retry-After`. 서버리스라 인스턴스 간 카운터 공유는 안 되지만 단일 클라이언트 폭주/무한루프는 차단.
+- **에러 리포팅**(`reportError`): 항상 구조화 JSON을 `console.error`로 남겨 Vercel 로그에 잡히고, **환경변수 `ALERT_WEBHOOK_URL`(Discord/Slack 호환)이 설정돼 있으면** 크롤/프록시 실패 시 웹훅 알림(같은 지점 5분 스로틀). 미설정 시 로그만 남기고 조용히 no-op.
+
 ---
 
 ## 작업 우선순위 (2026-06-06 기준)

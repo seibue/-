@@ -1,7 +1,10 @@
 const https = require("https");
+const { rateLimit, clientKey, tooMany, reportError } = require("./_ops.js");
 
 const ALLOWED_HOSTS = new Set(["digimoncard.com"]);
 const API_VERSION = "20260616-digimoncardcom-image-proxy";
+// 덱 공유 이미지가 한 번에 ~55장을 요청하므로 넉넉하게. 폭주/무한루프만 차단.
+const RATE_LIMIT_PER_MIN = 300;
 
 function sendText(response, statusCode, text) {
   if (typeof response.status === "function") {
@@ -76,13 +79,19 @@ function proxyImage(imageUrl, response, redirects = 0) {
         upstream.pipe(response);
       }
     )
-    .on("error", () => {
+    .on("error", (error) => {
+      reportError("card-image.proxy", error, { url: imageUrl.href });
       sendText(response, 502, `image proxy failed ${API_VERSION}`);
     });
 }
 
 function handler(request, response) {
   try {
+    const rl = rateLimit(`card-image:${clientKey(request)}`, RATE_LIMIT_PER_MIN);
+    if (!rl.ok) {
+      tooMany(response, rl, API_VERSION);
+      return;
+    }
     const imageUrl = imageUrlFromRequest(request);
     if (!imageUrl) {
       sendText(response, 400, `invalid image source ${API_VERSION}`);

@@ -101,6 +101,65 @@ test("normalizeTournament: 잘못된 format은 mixed, 이름 없으면 기본", 
   assert.equal(t.name, "이름 없는 대회");
 });
 
+test("normalizeMatch: 3대3 팀 결과/자리 보존, 잘못된 값은 빈 문자열", () => {
+  const store = makeStore();
+  const team = store.normalizeMatch({ teamResult: "loss", teamPosition: "B", result: "win" });
+  assert.equal(team.teamResult, "loss");
+  assert.equal(team.teamPosition, "B");
+  assert.equal(team.result, "win"); // 내 결과는 팀 결과와 별개
+  const bad = store.normalizeMatch({ teamResult: "MVP", teamPosition: "D" });
+  assert.equal(bad.teamResult, "");
+  assert.equal(bad.teamPosition, "");
+  const none = store.normalizeMatch({ matchType: "친선전" });
+  assert.equal(none.teamResult, "");
+  assert.equal(none.teamPosition, "");
+});
+
+test("normalizeTournament: topCut 유효값 유지, 그 외/미설정은 4", () => {
+  const store = makeStore();
+  assert.equal(store.normalizeTournament({ topCut: 128 }).topCut, 128);
+  assert.equal(store.normalizeTournament({ topCut: "8" }).topCut, 8);
+  assert.equal(store.normalizeTournament({ topCut: 3 }).topCut, 4); // 목록에 없음 → 기본
+  assert.equal(store.normalizeTournament({}).topCut, 4); // 미설정 → 기존 동작
+});
+
+test("normalizeCards: 선택 일러(art) 보존/검증, 합산 시 지정 art 승계", () => {
+  const store = makeStore();
+  const [card] = store.normalizeCards([{ cardNumber: "BT1-010", name: "가루몬", count: 1, art: "_P2" }]);
+  assert.equal(card.art, "_P2");
+  const [bad] = store.normalizeCards([{ cardNumber: "BT1-011", name: "x", count: 1, art: "P2" }]);
+  assert.equal(bad.art, ""); // 형식 불일치 → 기본
+  const [merged] = store.normalizeCards([
+    { cardNumber: "BT1-012", name: "y", count: 1 },
+    { cardNumber: "BT1-012", name: "y", count: 1, art: "_P1" },
+  ]);
+  assert.equal(merged.art, "_P1"); // 합산 시 지정된 일러 승계
+});
+
+test("normalizePersonalEvents: 필수값 검증 + startsAt/endsAt 정규화 + id 자동", () => {
+  const store = makeStore();
+  const events = store.normalizePersonalEvents([
+    { title: "개인 연습", startsAt: "2026-07-20T18:00:00+09:00", endsAt: "bad-date", location: " 우리집 " },
+    { title: "", startsAt: "2026-07-20T18:00:00+09:00" }, // 제목 없음 → 제외
+    { title: "제목만", startsAt: "" }, // 시작 없음 → 제외
+    { title: "잘못된 날짜", startsAt: "not-a-date" }, // 파싱 불가 → 제외
+    "garbage", // 객체 아님 → 제외
+  ]);
+  assert.equal(events.length, 1);
+  assert.equal(events[0].title, "개인 연습");
+  assert.equal(events[0].location, "우리집"); // trim
+  assert.equal(events[0].endsAt, ""); // 잘못된 endsAt → 빈 값
+  assert.ok(events[0].id, "id 자동 생성");
+});
+
+test("normalizePersonalEvents: 배열 아니면 빈 배열, mergeData가 personalEvents 채움", () => {
+  const store = makeStore();
+  assert.deepEqual(store.normalizePersonalEvents(null), []);
+  const merged = store.mergeData({ personalEvents: [{ title: "t", startsAt: "2026-07-20T10:00:00Z" }] });
+  assert.equal(merged.personalEvents.length, 1);
+  assert.deepEqual(store.mergeData({}).personalEvents, []);
+});
+
 test("normalizeDeckVersions: createdAt 오름차순 정렬", () => {
   const store = makeStore();
   const versions = store.normalizeDeckVersions([

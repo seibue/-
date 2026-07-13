@@ -95,3 +95,5 @@ function handler(request, response) {
 }
 
 module.exports = handler;
+module.exports.isAllowedImageUrl = isAllowedImageUrl;
+module.exports.imageUrlFromRequest = imageUrlFromRequest;

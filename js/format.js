@@ -101,6 +101,18 @@
     };
   }
 
+  // 스위스 종료 후 토너먼트(컷) 라운드 라벨 진행. cut 규모부터 결승까지: 128 → 128강,64강,…,4강,결승.
+  function topCutLabels(cut) {
+    const labels = [];
+    let n = Math.max(2, Number(cut) || 4);
+    while (n >= 4) {
+      labels.push(`${n}강`);
+      n = Math.floor(n / 2);
+    }
+    labels.push("결승");
+    return labels;
+  }
+
   const format = {
     uid,
     escapeHTML,
@@ -114,6 +126,7 @@
     normalizeGameStats,
     emptyRecordStats,
     finalizeRecordStats,
+    topCutLabels,
   };
 
   if (typeof module !== "undefined" && module.exports) {

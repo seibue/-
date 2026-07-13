@@ -85,3 +85,16 @@ test("uid: prefix로 시작하고 매번 다른 값", () => {
   assert.match(a, /^match-/);
   assert.notEqual(a, b);
 });
+
+test("topCutLabels: 컷 규모부터 결승까지 단계별 라벨", () => {
+  assert.deepEqual(format.topCutLabels(4), ["4강", "결승"]);
+  assert.deepEqual(format.topCutLabels(8), ["8강", "4강", "결승"]);
+  assert.deepEqual(format.topCutLabels(128), ["128강", "64강", "32강", "16강", "8강", "4강", "결승"]);
+});
+
+test("topCutLabels: 2(결승만)/미지정/이상값 처리", () => {
+  assert.deepEqual(format.topCutLabels(2), ["결승"]);
+  assert.deepEqual(format.topCutLabels(0), ["4강", "결승"]); // 기본 4
+  assert.deepEqual(format.topCutLabels(), ["4강", "결승"]);
+  assert.deepEqual(format.topCutLabels(3), ["결승"]); // 3은 4 미만 → 결승만
+});

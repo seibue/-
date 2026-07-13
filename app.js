@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260618-team3-share";
+  const APP_VERSION = "20260713-tests-3v3-cut-api";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -21,6 +21,7 @@
     normalizeGameStats,
     emptyRecordStats,
     finalizeRecordStats,
+    topCutLabels,
   } = window.JJM.format;
 
   // 캘린더 엔진(순수): 구글 캘린더 링크 / .ics(알람 포함) / 월간 격자
@@ -1194,17 +1195,6 @@
   }
 
   // 컷 규모(예: 16) → 라운드 라벨 순서(예: ["16강","8강","4강","결승"])
-  function topCutLabels(cut) {
-    const labels = [];
-    let n = Math.max(2, Number(cut) || 4);
-    while (n >= 4) {
-      labels.push(`${n}강`);
-      n = Math.floor(n / 2);
-    }
-    labels.push("결승");
-    return labels;
-  }
-
   function tournamentTopCut(tournamentId) {
     const cut = Number(getTournament(tournamentId)?.topCut);
     return [2, 4, 8, 16, 32, 64, 128].includes(cut) ? cut : 4;

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260713-tests-3v3-cut-api";
+  const APP_VERSION = "20260714-a11y-1";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -935,7 +935,7 @@
       <article class="home-panel home-card-search">
         <div class="home-card-search-head">
           <strong>카드 검색</strong>
-          <input class="input" type="search" value="${escapeHTML(state.homeCardSearch)}" placeholder="카드명·번호·효과 (예: 오메가몬, BT1-084)" data-home-card-search autocomplete="off" />
+          <input class="input" type="search" value="${escapeHTML(state.homeCardSearch)}" placeholder="카드명·번호·효과 (예: 오메가몬, BT1-084)" aria-label="카드 검색" data-home-card-search autocomplete="off" />
         </div>
         <div class="home-card-search-results" data-home-card-search-results>${renderHomeCardSearchResults()}</div>
       </article>
@@ -2143,6 +2143,7 @@
       renderHomeCardSearch,
       getData: () => data,
     });
+  let lastRenderedDialog = "";
   function render() {
     root.innerHTML = `
       <div class="app-shell">
@@ -2180,6 +2181,20 @@
     // 모달이 열려 있을 때 배경 페이지 스크롤 차단
     document.body.classList.toggle("modal-open", !!(state.modal || state.previewCardNo));
     document.body.classList.toggle("deck-modal-open", state.modal === "deck");
+    // 접근성: 다이얼로그가 열리면 포커스를 그 안으로 옮긴다(WCAG 2.4.3).
+    // - 처음 열리는 렌더, 또는
+    // - 다이얼로그가 열려 있는데 포커스가 body로 빠진 경우(내부 비동기 재렌더로 포커스 노드가 사라짐).
+    // 텍스트 입력 자동 포커스는 모바일 키보드를 띄우므로 패널 컨테이너(tabindex=-1)에만 포커스.
+    // 사용자가 특정 필드를 쓰는 중(activeElement가 실제 요소)이면 뺏지 않는다.
+    const openedDialog = state.modal || (state.previewCardNo ? "preview" : "");
+    if (openedDialog) {
+      const panel = document.querySelector(state.previewCardNo ? ".card-preview-panel" : ".modal-panel");
+      const focusLost = document.activeElement === document.body || document.activeElement === null;
+      if (panel && !panel.contains(document.activeElement) && (openedDialog !== lastRenderedDialog || focusLost)) {
+        panel.focus({ preventScroll: true });
+      }
+    }
+    lastRenderedDialog = openedDialog;
   }
 
   let pendingDeckScroll = null;
@@ -2791,7 +2806,7 @@
     const showArtSave = !!draftCard && hasGallery && !activeIsSaved;
     return `
       <div class="card-preview-backdrop">
-        <section class="card-preview-panel" role="dialog" aria-modal="true" aria-label="${escapeHTML(card.name)} 미리보기">
+        <section class="card-preview-panel" role="dialog" aria-modal="true" tabindex="-1" aria-label="${escapeHTML(card.name)} 미리보기">
           <button class="icon-button card-preview-close" type="button" title="닫기" aria-label="미리보기 닫기" data-action="close-card-preview">×</button>
           <div class="card-preview-image${hasGallery ? " has-gallery" : ""}" data-img-count="${images.length}">
             ${
@@ -2908,7 +2923,7 @@
     const backdropClass = className.includes("deck-modal-panel") ? " deck-modal-backdrop" : "";
     return `
       <div class="modal-backdrop${backdropClass}">
-        <section class="modal-panel ${escapeHTML(className)}" role="dialog" aria-modal="true" aria-label="${escapeHTML(title)}">
+        <section class="modal-panel ${escapeHTML(className)}" role="dialog" aria-modal="true" tabindex="-1" aria-label="${escapeHTML(title)}">
           <div class="modal-head">
             <h2 class="modal-title">${escapeHTML(title)}</h2>
             <button class="icon-button" type="button" title="닫기" aria-label="닫기" data-action="close-modal">×</button>
@@ -4961,6 +4976,11 @@
     if (event.key === "Escape" && state.previewCardNo) {
       event.preventDefault();
       closeCardPreview();
+      return;
+    }
+    if (event.key === "Escape" && state.modal) {
+      event.preventDefault();
+      closeModal();
       return;
     }
     if (event.key === "Enter" || event.key === " ") {

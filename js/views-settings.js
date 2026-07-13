@@ -44,7 +44,7 @@
             )
             .join("")}
           <form class="backup-row" id="type-form">
-            <input class="input" name="typeName" placeholder="새 유형" autocomplete="off" />
+            <input class="input" name="typeName" placeholder="새 유형" aria-label="새 대전 유형 이름" autocomplete="off" />
             <button class="control-button active" type="submit">추가</button>
           </form>
         </article>

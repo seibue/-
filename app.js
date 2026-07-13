@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260618-deck-png-mobile";
+  const APP_VERSION = "20260618-team3-share";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2014,7 +2014,8 @@
         const stage = match.roundStage || "none";
         const index = counters[stage] || 0;
         counters[stage] = index + 1;
-        return `${roundLabelForShare(match, index)} vs ${match.opponent || "상대 미기록"} ${roundResultForShare(match)}`;
+        const team3 = match.teamResult ? ` · 팀 ${resultShortLabel(match.teamResult)}` : "";
+        return `${roundLabelForShare(match, index)} vs ${match.opponent || "상대 미기록"} ${roundResultForShare(match)}${team3}`;
       });
   }
 
@@ -2024,12 +2025,26 @@
     return `${location ? `${location} ` : ""}${name} 전적`;
   }
 
+  // 3대3 팀전 공유 요약: 내 자리 + 팀 승패(내 결과와 별개)
+  function team3ShareSummary(matches) {
+    const team3 = matches.filter((match) => match.teamResult);
+    if (!team3.length) return null;
+    const seats = [...new Set(team3.map((match) => match.teamPosition).filter(Boolean))];
+    const rec = { win: 0, loss: 0, draw: 0 };
+    team3.forEach((match) => { rec[match.teamResult] = (rec[match.teamResult] || 0) + 1; });
+    const seatText = seats.length ? `내 자리 ${seats.join("/")}` : "";
+    const recordText = `팀 ${rec.win}승 ${rec.loss}패${rec.draw ? ` ${rec.draw}무` : ""}`;
+    return { line: `🤝 3대3 팀전${seatText ? ` · ${seatText}` : ""} · ${recordText}` };
+  }
+
   function tournamentDailyShareBlock(row) {
     const lines = [
       tournamentShareTitle(row),
       "",
       `사용 덱: ${tournamentDeckText(row.matches)}`,
     ];
+    const team3 = team3ShareSummary(row.matches);
+    if (team3) lines.push(team3.line);
     const roundLines = tournamentShareRoundLines(row.matches);
     if (roundLines.length) lines.push("", ...roundLines);
     return lines.join("\n");
@@ -2042,8 +2057,10 @@
       return [...summary.tournaments.map(tournamentDailyShareBlock), "#디지몬카드게임 #전적몬"].join("\n\n");
     }
     const lines = [];
+    const team3 = team3ShareSummary(summary.matches);
+    lines.push(dailyShareDeckLine(summary.decks));
+    if (team3) lines.push(team3.line);
     lines.push(
-      dailyShareDeckLine(summary.decks),
       ...summary.matchups.map((row) => `vs ${row.opponent} ${shareScoreText(row)}${hasMatchGameBreakdown(row) ? ` (게임 ${shareGameScoreText(row)})` : ""}`),
       "",
       "#디지몬카드게임 #전적몬"

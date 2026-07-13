@@ -263,7 +263,7 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - 덱 코드 복사/가져오기 — `copy-deck-code`(digimonmeta 배열), 가져오기(텍스트·JSON·digimonmeta·파일, 에라타/변형번호 처리)
 - 덱 버전 스냅샷 + 버전별 승률 — `save-deck-version`, `deck.versions`, `deckVersionRecords()`
 - 대회 라운드 전적 인라인 수정 — `renderTournamentCard()` 행별 ✎
-- 3대3 팀전 — 대전 유형에 `3대3 팀전`(`TEAM3_MATCH_TYPE`) 선택 시 매치 폼에 `내 자리(A/B/C, teamPosition)`·`팀 결과(teamResult, 내 결과와 별개)` 노출(`team3-mode` 클래스, `.team3-fields`). 자리는 대회당 고정 — `suggestedTeamPosition()`이 같은 대회 직전 3대3 라운드 자리를 이어받고 대회 변경 시 자동 세팅. 전적 카드 `.team3-badge`(팀 승/패·자리), 통계에 팀 승률(내 승률과 분리) 카드. `normalizeMatch`(store.js)가 teamResult/teamPosition 보존
+- 3대3 팀전 — 대전 유형에 `3대3 팀전`(`TEAM3_MATCH_TYPE`) 선택 시 매치 폼에 `내 자리(A/B/C, teamPosition)`·`팀 결과(teamResult, 내 결과와 별개)` 노출(`team3-mode` 클래스, `.team3-fields`). 자리는 대회당 고정 — `suggestedTeamPosition()`이 같은 대회 직전 3대3 라운드 자리를 이어받고 대회 변경 시 자동 세팅. 전적 카드 `.team3-badge`(팀 승/패·자리), 통계에 팀 승률(내 승률과 분리) 카드. 오늘 전적 공유 문장에 `team3ShareSummary()`로 '내 자리 + 팀 N승 M패' + 라운드별 '팀 승/패' 표기. `normalizeMatch`(store.js)가 teamResult/teamPosition 보존
 - 대회별 토너먼트 컷 설정 — 대회 추가/수정 모달의 `topCut`(2 결승만/4/8/16/32/64/128강, 기본 4). 스위스 종료 후 토너먼트 라운드 라벨이 컷부터 자동 진행(`topCutLabels`/`tournamentTopCut`로 예: 128강→64강→…→4강→결승). `TOURNAMENT_CUT_OPTIONS`, `normalizeTournament`(store.js)가 보존
 - **대회일정 캘린더** — `events` 탭, `js/calendar.js`(월간격자·구글캘린더링크·.ics+알람), 관리자 공식 일정 CRUD(Supabase `tournament_events`), 지역 필터칩
 - **개인 일정(본인만 보임)** — 누구나 '내 일정' 추가(`add-personal-event`). `data.personalEvents`(per-user 블록, RLS·기기간 동기화, 로그아웃 시 localStorage)에 저장 → `allCalendarEvents()`가 공식+개인 합쳐 표시. 개인 일정은 금색 칩·'내 일정' 배지, 소유자만 편집/삭제. `normalizePersonalEvents`(store.js), `savePersonalEvent`/`deletePersonalEventById`(app.js), `state.eventModalKind`("personal"/"official")

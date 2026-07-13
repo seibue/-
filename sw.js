@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260618-deck-png-mobile";
+const CACHE_NAME = "jeonjeokmon-shell-20260618-team3-share";
 const CORE_ASSETS = [
   "/",
   "/index.html",

@@ -32,6 +32,7 @@ updateFile("index.html", [
   [/js\/catalog\.js\?v=[^"]+/g, `js/catalog.js?v=${version}`],
   [/js\/status\.js\?v=[^"]+/g, `js/status.js?v=${version}`],
   [/js\/persistence\.js\?v=[^"]+/g, `js/persistence.js?v=${version}`],
+  [/js\/data-io\.js\?v=[^"]+/g, `js/data-io.js?v=${version}`],
   [/js\/docx-export\.js\?v=[^"]+/g, `js/docx-export.js?v=${version}`],
   [/js\/share-image\.js\?v=[^"]+/g, `js/share-image.js?v=${version}`],
   [/js\/card-effects\.js\?v=[^"]+/g, `js/card-effects.js?v=${version}`],

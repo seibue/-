@@ -35,6 +35,7 @@ DegiLog/
 │   ├── catalog.js           # 카드번호/카탈로그 정규화 순수 헬퍼 (createCatalog) — CARD_CATALOG 빌드보다 먼저 생성
 │   ├── status.js            # 데이터/동기화 상태 요약 헬퍼 (createStatus) — 읽기 전용, diagnostics보다 먼저 생성
 │   ├── persistence.js       # 저장/복구/undo 데이터 레이어 (createPersistence) — setData 콜백·scheduleCloudSave 지연 주입
+│   ├── data-io.js           # 파일/클립보드/설치 IO 액션 (createDataIO) — 덱 내보내기/가져오기·백업·PWA, 전부 런타임 전용
 │   ├── docx-export.js       # 덱 레시피 인쇄/DOCX 생성 (createDeckRecipeExport)
 │   ├── share-image.js       # 공유 이미지 캔버스 렌더/PNG 저장 (createShareImage)
 │   ├── card-effects.js      # 카드 효과 번역/조회/캐시 (createCardEffects)
@@ -132,6 +133,7 @@ const { addDraftCard, deckReadiness } = window.JJM.deck.createDeck({ state, getD
 | `catalog` | `createCatalog` | normalizeCardNumber, normalizeCatalogQuery, normalizeLevel, createDefaultDeckCardFilters, normalizeCatalogCard |
 | `status` | `createStatus` | dataSummary, cardDataSummary, syncTone, cloudStatusText, backupStatusInfo, isAdminUser, deckColorText … (18종, 읽기 전용) |
 | `persistence` | `createPersistence` | saveData, cloneDataSnapshot, saveRecoveryPoint, restoreRecoveryPoint, notifyUndo, restoreUndo … (8종) — loadData/loadCardEffectCache 는 init 순서 제약으로 app.js 잔류 |
+| `data-io` | `createDataIO` | deckExportText, copyDeckExportCode, handleDeckImportSubmit, downloadBackup, restoreBackup, clearAllData, installPwa, copyDailyShareText … (15종) — copyDailyShareText 는 share-image deps에 지연 화살표로 연결, catalogCardByNumber 는 app.js 잔류 |
 | `docx-export` | `createDeckRecipeExport` | printDeckRecipe, downloadDeckRecipeDocx |
 | `share-image` | `createShareImage` | downloadDeckImage, downloadDailyShareImage, openDailyShareX |
 | `card-effects` | `createCardEffects` + 순수 2종 | staticKoreanOfficialEffect, fetchAndCacheCardEffect |

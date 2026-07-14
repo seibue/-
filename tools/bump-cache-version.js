@@ -29,6 +29,7 @@ updateFile("index.html", [
   [/js\/format\.js\?v=[^"]+/g, `js/format.js?v=${version}`],
   [/js\/store\.js\?v=[^"]+/g, `js/store.js?v=${version}`],
   [/js\/lookups\.js\?v=[^"]+/g, `js/lookups.js?v=${version}`],
+  [/js\/catalog\.js\?v=[^"]+/g, `js/catalog.js?v=${version}`],
   [/js\/docx-export\.js\?v=[^"]+/g, `js/docx-export.js?v=${version}`],
   [/js\/share-image\.js\?v=[^"]+/g, `js/share-image.js?v=${version}`],
   [/js\/card-effects\.js\?v=[^"]+/g, `js/card-effects.js?v=${version}`],

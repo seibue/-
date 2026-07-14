@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260714-lookups-mod";
+const CACHE_NAME = "jeonjeokmon-shell-20260714-catalog-mod2";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -7,6 +7,7 @@ const CORE_ASSETS = [
   "/js/format.js",
   "/js/store.js",
   "/js/lookups.js",
+  "/js/catalog.js",
   "/js/docx-export.js",
   "/js/share-image.js",
   "/js/card-effects.js",

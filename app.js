@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260714-lookups-mod";
+  const APP_VERSION = "20260714-catalog-mod2";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -91,6 +91,17 @@
   // 3대3 팀전: 대전 유형으로 선택하면 폼에 '내 자리(A/B/C)'·'팀 결과'가 나타남
   const TEAM3_MATCH_TYPE = "3대3 팀전";
   const TEAM_POSITION_OPTIONS = ["A", "B", "C"];
+  // 트랙 B: 카드번호/카탈로그 정규화 순수 헬퍼는 js/catalog.js 로 이동.
+  // 아래 CARD_CATALOG 빌드가 normalizeCatalogCard 를 즉시 호출하므로 그 전에 생성해야 한다
+  // (normalizeCardNumber/normalizeLevel 은 store 팩토리에도 주입됨).
+  const {
+    normalizeCardNumber,
+    normalizeCatalogQuery,
+    normalizeLevel,
+    createDefaultDeckCardFilters,
+    normalizeCatalogCard,
+  } = window.JJM.catalog.createCatalog({ cardTypeLabels });
+
   // 같은 카드 번호의 다른 아트/레어도 중복은 덱 구성에 불필요하므로 번호 기준 1개만 유지
   // (카드 목록은 첫 등장(보통 기본 레어도)을 대표로 사용)
   const CARD_CATALOG = (() => {
@@ -120,7 +131,7 @@
 
   // 트랙 B: 데이터 정규화 레이어는 js/store.js 로 이동.
   // loadData()(아래 `let data`) 와 docx/cloud 팩토리보다 먼저 생성해야 한다(normalizeDeck/mergeData 주입).
-  // createDefaultData/createDemoData/loadData(IO) 와 normalizeCardNumber/normalizeLevel(공용)은 app.js 잔류.
+  // createDefaultData/createDemoData/loadData(IO)는 app.js 잔류(localStorage 접근).
   // app.js가 직접 쓰는 것만 구조분해 (normalizeMatchTypes/Tournament/DeckVersions/Match 는
   // store 내부의 mergeData/normalizeDeck 가 사용하므로 여기서 꺼낼 필요 없음)
   const { mergeData, normalizeMatchTypeName, normalizeDeck, normalizeCards, normalizePersonalEvents } = window.JJM.store.createStore({
@@ -664,55 +675,6 @@
     } catch (error) {
       return {};
     }
-  }
-
-  function normalizeCardNumber(value) {
-    const cleaned = String(value || "")
-      .trim()
-      .toUpperCase()
-      .replace(/\s+/g, "");
-    // 기본 카드번호(세트코드-번호)만 추출 → 에라타/프로모 변형 접미사 제거
-    // 예: EX3-057-ERRATA → EX3-057, P-103_P2 → P-103
-    const base = cleaned.match(/^[A-Z]+[0-9]*-[0-9]+/);
-    if (base) return base[0];
-    return cleaned.replace(/[^A-Z0-9-]/g, "");
-  }
-
-  function normalizeCatalogQuery(value) {
-    return String(value || "")
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9가-힣]/gi, "");
-  }
-
-  function normalizeLevel(value) {
-    return String(value || "").replace(/\D/g, "").slice(0, 1);
-  }
-
-  function createDefaultDeckCardFilters() {
-    return {
-      colors: [],
-      levels: [],
-      setPrefix: "all",
-      sort: "catalog",
-    };
-  }
-
-  function normalizeCatalogCard(card, index = 0) {
-    const type = cardTypeLabels[card.type] ? card.type : "other";
-    const rawImage = String(card.img || card.smallImgUrl || card.imgUrl || "").trim();
-    const image = rawImage.includes("dgchub.com") ? "" : rawImage;
-    return {
-      index,
-      no: normalizeCardNumber(card.no || card.cardNumber || card.cardNo || ""),
-      level: normalizeLevel(card.level || card.lv || ""),
-      name: String(card.name || "").trim(),
-      type,
-      color: String(card.color || "").toLowerCase(),
-      color2: String(card.color2 || "").toLowerCase(),
-      rarity: String(card.rarity || "").trim(),
-      img: image,
-    };
   }
 
   function saveData(options = {}) {

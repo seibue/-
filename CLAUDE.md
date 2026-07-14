@@ -33,6 +33,7 @@ DegiLog/
 │   ├── format.js            # 순수 포매팅/결과 헬퍼 (uid, escapeHTML, 승률, topCutLabels 등)
 │   ├── lookups.js           # 덱/대회 조회·라운드 라벨 헬퍼 (createLookups) — 순수 조회, stats보다 먼저 생성
 │   ├── catalog.js           # 카드번호/카탈로그 정규화 순수 헬퍼 (createCatalog) — CARD_CATALOG 빌드보다 먼저 생성
+│   ├── status.js            # 데이터/동기화 상태 요약 헬퍼 (createStatus) — 읽기 전용, diagnostics보다 먼저 생성
 │   ├── docx-export.js       # 덱 레시피 인쇄/DOCX 생성 (createDeckRecipeExport)
 │   ├── share-image.js       # 공유 이미지 캔버스 렌더/PNG 저장 (createShareImage)
 │   ├── card-effects.js      # 카드 효과 번역/조회/캐시 (createCardEffects)
@@ -116,9 +117,10 @@ const { addDraftCard, deckReadiness } = window.JJM.deck.createDeck({ state, getD
 - 순수 함수(예: `format.js`, `normalizeEffectText`)는 모듈 레벨에 두고 직접 노출 → 그대로 테스트 가능.
 
 ### 팩토리 생성 순서 (app.js 상단)
-`diagnostics → share-image → card-effects → deck-import → stats → deck → cloud` 순으로 `state` 정의 직후 생성합니다.
+`status → diagnostics → share-image → card-effects → deck-import → stats → deck → cloud` 순으로 `state` 정의 직후 생성합니다.
+(`catalog`는 CARD_CATALOG 빌드보다 앞, `store`는 loadData보다 앞, `lookups`는 stats보다 앞 — 각각 첫 사용처 직전에 생성)
 - `recordDiagnostic`(diagnostics)이 다른 모듈에 주입되므로 **diagnostics를 가장 먼저** 생성.
-- `cloud`는 `cloudClient`(let)·`cloudStatusText`·`syncTone`을 app.js에 남겨 **diagnostics와의 순환 의존을 차단**하고, `getCloudClient/setCloudClient`·`setData`로 연결.
+- `cloud`는 `cloudClient`(let)를 app.js에 남겨 **diagnostics와의 순환 의존을 차단**하고, `getCloudClient/setCloudClient`·`setData`로 연결. `cloudStatusText`/`syncTone`은 `status` 모듈로 이동(getCloudClient 게터 주입, 순환 없음).
 - 공용 유틸(`deckCards`/`deckCountSummary`/`deckLimitViolation`/`sortDeckCards` 등)은 여러 모듈에 주입되므로 **app.js에 잔류**.
 
 ### 모듈별 노출 API
@@ -127,6 +129,7 @@ const { addDraftCard, deckReadiness } = window.JJM.deck.createDeck({ state, getD
 | `format` | 함수 직접 | uid, escapeHTML, formatDate, resultLabel, normalizeGameStats, finalizeRecordStats, topCutLabels … |
 | `lookups` | `createLookups` | getDeck, deckName, getTournament, tournamentMatches, roundText, suggestedRoundLabel, suggestedTeamPosition … (15종) |
 | `catalog` | `createCatalog` | normalizeCardNumber, normalizeCatalogQuery, normalizeLevel, createDefaultDeckCardFilters, normalizeCatalogCard |
+| `status` | `createStatus` | dataSummary, cardDataSummary, syncTone, cloudStatusText, backupStatusInfo, isAdminUser, deckColorText … (18종, 읽기 전용) |
 | `docx-export` | `createDeckRecipeExport` | printDeckRecipe, downloadDeckRecipeDocx |
 | `share-image` | `createShareImage` | downloadDeckImage, downloadDailyShareImage, openDailyShareX |
 | `card-effects` | `createCardEffects` + 순수 2종 | staticKoreanOfficialEffect, fetchAndCacheCardEffect |

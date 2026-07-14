@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260714-status-mod";
+const CACHE_NAME = "jeonjeokmon-shell-20260714-persistence-mod";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -9,6 +9,7 @@ const CORE_ASSETS = [
   "/js/lookups.js",
   "/js/catalog.js",
   "/js/status.js",
+  "/js/persistence.js",
   "/js/docx-export.js",
   "/js/share-image.js",
   "/js/card-effects.js",

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260714-a11y-1";
+  const APP_VERSION = "20260714-lookups-mod";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -305,6 +305,32 @@
     getData: () => data,
     cardTypeLabels,
     REMOTE_CARD_API_URL,
+  });
+
+  // 트랙 B: 덱/대회 조회·라운드 라벨 헬퍼는 js/lookups.js 로 이동(순수 조회 로직).
+  // deckName 등이 아래 stats 팩토리 deps로 쓰이므로 stats보다 먼저 생성해야 한다.
+  const {
+    getDeck,
+    deckName,
+    getTournament,
+    tournamentName,
+    tournamentFormatLabel,
+    roundStageLabel,
+    roundText,
+    tournamentMatchText,
+    sortedTournaments,
+    tournamentMatches,
+    suggestedTournamentStage,
+    tournamentTopCut,
+    suggestedTeamPosition,
+    suggestedRoundLabel,
+    tournamentNextActionText,
+  } = window.JJM.lookups.createLookups({
+    getData: () => data,
+    TOURNAMENT_FORMAT_OPTIONS,
+    ROUND_STAGE_OPTIONS,
+    TEAM3_MATCH_TYPE,
+    topCutLabels,
   });
 
   // 트랙 B: 통계/매치업 계산은 js/stats.js 로 이동.
@@ -1136,97 +1162,6 @@
     saveData();
     notifyToast("되돌리기 완료", dataSummary(), "success");
     render();
-  }
-
-  function getDeck(id) {
-    return data.decks.find((deck) => deck.id === id);
-  }
-
-  function deckName(id) {
-    return getDeck(id)?.name || "삭제된 덱";
-  }
-
-  function getTournament(id) {
-    return data.tournaments.find((tournament) => tournament.id === id);
-  }
-
-  function tournamentName(id) {
-    return getTournament(id)?.name || "";
-  }
-
-  function tournamentFormatLabel(format) {
-    return TOURNAMENT_FORMAT_OPTIONS.find(([value]) => value === format)?.[1] || "스위스+토너먼트";
-  }
-
-  function roundStageLabel(stage) {
-    return ROUND_STAGE_OPTIONS.find(([value]) => value === stage)?.[1] || "일반";
-  }
-
-  function roundText(match) {
-    if (!match?.tournamentId) return "";
-    const stage = match.roundStage && match.roundStage !== "none" ? roundStageLabel(match.roundStage) : "";
-    const label = String(match.roundLabel || "").trim();
-    return [stage, label].filter(Boolean).join(" ");
-  }
-
-  function tournamentMatchText(match) {
-    const tournament = getTournament(match?.tournamentId);
-    if (!tournament) return "";
-    const round = roundText(match);
-    return round ? `${tournament.name} · ${round}` : tournament.name;
-  }
-
-  function sortedTournaments() {
-    return [...data.tournaments].sort((a, b) => `${b.date || ""}${b.createdAt || ""}`.localeCompare(`${a.date || ""}${a.createdAt || ""}`));
-  }
-
-  function tournamentMatches(tournamentId) {
-    return data.matches
-      .filter((match) => match.tournamentId === tournamentId)
-      .sort((a, b) => `${a.date || ""}${a.createdAt || ""}`.localeCompare(`${b.date || ""}${b.createdAt || ""}`));
-  }
-
-  function suggestedTournamentStage(tournamentId) {
-    const matches = tournamentMatches(tournamentId);
-    const topCount = matches.filter((match) => match.roundStage === "top").length;
-    const swissCount = matches.filter((match) => match.roundStage === "swiss").length;
-    if (topCount || swissCount >= 4) return "top";
-    return "swiss";
-  }
-
-  // 컷 규모(예: 16) → 라운드 라벨 순서(예: ["16강","8강","4강","결승"])
-  function tournamentTopCut(tournamentId) {
-    const cut = Number(getTournament(tournamentId)?.topCut);
-    return [2, 4, 8, 16, 32, 64, 128].includes(cut) ? cut : 4;
-  }
-
-  // 3대3 자리(A/B/C)는 대회당 한 번만 정하면 되게, 같은 대회의 직전 3대3 라운드 자리를 이어받는다.
-  function suggestedTeamPosition(tournamentId) {
-    if (!tournamentId) return "";
-    const prior = tournamentMatches(tournamentId)
-      .filter((match) => match.matchType === TEAM3_MATCH_TYPE && match.teamPosition)
-      .pop();
-    return prior?.teamPosition || "";
-  }
-
-  function suggestedRoundLabel(tournamentId, stage = "swiss") {
-    const matches = tournamentMatches(tournamentId).filter((match) => (match.roundStage || "none") === stage);
-    if (stage === "top") {
-      const labels = topCutLabels(tournamentTopCut(tournamentId));
-      return labels[Math.min(matches.length, labels.length - 1)] || `토너먼트 ${matches.length + 1}`;
-    }
-    if (stage === "swiss") return `R${matches.length + 1}`;
-    return "";
-  }
-
-  function tournamentNextActionText(tournament) {
-    const matches = tournamentMatches(tournament.id);
-    const swissCount = matches.filter((match) => match.roundStage === "swiss").length;
-    const topCount = matches.filter((match) => match.roundStage === "top").length;
-    if (!matches.length) return "스위스 R1 입력";
-    if (topCount) return `다음 토너먼트 ${suggestedRoundLabel(tournament.id, "top")}`;
-    if (swissCount >= 4) return "토너먼트 라운드 입력";
-    return `다음 스위스 ${suggestedRoundLabel(tournament.id, "swiss")}`;
   }
 
   function tournamentFinalSummaryText(tournament) {

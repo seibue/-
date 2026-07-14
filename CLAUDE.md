@@ -30,7 +30,8 @@ DegiLog/
 ├── preview-server.cjs       # 로컬 개발용 프리뷰 서버 (포트 8787)
 ├── package.json             # node:test 기반 테스트 스크립트 (의존성 0)
 ├── js/                      # app.js 에서 분리한 도메인 모듈 (빌드 없음, window.JJM.* 노출)
-│   ├── format.js            # 순수 포매팅/결과 헬퍼 (uid, escapeHTML, 승률 등)
+│   ├── format.js            # 순수 포매팅/결과 헬퍼 (uid, escapeHTML, 승률, topCutLabels 등)
+│   ├── lookups.js           # 덱/대회 조회·라운드 라벨 헬퍼 (createLookups) — 순수 조회, stats보다 먼저 생성
 │   ├── docx-export.js       # 덱 레시피 인쇄/DOCX 생성 (createDeckRecipeExport)
 │   ├── share-image.js       # 공유 이미지 캔버스 렌더/PNG 저장 (createShareImage)
 │   ├── card-effects.js      # 카드 효과 번역/조회/캐시 (createCardEffects)
@@ -122,7 +123,8 @@ const { addDraftCard, deckReadiness } = window.JJM.deck.createDeck({ state, getD
 ### 모듈별 노출 API
 | 모듈 | 노출 | app.js가 쓰는 주요 함수 |
 |------|------|------|
-| `format` | 함수 직접 | uid, escapeHTML, formatDate, resultLabel, normalizeGameStats, finalizeRecordStats … |
+| `format` | 함수 직접 | uid, escapeHTML, formatDate, resultLabel, normalizeGameStats, finalizeRecordStats, topCutLabels … |
+| `lookups` | `createLookups` | getDeck, deckName, getTournament, tournamentMatches, roundText, suggestedRoundLabel, suggestedTeamPosition … (15종) |
 | `docx-export` | `createDeckRecipeExport` | printDeckRecipe, downloadDeckRecipeDocx |
 | `share-image` | `createShareImage` | downloadDeckImage, downloadDailyShareImage, openDailyShareX |
 | `card-effects` | `createCardEffects` + 순수 2종 | staticKoreanOfficialEffect, fetchAndCacheCardEffect |

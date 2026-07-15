@@ -248,6 +248,27 @@
           render();
           return;
         }
+        // 온보딩: 샘플 덱/전적/대회를 원클릭으로 정리(내 데이터는 유지, undo 지원).
+        // 기존엔 하나씩 지우거나 '전체 삭제'(실데이터까지 소실)뿐이라 샘플이 통계를 오염시켰다.
+        if (action === "clear-sample-data") {
+          const isSample = (id) => String(id || "").startsWith("sample-");
+          const sampleCount =
+            getData().decks.filter((deck) => isSample(deck.id)).length +
+            getData().matches.filter((match) => isSample(match.id)).length +
+            getData().tournaments.filter((tournament) => isSample(tournament.id)).length;
+          if (!sampleCount) return;
+          if (!confirm(`샘플 덱·전적·대회 ${sampleCount}개를 지울까요?\n\n내가 만든 데이터는 그대로 유지됩니다.`)) return;
+          const snapshot = cloneDataSnapshot();
+          saveRecoveryPoint(snapshot, "샘플 데이터 삭제 전");
+          getData().decks = getData().decks.filter((deck) => !isSample(deck.id));
+          getData().matches = getData().matches.filter((match) => !isSample(match.id));
+          getData().tournaments = getData().tournaments.filter((tournament) => !isSample(tournament.id));
+          getData().settings = { ...(getData().settings || {}), demoData: false };
+          saveData();
+          notifyUndo("샘플 데이터 삭제됨", snapshot, `${sampleCount}개 샘플을 되돌릴 수 있습니다.`);
+          render();
+          return;
+        }
         if (action === "copy-card-update-commands") {
           if (isAdminUser()) copyCardUpdateCommands();
           else notifyToast("관리자 전용 기능", "카드 데이터 관리는 관리자 계정에서만 사용할 수 있습니다.", "warning");

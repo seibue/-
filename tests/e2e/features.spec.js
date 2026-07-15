@@ -97,6 +97,24 @@ test("삭제 → undo 토스트 → 되돌리기 복원", async ({ page }) => {
   await expect(cardWithName).toHaveCount(1);
 });
 
+test("온보딩: '샘플 지우기'로 샘플만 정리되고 undo로 복원된다", async ({ page }) => {
+  await gotoApp(page);
+  page.on("dialog", (d) => d.accept());
+  // 홈 스타터 카드의 샘플 지우기
+  const clearBtn = page.locator('[data-action="clear-sample-data"]').first();
+  await expect(clearBtn).toBeVisible();
+  await clearBtn.click();
+
+  // 샘플 덱이 사라지고, 버튼도 숨겨짐(샘플 없음)
+  await page.locator('[data-tab="decks"]').first().click();
+  await expect(page.getByText("샘플: 레드 오메가")).toHaveCount(0);
+  await expect(page.locator('[data-action="clear-sample-data"]')).toHaveCount(0);
+
+  // undo 복원
+  await page.locator('.toast-action[data-action="restore-undo"]').first().click();
+  await expect(page.getByText("샘플: 레드 오메가").first()).toBeVisible();
+});
+
 test("접근성: Escape 닫기 + Tab 포커스 트랩 + 토스트 라이브 리전 상시", async ({ page }) => {
   await gotoApp(page);
   // 라이브 리전은 토스트가 없어도 DOM에 존재

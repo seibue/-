@@ -248,12 +248,15 @@
       ["3", "통계 확인", getData().matches.length > 0],
       ["4", "X 공유", getData().matches.some((match) => match.date === todayISO())],
     ];
+    const hasSampleData = [...getData().decks, ...getData().matches, ...getData().tournaments].some((item) =>
+      String(item.id || "").startsWith("sample-")
+    );
     return `
       <article class="home-panel starter-card">
         <div class="home-panel-head">
           <div>
             <h2>처음이라면 이 순서로 시작</h2>
-            <p class="mini-text">샘플 데이터는 화면을 보여주기 위한 예시입니다. 내 덱을 만들면 자연스럽게 교체해서 쓸 수 있습니다.</p>
+            <p class="mini-text">샘플 데이터는 화면을 보여주기 위한 예시입니다. 내 기록을 시작할 준비가 되면 '샘플 지우기'로 한 번에 정리할 수 있어요.</p>
           </div>
           <span class="home-chip">가이드</span>
         </div>
@@ -269,6 +272,7 @@
         <div class="starter-actions">
           <button class="primary-action compact" type="button" data-action="open-deck">내 덱 만들기</button>
           <button class="control-button" type="button" data-action="open-match">전적 남기기</button>
+          ${hasSampleData ? `<button class="control-button" type="button" data-action="clear-sample-data">샘플 지우기</button>` : ""}
           <button class="control-button" type="button" data-tab="settings">전체 가이드</button>
           <button class="quiet-button" type="button" data-action="dismiss-starter-guide">숨기기</button>
         </div>

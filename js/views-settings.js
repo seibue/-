@@ -109,7 +109,7 @@
           <h2 class="settings-title">처음 시작 가이드</h2>
           <span class="sync-badge ok">첫 사용자용</span>
         </div>
-        <div class="mini-text">처음 보이는 샘플 덱과 전적은 화면 구성을 보여주기 위한 예시입니다. 수정하거나 삭제해도 괜찮습니다.</div>
+        <div class="mini-text">처음 보이는 샘플 덱과 전적은 화면 구성을 보여주기 위한 예시입니다. '샘플 지우기'로 한 번에 정리할 수 있습니다(내 데이터는 유지).</div>
         <div class="guide-steps">
           ${steps
             .map(
@@ -128,6 +128,11 @@
         <div class="backup-row sync-actions">
           <button class="control-button active" type="button" data-action="open-deck">덱 추가로 시작</button>
           <button class="control-button" type="button" data-action="open-match">전적 기록하기</button>
+          ${
+            [...getData().decks, ...getData().matches, ...getData().tournaments].some((item) => String(item.id || "").startsWith("sample-"))
+              ? `<button class="control-button" type="button" data-action="clear-sample-data">샘플 지우기</button>`
+              : ""
+          }
         </div>
       </article>
     `;

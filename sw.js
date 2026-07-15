@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260716-matches-paging";
+const CACHE_NAME = "jeonjeokmon-shell-20260716-sample-clear";
 const CORE_ASSETS = [
   "/",
   "/index.html",

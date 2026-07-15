@@ -51,7 +51,8 @@ DegiLog/
 │   ├── views-matches.js     # 전적 탭 뷰(렌더) 함수군 (createMatchesViews) — views 분리 4호
 │   ├── views-home.js        # 홈 대시보드 뷰(렌더) 함수군 (createHomeViews) — views 분리 5호 (카드검색은 app.js 잔류)
 │   ├── views-decks.js       # 덱 탭 목록 뷰(렌더) 함수군 (createDeckViews) — views 분리 6호
-│   └── views-modals.js      # 모달/카드 미리보기/덱 빌더 뷰 22종 (createModalViews) — views 분리 7호, deck·stats·card-effects 팩토리보다 뒤에 생성
+│   ├── views-modals.js      # 모달/카드 미리보기/덱 빌더 뷰 22종 (createModalViews) — views 분리 7호, deck·stats·card-effects 팩토리보다 뒤에 생성
+│   └── controller.js        # 액션 컨트롤러 (createController) — handleAction+폼 제출 5종, 모든 팩토리보다 마지막(리스너 직전)에 생성
 ├── tests/                   # node --test 단위 테스트 (모듈별, npm test 로 실행)
 │   └── *.test.js
 ├── api/
@@ -136,6 +137,7 @@ const { addDraftCard, deckReadiness } = window.JJM.deck.createDeck({ state, getD
 | `persistence` | `createPersistence` | saveData, cloneDataSnapshot, saveRecoveryPoint, restoreRecoveryPoint, notifyUndo, restoreUndo … (8종) — loadData/loadCardEffectCache 는 init 순서 제약으로 app.js 잔류 |
 | `data-io` | `createDataIO` | deckExportText, copyDeckExportCode, handleDeckImportSubmit, downloadBackup, restoreBackup, clearAllData, installPwa, copyDailyShareText … (15종) — copyDailyShareText 는 share-image deps에 지연 화살표로 연결, catalogCardByNumber 는 app.js 잔류 |
 | `views-modals` | `createModalViews` | renderModal, renderMatchModal, renderTournamentModal, renderDeckModal, renderDeckBuilder, renderCardPreview, renderEventModal, modalFrame … (22종, 순수 렌더) — updateDeckCatalogResults/commitDeckCardSearch 는 deckSearchTimer(재할당 let) 때문에 app.js 잔류 |
+| `controller` | `createController` | handleAction(중앙 액션 분기), handleMatchSubmit, handleTournamentSubmit, handleDeckSubmit, handleTypeSubmit, handleEventSubmit (deps ~80종) — 이벤트 리스너 등록은 app.js 잔류 |
 | `docx-export` | `createDeckRecipeExport` | printDeckRecipe, downloadDeckRecipeDocx |
 | `share-image` | `createShareImage` | downloadDeckImage, downloadDailyShareImage, openDailyShareX |
 | `card-effects` | `createCardEffects` + 순수 2종 | staticKoreanOfficialEffect, fetchAndCacheCardEffect |
@@ -306,7 +308,8 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 
 ---
 
-## 향후 분리 후보 (트랙 B 잔여, 고위험)
+## 트랙 B (코어 모듈화) — 완료
 
-데이터 레이어(persistence)·상태 요약(status)·IO 액션(data-io)·모달 뷰(views-modals)까지 분리 완료.
-마지막 남은 덩어리는 **controller**(`handleAction` ~560줄 + 이벤트 리스너 ~340줄)입니다 — deps 100개 안팎이 필요한 최고난도 영역. 별도 세션에서 신중히 진행 권장(`render`↔`handleAction` 상호 호출). 이동 시 의존성 스캔은 호출형(`f(`)뿐 아니라 **값 참조(`Object.entries(x)` 등)도 잡아야 함**(views-modals 분리 때 colorLabels 누락 사례).
+controller(`handleAction`+폼 제출)까지 분리되어 **트랙 B 7단계가 모두 완료**되었습니다(app.js ~7,500 → ~3,200줄, 모듈 23개).
+app.js에 남은 것은 의도된 코어입니다: 상수/데모데이터, `loadData`/`loadCardEffectCache`(init 순서), 팩토리 조립(DI 배선), `render`/`renderCurrentTab`+공용 유틸(`deckCards` 등 다수 모듈 공유), 이벤트 리스너(let 타이머 재할당), SW 등록.
+분리 작업 시 교훈(재사용): ① 의존성 스캔은 호출형(`f(`)뿐 아니라 **값 참조**(`Object.entries(x)`)도 잡을 것(colorLabels 사례) ② init 시점 즉시 실행 코드가 쓰는 함수는 TDZ 주의(catalog 사례) ③ 나중에 생성되는 팩토리 const 는 지연 화살표로 주입 ④ 이동 후 **런타임 전수 열기/제출 테스트** 필수.

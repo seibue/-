@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260715-modals-mod";
+const CACHE_NAME = "jeonjeokmon-shell-20260716-controller-mod";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -26,6 +26,7 @@ const CORE_ASSETS = [
   "/js/views-home.js",
   "/js/views-decks.js",
   "/js/views-modals.js",
+  "/js/controller.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icon-d-cardback.png"

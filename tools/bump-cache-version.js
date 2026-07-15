@@ -48,6 +48,7 @@ updateFile("index.html", [
   [/js\/views-home\.js\?v=[^"]+/g, `js/views-home.js?v=${version}`],
   [/js\/views-decks\.js\?v=[^"]+/g, `js/views-decks.js?v=${version}`],
   [/js\/views-modals\.js\?v=[^"]+/g, `js/views-modals.js?v=${version}`],
+  [/js\/controller\.js\?v=[^"]+/g, `js/controller.js?v=${version}`],
   [/app\.js\?v=[^"]+/g, `app.js?v=${version}`],
 ]);
 

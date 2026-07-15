@@ -32,6 +32,20 @@
     const hasActiveFilter =
       state.filters.query || state.filters.result !== "all" || state.filters.deck !== "all" || state.filters.type !== "all";
 
+    // 성능: 대량 전적(수백 건 이상)에서 전체 재렌더가 느려지지 않도록 표시 상한을 두고 "더 보기"로 확장.
+    // 날짜 그룹 헤더가 그날 전체 승률을 보여주므로, 그룹 중간이 아니라 그룹 "경계"에서 자른다
+    // (정렬이 날짜 내림차순이라 같은 날짜는 연속됨).
+    const visibleTarget = Math.max(1, Number(state.matchesVisible) || 50);
+    let visibleMatches = matches;
+    let remainingCount = 0;
+    if (matches.length > visibleTarget) {
+      let cutIndex = visibleTarget;
+      const boundaryDate = matches[visibleTarget - 1]?.date;
+      while (cutIndex < matches.length && matches[cutIndex].date === boundaryDate) cutIndex += 1;
+      visibleMatches = matches.slice(0, cutIndex);
+      remainingCount = matches.length - cutIndex;
+    }
+
     return `
       <section>
         <button class="primary-action" type="button" data-action="open-match">＋ 기록을 추가</button>
@@ -52,8 +66,13 @@
         ${state.filtersOpen ? renderFilterPanel() : ""}
         ${
           matches.length
-            ? renderMatchDateSections(matches)
+            ? renderMatchDateSections(visibleMatches)
             : renderMatchesEmpty(hasActiveFilter || state.memoOnly)
+        }
+        ${
+          remainingCount > 0
+            ? `<button class="control-button show-more-matches" type="button" data-action="show-more-matches">더 보기 (${remainingCount.toLocaleString("ko-KR")}건 남음)</button>`
+            : ""
         }
       </section>
     `;

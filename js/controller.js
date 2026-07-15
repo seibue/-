@@ -677,6 +677,11 @@
           render();
           return;
         }
+        if (action === "show-more-matches") {
+          state.matchesVisible = (Number(state.matchesVisible) || 50) + 50;
+          render();
+          return;
+        }
         if (action === "toggle-memo") {
           state.memoOnly = !state.memoOnly;
           render();

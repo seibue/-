@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260716-a11y-2";
+  const APP_VERSION = "20260716-matches-paging";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -176,6 +176,8 @@
   const state = {
     tab: "home",
     filtersOpen: false,
+    // 전적 목록 표시 상한(더 보기로 +50). 대량 전적에서 전체 재렌더가 느려지는 것 방지.
+    matchesVisible: 50,
     memoOnly: false,
     bulkMode: false,
     selected: new Set(),
@@ -2885,6 +2887,7 @@
     if (tab) {
       state.tab = tab.dataset.tab;
       state.selected.clear();
+      state.matchesVisible = 50; // 전적 목록 표시 상한 초기화("더 보기" 확장분 리셋)
       render();
       window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
       return;

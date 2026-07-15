@@ -37,7 +37,7 @@
         <button class="primary-action" type="button" data-action="open-match">＋ 기록을 추가</button>
         <div class="toolbar">
           <div class="toolbar-main">
-            <button class="control-button ${state.filtersOpen || hasActiveFilter ? "active" : ""}" type="button" data-action="toggle-filters">
+            <button class="control-button ${state.filtersOpen || hasActiveFilter ? "active" : ""}" type="button" data-action="toggle-filters" aria-expanded="${state.filtersOpen ? "true" : "false"}">
               🔍 필터 ${hasActiveFilter ? "적용됨" : "▼"}
             </button>
             ${
@@ -46,8 +46,8 @@
                 : ""
             }
           </div>
-          <button class="quiet-button ${state.memoOnly ? "active" : ""}" type="button" data-action="toggle-memo">메모</button>
-          <button class="quiet-button ${state.bulkMode ? "active" : ""}" type="button" data-action="toggle-bulk">일괄</button>
+          <button class="quiet-button ${state.memoOnly ? "active" : ""}" type="button" data-action="toggle-memo" aria-pressed="${state.memoOnly ? "true" : "false"}">메모</button>
+          <button class="quiet-button ${state.bulkMode ? "active" : ""}" type="button" data-action="toggle-bulk" aria-pressed="${state.bulkMode ? "true" : "false"}">일괄</button>
         </div>
         ${state.filtersOpen ? renderFilterPanel() : ""}
         ${

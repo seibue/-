@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260716-controller-mod";
+  const APP_VERSION = "20260716-a11y-2";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -915,30 +915,35 @@
     if (authControls) authControls.innerHTML = renderAuthControlsInner();
   }
 
+  function renderToastItems() {
+    return state.toasts
+      .map(
+        (toast) => `
+          <div class="toast ${escapeHTML(toast.tone || "info")}">
+            <div>
+              <strong>${escapeHTML(toast.title)}</strong>
+              ${toast.message ? `<span>${escapeHTML(toast.message)}</span>` : ""}
+              ${
+                toast.action
+                  ? `<button class="toast-action" type="button" data-action="${escapeHTML(toast.action.action)}" ${
+                      toast.action.undoId ? `data-undo-id="${escapeHTML(toast.action.undoId)}"` : ""
+                    }>${escapeHTML(toast.action.label)}</button>`
+                  : ""
+              }
+            </div>
+            <button class="toast-close" type="button" title="닫기" aria-label="알림 닫기" data-action="dismiss-toast" data-id="${escapeHTML(toast.id)}">×</button>
+          </div>
+        `
+      )
+      .join("");
+  }
+
   function renderToastStack() {
-    if (!state.toasts.length) return "";
+    // 접근성: 라이브 리전은 콘텐츠와 동시에 삽입되면 스크린리더가 놓치기 쉬움 →
+    // 빈 상태에서도 컨테이너를 상시 렌더해 두고 안에 토스트만 넣고 뺀다.
     return `
       <div class="toast-stack" data-toast-stack role="status" aria-live="polite" aria-atomic="false">
-        ${state.toasts
-          .map(
-            (toast) => `
-              <div class="toast ${escapeHTML(toast.tone || "info")}">
-                <div>
-                  <strong>${escapeHTML(toast.title)}</strong>
-                  ${toast.message ? `<span>${escapeHTML(toast.message)}</span>` : ""}
-                  ${
-                    toast.action
-                      ? `<button class="toast-action" type="button" data-action="${escapeHTML(toast.action.action)}" ${
-                          toast.action.undoId ? `data-undo-id="${escapeHTML(toast.action.undoId)}"` : ""
-                        }>${escapeHTML(toast.action.label)}</button>`
-                      : ""
-                  }
-                </div>
-                <button class="toast-close" type="button" title="닫기" aria-label="알림 닫기" data-action="dismiss-toast" data-id="${escapeHTML(toast.id)}">×</button>
-              </div>
-            `
-          )
-          .join("")}
+        ${renderToastItems()}
       </div>
     `;
   }
@@ -962,11 +967,12 @@
   function updateToastStack() {
     const stack = document.querySelector("[data-toast-stack]");
     if (stack) {
-      stack.outerHTML = renderToastStack();
+      // 컨테이너는 유지하고 내용만 교체해야 라이브 리전 알림이 안정적으로 읽힌다.
+      stack.innerHTML = renderToastItems();
       return;
     }
     const shell = document.querySelector(".app-shell");
-    if (shell && state.toasts.length) shell.insertAdjacentHTML("beforeend", renderToastStack());
+    if (shell) shell.insertAdjacentHTML("beforeend", renderToastStack());
   }
 
   function notifyToast(title, message = "", tone = "info", duration = 3600, action = null) {
@@ -2257,8 +2263,11 @@
             .flat()
             .map((cell) => {
               const evs = byDate[cell.iso] || [];
+              // 스크린리더용: 숫자만 읽히지 않도록 월/일·일정 수·오늘 여부를 라벨로 제공
+              const [, cellMonth, cellDay] = cell.iso.split("-").map(Number);
+              const cellLabel = `${cellMonth}월 ${cellDay}일${evs.length ? `, 일정 ${evs.length}건` : ""}${cell.isToday ? ", 오늘" : ""}`;
               return `
-                <button class="calendar-cell${cell.inMonth ? "" : " out"}${cell.isToday ? " today" : ""}${cell.iso === selDate ? " selected" : ""}${evs.length ? " has-ev" : ""}" type="button" data-action="select-calendar-day" data-date="${cell.iso}">
+                <button class="calendar-cell${cell.inMonth ? "" : " out"}${cell.isToday ? " today" : ""}${cell.iso === selDate ? " selected" : ""}${evs.length ? " has-ev" : ""}" type="button" data-action="select-calendar-day" data-date="${cell.iso}" aria-label="${escapeHTML(cellLabel)}"${cell.iso === selDate ? ' aria-current="date"' : ""}>
                   <span class="cal-day">${cell.day}</span>
                   ${evs.slice(0, 2).map((e) => `<span class="cal-ev${e.personal ? " personal" : ""}">${escapeHTML(e.title)}</span>`).join("")}
                   ${evs.length > 2 ? `<span class="cal-more">+${evs.length - 2}</span>` : ""}
@@ -2948,6 +2957,31 @@
       event.preventDefault();
       closeModal();
       return;
+    }
+    // 접근성(WCAG 2.4.3): 다이얼로그가 열려 있으면 Tab 포커스를 다이얼로그 안에서 순환시킨다.
+    // 카드 미리보기가 덱 빌더 위에 겹칠 수 있으므로 미리보기를 우선(Escape 처리 순서와 동일).
+    if (event.key === "Tab" && (state.modal || state.previewCardNo)) {
+      const panel = document.querySelector(state.previewCardNo ? ".card-preview-panel" : ".modal-panel");
+      if (panel) {
+        const focusables = [...panel.querySelectorAll('button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])')].filter(
+          (el) => !el.disabled && el.offsetParent !== null
+        );
+        if (focusables.length) {
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          const active = document.activeElement;
+          if (!panel.contains(active) && active !== panel) {
+            event.preventDefault();
+            first.focus();
+          } else if (event.shiftKey && (active === first || active === panel)) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && active === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
+      }
     }
     if (event.key === "Enter" || event.key === " ") {
       const previewRow = event.target.closest?.('[role="button"][data-action="preview-catalog-card"]');

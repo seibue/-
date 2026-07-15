@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260716-controller-mod";
+const CACHE_NAME = "jeonjeokmon-shell-20260716-a11y-2";
 const CORE_ASSETS = [
   "/",
   "/index.html",

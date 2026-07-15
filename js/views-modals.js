@@ -905,7 +905,7 @@
                     .map(([type, label]) => `<option value="${type}"${selectedAttr(state.deckCardType, type)}>${label}</option>`)
                     .join("")}
                 </select>
-                <button class="control-button hub-detail-button ${state.deckAdvancedOpen || activeFilterCount ? "active" : ""}" type="button" data-action="toggle-deck-advanced-search">
+                <button class="control-button hub-detail-button ${state.deckAdvancedOpen || activeFilterCount ? "active" : ""}" type="button" data-action="toggle-deck-advanced-search" aria-expanded="${state.deckAdvancedOpen ? "true" : "false"}">
                   상세${activeFilterCount ? ` ${activeFilterCount}` : ""}
                 </button>
                 <div class="mobile-builder-summary ${escapeHTML(builderStatusTone)}">

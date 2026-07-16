@@ -69,7 +69,7 @@
             </label>
           </div>
         </article>
-        ${isAdminUser() ? renderCardDataSettingsCard() : ""}
+        ${isAdminUser() ? renderCardDataSettingsCard() : renderCardDataInfoCard()}
         ${renderInstallSettingsCard()}
         ${renderContactSettingsCard()}
         <article class="settings-card">
@@ -294,6 +294,22 @@
     `;
   }
 
+  // 일반 사용자용 카드 데이터 요약 — 카탈로그 규모와 최종 갱신일을 누구나 확인할 수 있게.
+  // (갱신 실행은 운영자 몫이라 관리자에겐 renderCardDataSettingsCard 가 대신 표시됨)
+  function renderCardDataInfoCard() {
+    const summary = cardDataSummary();
+    return `
+      <article class="settings-card">
+        <div class="settings-title-row">
+          <h2 class="settings-title">카드 데이터</h2>
+          <span class="sync-badge ok">${summary.catalogCount.toLocaleString("ko-KR")}장</span>
+        </div>
+        <div class="mini-text">카드 목록 ${summary.catalogCount.toLocaleString("ko-KR")}장 · 정발 효과 ${summary.effectCount.toLocaleString("ko-KR")}장 수록</div>
+        <div class="mini-text">최근 갱신: ${escapeHTML(formatSyncTime(summary.latestEffectFetch) || "기록 없음")} · 새 카드는 운영자가 주기적으로 반영합니다.</div>
+      </article>
+    `;
+  }
+
   function renderCardDataSettingsCard() {
     const summary = cardDataSummary();
     return `
@@ -326,7 +342,7 @@
     `;
   }
 
-    return { renderSettingsView, renderContactSettingsCard, renderFirstUseGuideCard, renderServiceStatusCard, renderDiagnosticsSettingsCard, renderSyncSettingsCard, renderInstallSettingsCard, renderCardDataSettingsCard };
+    return { renderSettingsView, renderContactSettingsCard, renderFirstUseGuideCard, renderServiceStatusCard, renderDiagnosticsSettingsCard, renderSyncSettingsCard, renderInstallSettingsCard, renderCardDataSettingsCard, renderCardDataInfoCard };
   }
 
   const api = { createSettingsViews };

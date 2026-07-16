@@ -101,6 +101,11 @@
     const team3TeamRate = team3Team.total ? Math.round((team3Team.wins / team3Team.total) * 100) : 0;
     const team3Mine = statsFromMatches(team3);
 
+    // 선공/후공 승률 — 매치업 리포트 안의 분리 지표와 별개로, 기간 전체 기준 독립 카드
+    const firstStats = statsFromMatches(scoped.filter((match) => match.playOrder === "first"));
+    const secondStats = statsFromMatches(scoped.filter((match) => match.playOrder === "second"));
+    const playOrderTotal = firstStats.total + secondStats.total;
+
     return `
       <section>
         ${renderStatsPeriodChips()}
@@ -144,6 +149,18 @@
                       <div class="bar-list">
                         ${renderBar("팀 승률", `${team3Team.total}판 · 팀 ${team3Team.wins}승 ${team3Team.losses}패${team3Team.draws ? ` ${team3Team.draws}무` : ""}`, team3TeamRate)}
                         ${renderBar("내 승률", `${team3Mine.total}판 · ${team3Mine.wins}승 ${team3Mine.losses}패${team3Mine.draws ? ` ${team3Mine.draws}무` : ""}`, team3Mine.rate)}
+                      </div>
+                    </div>`
+                  : ""
+              }
+              ${
+                playOrderTotal
+                  ? `<div class="settings-card" style="margin-top: 12px;">
+                      <h2 class="settings-title">선공 / 후공 승률</h2>
+                      <div class="mini-text">선공·후공을 기록한 대전 기준 · ${playOrderTotal}전</div>
+                      <div class="bar-list">
+                        ${renderBar(`선공 (${firstStats.total}전)`, `승률 ${firstStats.rate}% · ${firstStats.wins}승 ${firstStats.losses}패${firstStats.draws ? ` ${firstStats.draws}무` : ""}`, firstStats.rate)}
+                        ${renderBar(`후공 (${secondStats.total}전)`, `승률 ${secondStats.rate}% · ${secondStats.wins}승 ${secondStats.losses}패${secondStats.draws ? ` ${secondStats.draws}무` : ""}`, secondStats.rate)}
                       </div>
                     </div>`
                   : ""

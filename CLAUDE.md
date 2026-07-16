@@ -273,8 +273,10 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - [x] CLAUDE.md 작성
 - [x] 전적 기록 — 대회 라운드 뱃지 — `roundText()`로 구현됨
 - [x] 홈 — 최근 N게임 트렌드 — `homeTrendRows()` ("최근 N전 N승")
-- [~] 통계 — 선공/후공 승률 — **부분**: 매치업 리포트 내 선공/후공 분리는 있음(`matchupBreakdownRows(…, "playOrder")`). 통계 상단의 *독립 선후공 카드*는 미구현.
-- [ ] 설정 — 카드 데이터 최종 갱신일 표시 — 미구현(유일하게 남은 항목)
+- [x] 통계 — 선공/후공 승률 — 독립 카드 구현(`renderStatsView`의 "선공 / 후공 승률", 기간 필터 연동) + 매치업 리포트 내 분리(`matchupBreakdownRows(…, "playOrder")`)
+- [x] 설정 — 카드 데이터 최종 갱신일 표시 — `renderCardDataInfoCard`(비관리자용 요약: 카탈로그 수·정발 효과 수·최근 갱신일). 관리자는 기존 관리 카드 유지.
+
+**→ 초기 우선순위 목록 전체 완료.**
 
 ## 이미 구현된 것 (제안 전 확인)
 

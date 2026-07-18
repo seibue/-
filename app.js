@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260716-backlog-finish";
+  const APP_VERSION = "20260718-user-feedback-1";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -90,6 +90,9 @@
   ];
   // 3대3 팀전: 대전 유형으로 선택하면 폼에 '내 자리(A/B/C)'·'팀 결과'가 나타남
   const TEAM3_MATCH_TYPE = "3대3 팀전";
+  // 매치 폼 드롭다운에 항상 노출되는 내장 대전 유형(사용자 목록에 없어도 합류).
+  // 공식 대회 유형이라 기존 사용자 데이터에 손대지 않고도 바로 선택 가능하게 한다.
+  const BUILTIN_MATCH_TYPES = ["얼티미트컵", TEAM3_MATCH_TYPE];
   const TEAM_POSITION_OPTIONS = ["A", "B", "C"];
   // 트랙 B: 카드번호/카탈로그 정규화 순수 헬퍼는 js/catalog.js 로 이동.
   // 아래 CARD_CATALOG 빌드가 normalizeCatalogCard 를 즉시 호출하므로 그 전에 생성해야 한다
@@ -564,7 +567,7 @@
   function createDefaultData() {
     return {
       settings: {},
-      matchTypes: ["테이머 배틀", "매장 대표전", "친선전", "테스트 플레이"],
+      matchTypes: ["테이머 배틀", "매장 대표전", "얼티미트컵", "친선전", "테스트 플레이"],
       decks: [],
       tournaments: [],
       matches: [],
@@ -616,7 +619,7 @@
     ].map(([id, cardNumber, level, name, type, count]) => ({ id, cardNumber, level, name, type, count }));
     return {
       settings: { demoData: true },
-      matchTypes: ["테이머 배틀", "매장 대표전", "친선전", "테스트 플레이"],
+      matchTypes: ["테이머 배틀", "매장 대표전", "얼티미트컵", "친선전", "테스트 플레이"],
       decks: [
         {
           id: redDeckId,
@@ -2486,6 +2489,7 @@
     MATCH_SCORE_OPTIONS,
     ROUND_STAGE_OPTIONS,
     TEAM3_MATCH_TYPE,
+    BUILTIN_MATCH_TYPES,
     TEAM_POSITION_OPTIONS,
     TOURNAMENT_CUT_OPTIONS,
     TOURNAMENT_FORMAT_OPTIONS,
@@ -2581,7 +2585,13 @@
       return;
     }
     render();
-    if (returnScroll != null) window.scrollTo(0, returnScroll);
+    if (returnScroll != null) {
+      window.scrollTo(0, returnScroll.y || 0);
+      if (returnScroll.homeResults != null) {
+        const resultsBox = document.querySelector("[data-home-card-search-results]");
+        if (resultsBox) resultsBox.scrollTop = returnScroll.homeResults;
+      }
+    }
   }
 
   function syncMatchFormMode(form) {
@@ -2630,10 +2640,13 @@
     const normalized = normalizeCardNumber(cardNumber);
     if (!normalized) return;
     cacheDeckDraftForm(document.querySelector("#deck-form"));
-    // 일반 화면(덱 모달 밖)에서 미리보기를 열 때 현재 페이지 스크롤 위치를 저장해두고,
-    // 닫을 때 그대로 복원한다(미리보기 후 화면이 위/아래로 튀는 문제 방지).
+    // 일반 화면(덱 모달 밖)에서 미리보기를 열 때 현재 페이지 스크롤 + 홈 카드검색 결과 박스의
+    // 내부 스크롤을 저장해두고, 닫을 때 그대로 복원한다(재렌더로 목록이 맨 위로 튀는 문제 방지).
     if (!state.previewCardNo && state.modal !== "deck") {
-      previewReturnScroll = window.scrollY;
+      previewReturnScroll = {
+        y: window.scrollY,
+        homeResults: document.querySelector("[data-home-card-search-results]")?.scrollTop ?? null,
+      };
     }
     state.previewCardNo = normalized;
     // 덱 수정 중 덱에 있는 카드면, 저장된 일러를 기본 선택으로 연다.
@@ -2641,6 +2654,11 @@
     state.previewActiveImage = draftCard ? imageIndexFromArt(draftCard.art) : 0;
     if (state.modal === "deck") renderKeepingDeckScroll();
     else render();
+    // 재렌더로 초기화된 검색 결과 스크롤을 미리보기 뒤에서도 유지
+    if (state.modal !== "deck" && previewReturnScroll?.homeResults != null) {
+      const resultsBox = document.querySelector("[data-home-card-search-results]");
+      if (resultsBox) resultsBox.scrollTop = previewReturnScroll.homeResults;
+    }
     if (!KOREAN_CARD_PREVIEWS[normalized]?.effect) fetchAndCacheCardEffect(normalized);
     loadCardParallelImages(normalized);
   }

@@ -30,6 +30,7 @@
       MATCH_SCORE_OPTIONS,
       ROUND_STAGE_OPTIONS,
       TEAM3_MATCH_TYPE,
+      BUILTIN_MATCH_TYPES,
       TEAM_POSITION_OPTIONS,
       TOURNAMENT_CUT_OPTIONS,
       TOURNAMENT_FORMAT_OPTIONS,
@@ -201,6 +202,7 @@
               <span>${escapeHTML(preview.label || "한글 카드 정보")}</span>
               <strong>${escapeHTML(card.name)}</strong>
             </div>
+            ${effectBlocks}
             <dl>
               <div>
                 <dt>카드번호</dt>
@@ -219,7 +221,6 @@
                 <dd>${escapeHTML(colorLabel(card.color) || "-")}</dd>
               </div>
             </dl>
-            ${effectBlocks}
           </div>
         `;
       }
@@ -382,7 +383,11 @@
         const selectedTournamentProgress = selectedTournament ? tournamentRoundProgress(selectedTournament) : null;
         // 3대3 팀전: 유형이 3대3이면 폼에 자리·팀 결과 노출. 자리는 같은 대회 직전 라운드에서 이어받음.
         const isTeam3 = selectedMatchType === TEAM3_MATCH_TYPE;
-        const matchTypeOptions = getData().matchTypes.includes(TEAM3_MATCH_TYPE) ? getData().matchTypes : [...getData().matchTypes, TEAM3_MATCH_TYPE];
+        // 사용자 목록 + 내장 유형(얼티미트컵·3대3) 합류 — 중복 없이 뒤에 붙인다
+        const matchTypeOptions = [...getData().matchTypes];
+        BUILTIN_MATCH_TYPES.forEach((type) => {
+          if (!matchTypeOptions.includes(type)) matchTypeOptions.push(type);
+        });
         const selectedTeamResult = match?.teamResult || "win";
         const selectedTeamPosition = match?.teamPosition || suggestedTeamPosition(selectedTournamentId) || "A";
         const hasQuickDefaults = !match && Boolean(getData().settings?.quickMatchDefaults || getData().matches[0]);

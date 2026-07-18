@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260716-backlog-finish";
+const CACHE_NAME = "jeonjeokmon-shell-20260718-user-feedback-1";
 const CORE_ASSETS = [
   "/",
   "/index.html",

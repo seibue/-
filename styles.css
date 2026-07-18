@@ -2994,7 +2994,8 @@ button:disabled {
 
 .card-preview-image {
   position: relative;
-  height: min(52vh, 420px);
+  /* 효과(특히 하단/진화원)가 접힘 없이 보이도록 52vh→46vh 소폭 축소 */
+  height: min(46vh, 380px);
   aspect-ratio: 5 / 7;
   width: auto;
   max-width: 100%;

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260718-user-feedback-1";
+const CACHE_NAME = "jeonjeokmon-shell-20260718-effect-blocks";
 const CORE_ASSETS = [
   "/",
   "/index.html",

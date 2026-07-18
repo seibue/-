@@ -237,23 +237,32 @@
         }
         const isKoreanOfficial = remoteEffect.source === "kr";
         if (!isKoreanOfficial) return "";
+        // 공식 사이트 관례 용어(상단/하단 텍스트) 대신 직관적 라벨 + 종류별 색 톤
         const blocks = [
-          ["상단 텍스트", remoteEffect.mainEffect],
-          ["하단 텍스트", remoteEffect.sourceEffect],
-          ["시큐리티 효과", remoteEffect.securityEffect],
-          ["추가 텍스트", remoteEffect.altEffect],
+          ["효과", remoteEffect.mainEffect, "main"],
+          ["진화원 효과", remoteEffect.sourceEffect, "source"],
+          ["시큐리티", remoteEffect.securityEffect, "security"],
+          ["추가 효과", remoteEffect.altEffect, "alt"],
         ]
           .filter(([, text]) => text)
-          .map(([title, text]) => renderCardEffectBlock(title, text));
+          .map(([title, text, tone]) => renderCardEffectBlock(title, text, "", "", tone));
         if (blocks.length) return blocks.join("");
         return "";
       }
 
-      function renderCardEffectBlock(title, koreanText, originalText = "", badge = "") {
+      // 효과문 안의 키워드(≪블로커≫)와 타이밍(【등장 시】)을 자동 강조.
+      // escapeHTML 을 먼저 적용한 뒤 치환하므로 원문 HTML 이 끼어들 여지가 없다.
+      function highlightEffectText(text) {
+        return escapeHTML(text)
+          .replace(/([≪《][^≫》]{1,30}[≫》])/g, '<b class="fx-kw">$1</b>')
+          .replace(/(【[^】]{1,20}】)/g, '<b class="fx-timing">$1</b>');
+      }
+
+      function renderCardEffectBlock(title, koreanText, originalText = "", badge = "", tone = "") {
         return `
-          <div class="card-preview-effect">
+          <div class="card-preview-effect${tone ? ` tone-${escapeHTML(tone)}` : ""}">
             <span>${escapeHTML(title)}${badge ? `<em>${escapeHTML(badge)}</em>` : ""}</span>
-            <p>${escapeHTML(koreanText)}</p>
+            <p>${highlightEffectText(koreanText)}</p>
             ${
               originalText
                 ? `

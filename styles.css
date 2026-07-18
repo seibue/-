@@ -3182,6 +3182,53 @@ button:disabled {
   color: var(--muted);
 }
 
+/* 효과 종류별 색 톤 — 효과(시안)/진화원(그린)/시큐리티(골드=기본)/추가(뮤트) */
+.card-preview-effect.tone-main {
+  border-left-color: var(--accent);
+  background: rgba(25, 231, 255, 0.07);
+}
+
+.card-preview-effect.tone-main > span {
+  color: var(--accent);
+}
+
+.card-preview-effect.tone-main p {
+  color: #dcf8ff;
+}
+
+.card-preview-effect.tone-source {
+  border-left-color: var(--win);
+  background: rgba(45, 227, 157, 0.07);
+}
+
+.card-preview-effect.tone-source > span {
+  color: var(--win);
+}
+
+.card-preview-effect.tone-source p {
+  color: #ddfbee;
+}
+
+.card-preview-effect.tone-alt {
+  border-left-color: var(--muted);
+  background: rgba(139, 185, 218, 0.07);
+}
+
+.card-preview-effect.tone-alt > span {
+  color: var(--muted);
+}
+
+/* 효과문 키워드(≪≫)·타이밍(【】) 자동 강조 */
+.card-preview-effect .fx-kw {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.card-preview-effect .fx-timing {
+  color: var(--gold);
+  font-weight: 700;
+}
+
 .card-preview-effect details {
   border-top: 1px solid rgba(119, 160, 201, 0.18);
   padding-top: 6px;

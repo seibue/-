@@ -5984,3 +5984,30 @@ button:disabled {
     scroll-behavior: auto !important;
   }
 }
+
+/* 모바일 터치 타깃 확보(권장 최소 ~40px) — 데스크톱 밀도는 그대로 둔다 */
+@media (max-width: 540px) {
+  .tournament-round-item .round-item-edit {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+  }
+
+  .region-chip {
+    min-height: 40px;
+    padding: 8px 12px;
+  }
+
+  /* 토스트는 되돌리기 같은 중요 액션을 담으므로 모바일에서 특히 누르기 쉬워야 한다 */
+  .toast-action {
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  .toast-close {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}

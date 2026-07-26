@@ -115,6 +115,29 @@ test("온보딩: '샘플 지우기'로 샘플만 정리되고 undo로 복원된�
   await expect(page.getByText("샘플: 레드 오메가").first()).toBeVisible();
 });
 
+test("홈 카드 검색: 상세 필터(색·레벨)만으로 텍스트 없이 검색된다", async ({ page }) => {
+  await gotoApp(page);
+  await page.locator('[data-tab="home"]').first().click();
+  // 상세 패널 열기
+  await page.locator('[data-action="toggle-home-search-advanced"]').click();
+  await expect(page.locator(".home-advanced-search")).toBeVisible();
+  await expect(page.locator('.home-advanced-search [data-filter-group="colors"]')).toHaveCount(7);
+
+  // 텍스트 입력 없이 레드 + Lv.7 필터만으로 검색
+  await page.locator('.home-advanced-search [data-filter-group="colors"][data-filter-value="red"]').click();
+  await page.locator('.home-advanced-search [data-filter-group="levels"][data-filter-value="7"]').click();
+  const results = page.locator("[data-home-card-search-results] .home-card-result");
+  await expect(results.first()).toBeVisible();
+  expect(await results.count()).toBeGreaterThan(0);
+  // 배지에 활성 필터 수 표시
+  await expect(page.locator('[data-action="toggle-home-search-advanced"]')).toContainText("상세 2");
+
+  // 초기화 → 필터 해제
+  await page.locator('[data-action="clear-home-filters"]').click();
+  await expect(page.locator('[data-action="toggle-home-search-advanced"]')).not.toContainText("2");
+  await expect(page.locator(".home-card-search-hint")).toBeVisible();
+});
+
 test("접근성: Escape 닫기 + Tab 포커스 트랩 + 토스트 라이브 리전 상시", async ({ page }) => {
   await gotoApp(page);
   // 라이브 리전은 토스트가 없어도 DOM에 존재

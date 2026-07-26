@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260718-touch-targets";
+  const APP_VERSION = "20260718-home-advanced-search";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -198,6 +198,8 @@
     deckDraftCards: [],
     deckCardSearch: "",
     homeCardSearch: "",
+    homeSearchAdvancedOpen: false,
+    homeCardFilters: { colors: [], levels: [], type: "all", setPrefix: "all" },
     deckCardType: "all",
     deckAdvancedOpen: false,
     deckBuilderView: "catalog",
@@ -824,24 +826,52 @@
 
   const HOME_CARD_SEARCH_LIMIT = 300;
 
-  // 질의에 매칭되는 모든 카드(정렬됨). 표시 개수 제한은 렌더에서 적용.
+  function homeCardFilters() {
+    const filters = state.homeCardFilters || {};
+    return {
+      colors: Array.isArray(filters.colors) ? filters.colors : [],
+      levels: Array.isArray(filters.levels) ? filters.levels : [],
+      type: filters.type || "all",
+      setPrefix: filters.setPrefix || "all",
+    };
+  }
+
+  function activeHomeFilterCount() {
+    const filters = homeCardFilters();
+    return (
+      filters.colors.length +
+      filters.levels.length +
+      (filters.type !== "all" ? 1 : 0) +
+      (filters.setPrefix !== "all" ? 1 : 0)
+    );
+  }
+
+  // 질의/필터에 매칭되는 모든 카드(정렬됨). 표시 개수 제한은 렌더에서 적용.
+  // 텍스트 없이 필터만으로도 검색할 수 있게 한다(색·레벨 등 상세 탐색).
   function homeCardSearchMatches() {
     const query = state.homeCardSearch.trim().toLowerCase();
-    if (!query) return [];
+    const filters = homeCardFilters();
+    const hasFilter = activeHomeFilterCount() > 0;
+    if (!query && !hasFilter) return [];
     const compactQuery = normalizeCatalogQuery(state.homeCardSearch);
     return CARD_CATALOG.filter((card) => {
+      if (filters.type !== "all" && card.type !== filters.type) return false;
+      if (!cardHasAnyColor(card, filters.colors)) return false;
+      if (filters.levels.length && !filters.levels.includes(card.level)) return false;
+      if (filters.setPrefix !== "all" && cardSetPrefix(card) !== filters.setPrefix) return false;
+      if (!query) return true;
       if (cardNumberMatchesQuery(card.no, query)) return true;
       return catalogTextMatches(card, query, compactQuery);
     }).sort(compareCatalogCards);
   }
 
   function renderHomeCardSearchResults() {
-    if (!state.homeCardSearch.trim()) {
-      return `<div class="home-card-search-hint">카드 이름이나 번호를 입력하면 카드를 찾아 효과를 볼 수 있습니다.</div>`;
+    if (!state.homeCardSearch.trim() && !activeHomeFilterCount()) {
+      return `<div class="home-card-search-hint">카드 이름·번호로 찾거나, '상세'를 눌러 색·레벨·종류로 검색할 수 있습니다.</div>`;
     }
     const all = homeCardSearchMatches();
     if (!all.length) {
-      return `<div class="home-card-search-hint">검색 결과가 없습니다. 번호는 BT1-084, bt1 084처럼 입력해도 됩니다.</div>`;
+      return `<div class="home-card-search-hint">검색 결과가 없습니다. 번호는 BT1-084, bt1 084처럼 입력해도 되고, 상세 필터를 줄여보세요.</div>`;
     }
     const cards = all.slice(0, HOME_CARD_SEARCH_LIMIT);
     const countLine = `<div class="home-card-search-count">${all.length}종 검색됨${
@@ -868,13 +898,79 @@
       .join("");
   }
 
+  function renderHomeFilterChip(group, value, label, options = {}) {
+    const filters = homeCardFilters();
+    const active = Array.isArray(filters[group]) && filters[group].includes(value);
+    return `
+      <button class="deck-filter-chip ${active ? "active" : ""} ${options.color ? "color-chip" : ""}" type="button"
+        data-action="toggle-home-filter-value" data-filter-group="${escapeHTML(group)}" data-filter-value="${escapeHTML(value)}"
+        aria-pressed="${active ? "true" : "false"}">
+        ${options.color ? `<span class="color-dot" style="--dot-color: ${escapeHTML(colorMap[value] || colorMap.blue)}"></span>` : ""}
+        ${escapeHTML(label)}
+      </button>
+    `;
+  }
+
+  function renderHomeSearchAdvanced() {
+    if (!state.homeSearchAdvancedOpen) return "";
+    const filters = homeCardFilters();
+    const setPrefixes = catalogSetPrefixes();
+    const levelOptions = ["2", "3", "4", "5", "6", "7"];
+    return `
+      <div class="deck-advanced-search home-advanced-search">
+        <div class="deck-advanced-head">
+          <strong>상세 검색</strong>
+          <button class="quiet-button" type="button" data-action="clear-home-filters" ${activeHomeFilterCount() ? "" : "disabled"}>초기화</button>
+        </div>
+        <div class="deck-filter-section">
+          <span>색상</span>
+          <div class="deck-filter-chips">
+            ${Object.entries(colorLabels)
+              .map(([color, label]) => renderHomeFilterChip("colors", color, label, { color: true }))
+              .join("")}
+          </div>
+        </div>
+        <div class="deck-filter-section">
+          <span>Lv</span>
+          <div class="deck-filter-chips compact">
+            ${levelOptions.map((level) => renderHomeFilterChip("levels", level, `Lv.${level}`)).join("")}
+          </div>
+        </div>
+        <div class="deck-filter-grid">
+          <label class="field">
+            <span>종류</span>
+            <select class="select" data-home-filter-select="type">
+              <option value="all"${selectedAttr(filters.type, "all")}>전체</option>
+              ${Object.entries(cardTypeLabels)
+                .filter(([type]) => type !== "other")
+                .map(([type, label]) => `<option value="${type}"${selectedAttr(filters.type, type)}>${label}</option>`)
+                .join("")}
+            </select>
+          </label>
+          <label class="field">
+            <span>수록 코드</span>
+            <select class="select" data-home-filter-select="setPrefix">
+              <option value="all"${selectedAttr(filters.setPrefix, "all")}>전체</option>
+              ${setPrefixes.map((prefix) => `<option value="${escapeHTML(prefix)}"${selectedAttr(filters.setPrefix, prefix)}>${escapeHTML(prefix)}</option>`).join("")}
+            </select>
+          </label>
+        </div>
+      </div>
+    `;
+  }
+
   function renderHomeCardSearch() {
+    const activeCount = activeHomeFilterCount();
     return `
       <article class="home-panel home-card-search">
         <div class="home-card-search-head">
           <strong>카드 검색</strong>
           <input class="input" type="search" value="${escapeHTML(state.homeCardSearch)}" placeholder="카드명·번호·효과 (예: 오메가몬, BT1-084)" aria-label="카드 검색" data-home-card-search autocomplete="off" />
+          <button class="control-button home-search-detail-button ${state.homeSearchAdvancedOpen || activeCount ? "active" : ""}" type="button" data-action="toggle-home-search-advanced" aria-expanded="${state.homeSearchAdvancedOpen ? "true" : "false"}">
+            상세${activeCount ? ` ${activeCount}` : ""}
+          </button>
         </div>
+        ${renderHomeSearchAdvanced()}
         <div class="home-card-search-results" data-home-card-search-results>${renderHomeCardSearchResults()}</div>
       </article>
     `;
@@ -3100,6 +3196,13 @@
       cacheDeckDraftForm(event.target.closest("#deck-form"));
       setDeckFilterValue(deckFilterSelect.dataset.deckFilterSelect, deckFilterSelect.value);
       renderKeepingDeckScroll();
+      return;
+    }
+    const homeFilterSelect = event.target.closest("[data-home-filter-select]");
+    if (homeFilterSelect) {
+      const key = homeFilterSelect.dataset.homeFilterSelect;
+      state.homeCardFilters = { ...homeCardFilters(), [key]: homeFilterSelect.value };
+      render();
       return;
     }
     const deckTraySort = event.target.closest("[data-deck-tray-sort]");

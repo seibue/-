@@ -608,6 +608,26 @@
           renderKeepingDeckScroll();
           return;
         }
+        if (action === "toggle-home-search-advanced") {
+          state.homeSearchAdvancedOpen = !state.homeSearchAdvancedOpen;
+          render();
+          return;
+        }
+        if (action === "clear-home-filters") {
+          state.homeCardFilters = { colors: [], levels: [], type: "all", setPrefix: "all" };
+          render();
+          return;
+        }
+        if (action === "toggle-home-filter-value") {
+          const group = target.dataset.filterGroup;
+          const value = target.dataset.filterValue;
+          const filters = state.homeCardFilters || { colors: [], levels: [], type: "all", setPrefix: "all" };
+          const list = Array.isArray(filters[group]) ? filters[group] : [];
+          filters[group] = list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
+          state.homeCardFilters = filters;
+          render();
+          return;
+        }
         if (action === "toggle-deck-advanced-search") {
           cacheDeckDraftForm(target.closest(".modal-panel")?.querySelector("#deck-form"));
           state.deckAdvancedOpen = !state.deckAdvancedOpen;

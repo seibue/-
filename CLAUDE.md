@@ -59,6 +59,8 @@ DegiLog/
 │   ├── korean-card.js       # Vercel 서버리스: 한국 공식 카드 크롤링
 │   └── card-image.js        # Vercel 서버리스: 카드 이미지 프록시
 └── tools/
+    ├── make-promo-video.js       # 홍보 영상 녹화 (Playwright로 실제 앱 조작 + 자막 오버레이 주입)
+    ├── encode-promo-video.js     # 홍보 영상 인코딩 (ffmpeg — mp4/16:9/GIF/썸네일)
     ├── refresh-card-data.js      # update + bump을 한 번에 실행
     ├── update-card-data.js       # card-catalog.js, korean-card-effects.js 재생성
     ├── build-card-catalog-cache.js
@@ -241,7 +243,7 @@ node tools/refresh-card-data.js --version=20260527-card-data
 GitHub에 올릴 파일: `index.html`, `app.js`, `js/`, `styles.css`, `card-catalog.js`, `korean-card-effects.js`, `sw.js`, `tools/`, `tests/`, `package.json`
 
 ### 데이터 소스 (중요)
-- **카탈로그**(`card-catalog.js`) ← **일본 공식 `digimoncard.com/cards`**(HTML 크롤). 번호·색·형태(레벨)·종류·레어도 추출. **dgchub 의존 제거됨.**
+- **카탈로그**(`card-catalog.js`) ← **일본 공식 `digimoncard.com/cards`**(HTML 크롤). 번호·색·형태(레벨)·종류·레어도 추출. **dgchub 의존 제거됨.** 속성(백신종 등)·유형(파충류형 등)은 일본 공식엔 없어 **한국 공식에서 크롤한 뒤 카탈로그에 합류**(빌드 시 korean-card-effects.js의 `attribute`/`form`을 읽음).
   - 한글 이름은 `korean-card-effects.js`에서 번호로 매칭해 채우고, **미발매(일본 선행) 카드는 일본어 이름**으로 남음(한국 정발 후 효과 재크롤 시 자동 한글화).
   - `img`는 빈 값으로 두어 런타임에 **일본 공식 `digimoncard.com/images/cardlist/card/{번호}.png`** 를 쓰게 함(`remoteCardImageUrls`). 패럴렐(다른 일러)은 `_P1.._Pn`. 카드 이미지 소스는 일본 공식으로 통일됨(images.digimoncard.io 의존 제거).
   - 빌드 순서 의존: **효과 → 카탈로그**(카탈로그가 한글 이름을 효과 파일에서 읽음). `update-card-data.js`가 이 순서로 실행.
@@ -297,6 +299,18 @@ GitHub 연결 후에는 `main` 브랜치 push → Vercel 자동 배포로 전환
 - 보안: Supabase RLS(`jeonjeokmon_user_data`·`tournament_events`), `vercel.json` 보안 헤더, LICENSE
 
 ---
+
+## 홍보 영상 생성
+
+```powershell
+npm run promo          # 녹화 → promo/전적몬-홍보.webm (540x960) + promo/shots/*.png
+npm run promo:encode   # 인코딩 → mp4(세로/가로) · GIF · 썸네일
+```
+- 녹화는 `preview-server.cjs`(8787)를 자동 기동해 **실제 앱을 조작**하며 찍습니다. 자막·커서·인트로/아웃트로는 페이지에 오버레이 레이어를 주입해 그리므로 **앱 코드는 건드리지 않습니다**.
+- ⚠️ Playwright 의 `recordVideo.size` 는 **축소만 하고 업스케일을 하지 않습니다.** 뷰포트보다 큰 값을 주면 프레임 좌상단에만 화면이 그려지고 나머지는 회색이 됩니다. 그래서 뷰포트 = 영상 해상도(540x960)로 맞췄고, 폭 540 은 모바일 레이아웃 브레이크포인트(`@media max-width:540px`) 경계라 **모바일 UI 를 유지하는 최대 해상도**입니다. 1080p 는 인코딩 단계에서 올립니다.
+- 인코딩은 **ffmpeg 필요**(`winget install Gyan.FFmpeg`). `--bgm="음원.mp3"` 로 배경음, `--gif=시작초,길이` 로 GIF 구간, `--only=mp4` 로 일부만 뽑을 수 있습니다.
+- UI·문구를 바꾸면 스토리보드 selector 가 깨질 수 있습니다. 실행 후 `건너뛴 구간` 로그가 찍히면 해당 selector 를 고치세요.
+- `promo/` 는 .gitignore 처리(배포 불필요, 언제든 재생성).
 
 ## 알려진 주의 사항
 

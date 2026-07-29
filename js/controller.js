@@ -614,14 +614,14 @@
           return;
         }
         if (action === "clear-home-filters") {
-          state.homeCardFilters = { colors: [], levels: [], type: "all", setPrefix: "all" };
+          state.homeCardFilters = { colors: [], levels: [], attributes: [], form: "", type: "all", setPrefix: "all" };
           render();
           return;
         }
         if (action === "toggle-home-filter-value") {
           const group = target.dataset.filterGroup;
           const value = target.dataset.filterValue;
-          const filters = state.homeCardFilters || { colors: [], levels: [], type: "all", setPrefix: "all" };
+          const filters = state.homeCardFilters || { colors: [], levels: [], attributes: [], form: "", type: "all", setPrefix: "all" };
           const list = Array.isArray(filters[group]) ? filters[group] : [];
           filters[group] = list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
           state.homeCardFilters = filters;

@@ -59,6 +59,9 @@
         color: String(card.color || "").toLowerCase(),
         color2: String(card.color2 || "").toLowerCase(),
         rarity: String(card.rarity || "").trim(),
+        // 속성(백신종 등)·유형(파충류형 등) — 한국 공식 출처, 카드에 있을 때만.
+        attribute: String(card.attribute || "").trim(),
+        form: String(card.form || "").trim(),
         img: image,
       };
     }

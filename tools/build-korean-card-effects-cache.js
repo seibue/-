@@ -115,6 +115,9 @@ function parseCards(html, sourceUrl, fetchedAt) {
       const mainEffect = findDlValue(item, "상단 텍스트");
       const sourceEffect = findDlValue(item, "하단 텍스트");
       const securityEffect = findDlValue(item, "시큐리티 효과");
+      // 속성(백신종/데이터종/…) + 유형(파충류형 등, 특징이 쉼표로 섞임). 없으면 빈 문자열.
+      const attribute = findDlValue(item, "속성");
+      const form = findDlValue(item, "유형");
       // 효과가 없어도 정발된 카드(예: 효과 없는 디지타마 BT21-001~006)는 한글 이름을
       // 보존하기 위해 포함한다. 앱은 hasEffect:false로 안전하게 처리한다.
       // 이름이 없는 항목(비카드)만 제외.
@@ -128,6 +131,8 @@ function parseCards(html, sourceUrl, fetchedAt) {
         sourceEffect,
         securityEffect,
         altEffect: "",
+        attribute,
+        form,
       };
     })
     .filter(Boolean);
@@ -219,6 +224,8 @@ function writeCache(cards) {
         sourceEffect: card.sourceEffect,
         securityEffect: card.securityEffect,
         altEffect: card.altEffect,
+        ...(card.attribute ? { attribute: card.attribute } : {}),
+        ...(card.form ? { form: card.form } : {}),
         ...(card.unofficial ? { unofficial: true } : {}),
       },
     ])

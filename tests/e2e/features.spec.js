@@ -138,6 +138,26 @@ test("홈 카드 검색: 상세 필터(색·레벨)만으로 텍스트 없이 �
   await expect(page.locator(".home-card-search-hint")).toBeVisible();
 });
 
+test("홈 카드 검색: 속성 칩 + 유형 텍스트로 좁혀 검색된다", async ({ page }) => {
+  await gotoApp(page);
+  await page.locator('[data-tab="home"]').first().click();
+  await page.locator('[data-action="toggle-home-search-advanced"]').click();
+
+  // 속성 칩 6종 노출 + 바이러스종 선택
+  await expect(page.locator('.home-advanced-search [data-filter-group="attributes"]')).toHaveCount(6);
+  await page.locator('.home-advanced-search [data-filter-group="attributes"][data-filter-value="바이러스종"]').click();
+  const results = page.locator("[data-home-card-search-results] .home-card-result");
+  await expect(results.first()).toBeVisible();
+
+  // 유형 텍스트로 좁히기 → 결과가 줄어든다
+  const before = await results.count();
+  await page.locator("[data-home-form-filter]").fill("성기사");
+  await page.waitForTimeout(400);
+  const after = await results.count();
+  expect(after).toBeLessThan(before);
+  expect(after).toBeGreaterThan(0);
+});
+
 test("접근성: Escape 닫기 + Tab 포커스 트랩 + 토스트 라이브 리전 상시", async ({ page }) => {
   await gotoApp(page);
   // 라이브 리전은 토스트가 없어도 DOM에 존재

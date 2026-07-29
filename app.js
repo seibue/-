@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260718-home-advanced-search";
+  const APP_VERSION = "20260718-attr-form-search";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -199,7 +199,7 @@
     deckCardSearch: "",
     homeCardSearch: "",
     homeSearchAdvancedOpen: false,
-    homeCardFilters: { colors: [], levels: [], type: "all", setPrefix: "all" },
+    homeCardFilters: { colors: [], levels: [], attributes: [], form: "", type: "all", setPrefix: "all" },
     deckCardType: "all",
     deckAdvancedOpen: false,
     deckBuilderView: "catalog",
@@ -831,6 +831,8 @@
     return {
       colors: Array.isArray(filters.colors) ? filters.colors : [],
       levels: Array.isArray(filters.levels) ? filters.levels : [],
+      attributes: Array.isArray(filters.attributes) ? filters.attributes : [],
+      form: String(filters.form || "").trim(),
       type: filters.type || "all",
       setPrefix: filters.setPrefix || "all",
     };
@@ -841,6 +843,8 @@
     return (
       filters.colors.length +
       filters.levels.length +
+      filters.attributes.length +
+      (filters.form ? 1 : 0) +
       (filters.type !== "all" ? 1 : 0) +
       (filters.setPrefix !== "all" ? 1 : 0)
     );
@@ -854,10 +858,13 @@
     const hasFilter = activeHomeFilterCount() > 0;
     if (!query && !hasFilter) return [];
     const compactQuery = normalizeCatalogQuery(state.homeCardSearch);
+    const formQuery = normalizeCatalogQuery(filters.form);
     return CARD_CATALOG.filter((card) => {
       if (filters.type !== "all" && card.type !== filters.type) return false;
       if (!cardHasAnyColor(card, filters.colors)) return false;
       if (filters.levels.length && !filters.levels.includes(card.level)) return false;
+      if (filters.attributes.length && !filters.attributes.includes(card.attribute)) return false;
+      if (formQuery && !normalizeCatalogQuery(card.form).includes(formQuery)) return false;
       if (filters.setPrefix !== "all" && cardSetPrefix(card) !== filters.setPrefix) return false;
       if (!query) return true;
       if (cardNumberMatchesQuery(card.no, query)) return true;
@@ -936,7 +943,19 @@
             ${levelOptions.map((level) => renderHomeFilterChip("levels", level, `Lv.${level}`)).join("")}
           </div>
         </div>
+        <div class="deck-filter-section">
+          <span>속성</span>
+          <div class="deck-filter-chips compact">
+            ${["백신종", "데이터종", "바이러스종", "프리", "배리어블종", "불명"]
+              .map((attr) => renderHomeFilterChip("attributes", attr, attr))
+              .join("")}
+          </div>
+        </div>
         <div class="deck-filter-grid">
+          <label class="field">
+            <span>유형</span>
+            <input class="input" type="search" value="${escapeHTML(filters.form)}" placeholder="예: 성기사, 파충류" aria-label="유형 검색" data-home-form-filter autocomplete="off" />
+          </label>
           <label class="field">
             <span>종류</span>
             <select class="select" data-home-filter-select="type">
@@ -1273,6 +1292,8 @@
         type: catalogCard.type,
         color: catalogCard.color,
         rarity: catalogCard.rarity,
+        attribute: catalogCard.attribute || "",
+        form: catalogCard.form || "",
         img: catalogImageSource(catalogCard),
       };
     }
@@ -3242,6 +3263,16 @@
       render();
       return;
     }
+    // 유형(form) 텍스트 필터: 결과만 부분 갱신해 입력 포커스를 유지.
+    const homeFormFilterInput = event.target.closest("[data-home-form-filter]");
+    if (homeFormFilterInput) {
+      state.homeCardFilters = { ...homeCardFilters(), form: homeFormFilterInput.value };
+      clearTimeout(homeSearchTimer);
+      if (!event.isComposing) {
+        homeSearchTimer = setTimeout(updateHomeCardSearchResults, 180);
+      }
+      return;
+    }
     const deckCardSearch = event.target.closest("[data-deck-card-search]");
     if (deckCardSearch) {
       cacheDeckDraftForm(event.target.closest("#deck-form"));
@@ -3286,6 +3317,13 @@
     if (homeCardSearch) {
       state.homeCardSearch = homeCardSearch.value;
       clearTimeout(homeSearchTimer);
+      updateHomeCardSearchResults();
+      return;
+    }
+    // 유형(form) 텍스트 필터: 결과만 부분 갱신해 입력 포커스를 유지한다.
+    const homeFormFilter = event.target.closest("[data-home-form-filter]");
+    if (homeFormFilter) {
+      state.homeCardFilters = { ...homeCardFilters(), form: homeFormFilter.value };
       updateHomeCardSearchResults();
       return;
     }

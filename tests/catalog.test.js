@@ -50,6 +50,11 @@ test("normalizeCatalogCard: 필드 매핑 + 미지 type은 other + dgchub 이미
   assert.equal(card.type, "digimon");
   assert.equal(card.color, "red");
   assert.equal(card.img, "https://x/y.png");
+  // 속성/유형 보존
+  const withMeta = C.normalizeCatalogCard({ no: "BT1-084", name: "오메가몬", type: "digimon", attribute: "백신종", form: "성기사형,로얄 나이츠" });
+  assert.equal(withMeta.attribute, "백신종");
+  assert.equal(withMeta.form, "성기사형,로얄 나이츠");
+  assert.equal(C.normalizeCatalogCard({ no: "P-1", name: "x", type: "option" }).attribute, ""); // 없으면 빈 값
   // 미지 type → other, dgchub 이미지 → 빈 값
   const weird = C.normalizeCatalogCard({ no: "BT1-002", name: "x", type: "hero", img: "https://dgchub.com/a.png" });
   assert.equal(weird.type, "other");

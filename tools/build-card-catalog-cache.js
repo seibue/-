@@ -129,7 +129,8 @@ function categoryIds(html) {
   ];
 }
 
-function loadKoreanNames() {
+// 한글 이름 + 속성/유형을 번호별로 반환. 속성·유형은 한국 공식에서만 오는 정보라 카탈로그에 합류시킨다.
+function loadKoreanMeta() {
   if (!fs.existsSync(KOREAN_EFFECTS_FILE)) return {};
   try {
     const sandbox = { window: {} };
@@ -137,21 +138,25 @@ function loadKoreanNames() {
     // eslint-disable-next-line no-new-func
     new Function("window", code)(sandbox.window);
     const effects = sandbox.window.KOREAN_CARD_EFFECTS || {};
-    const names = {};
+    const meta = {};
     Object.keys(effects).forEach((no) => {
-      const name = String(effects[no]?.name || "").trim();
-      if (name) names[normalizeCardNumber(no)] = name;
+      const entry = effects[no] || {};
+      meta[normalizeCardNumber(no)] = {
+        name: String(entry.name || "").trim(),
+        attribute: String(entry.attribute || "").trim(),
+        form: String(entry.form || "").trim(),
+      };
     });
-    return names;
+    return meta;
   } catch (error) {
-    console.warn("한글 이름 로드 실패(일본어 이름으로 대체):", error.message);
+    console.warn("한글 메타 로드 실패(일본어 이름으로 대체):", error.message);
     return {};
   }
 }
 
 async function main() {
-  const koreanNames = loadKoreanNames();
-  console.log(`한글 이름 소스: ${Object.keys(koreanNames).length}장`);
+  const koreanMeta = loadKoreanMeta();
+  console.log(`한글 메타 소스: ${Object.keys(koreanMeta).length}장`);
 
   const firstHtml = await fetchText(`${BASE_URL}?search=true`);
   const categories = categoryIds(firstHtml);
@@ -167,17 +172,20 @@ async function main() {
     const cards = parseCards(html);
     cards.forEach((card) => {
       if (byNumber.has(card.no)) return; // 병렬/중복은 첫 항목만
-      const koName = koreanNames[card.no];
-      if (koName) koMatched += 1;
+      const meta = koreanMeta[card.no] || {};
+      if (meta.name) koMatched += 1;
       byNumber.set(card.no, {
         no: card.no,
         lv: card.lv,
-        name: koName || card.jpName,
+        name: meta.name || card.jpName,
         type: card.type,
         color: card.color,
         color2: card.color2,
         rarity: card.rarity,
-        img: "", // 앱은 images.digimoncard.io로 이미지를 받는다(런타임). 카탈로그엔 싣지 않음.
+        // 속성/유형은 한국 공식에서만 오므로 있을 때만 실어 파일을 가볍게 유지한다.
+        ...(meta.attribute ? { attribute: meta.attribute } : {}),
+        ...(meta.form ? { form: meta.form } : {}),
+        img: "", // 앱은 런타임에 일본 공식 이미지를 받는다. 카탈로그엔 싣지 않음.
       });
     });
     console.log(`[${index + 1}/${categories.length}] category ${category}, cards ${byNumber.size}`);

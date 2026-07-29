@@ -220,6 +220,22 @@
                 <dt>색상</dt>
                 <dd>${escapeHTML(colorLabel(card.color) || "-")}</dd>
               </div>
+              ${
+                card.attribute
+                  ? `<div>
+                <dt>속성</dt>
+                <dd>${escapeHTML(card.attribute)}</dd>
+              </div>`
+                  : ""
+              }
+              ${
+                card.form
+                  ? `<div>
+                <dt>유형</dt>
+                <dd>${escapeHTML(card.form)}</dd>
+              </div>`
+                  : ""
+              }
             </dl>
           </div>
         `;

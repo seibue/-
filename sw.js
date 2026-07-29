@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260718-attr-form-search";
+const CACHE_NAME = "jeonjeokmon-shell-20260718-form-datalist";
 const CORE_ASSETS = [
   "/",
   "/index.html",

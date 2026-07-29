@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260718-attr-form-search";
+  const APP_VERSION = "20260718-form-datalist";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -905,6 +905,23 @@
       .join("");
   }
 
+  // 카탈로그의 실제 유형(파충류형 등, "형"으로 끝나는 종족) 목록을 빈도 내림차순으로.
+  // 자유 텍스트로는 정확한 명칭을 모르면 헛검색이 나므로 datalist로 선택지를 제공한다.
+  let catalogFormOptionsCache = null;
+  function catalogFormOptions() {
+    if (catalogFormOptionsCache) return catalogFormOptionsCache;
+    const counts = new Map();
+    CARD_CATALOG.forEach((card) => {
+      if (!card.form) return;
+      card.form.split(/[,，]/).forEach((token) => {
+        const value = token.trim();
+        if (value.endsWith("형")) counts.set(value, (counts.get(value) || 0) + 1);
+      });
+    });
+    catalogFormOptionsCache = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([value]) => value);
+    return catalogFormOptionsCache;
+  }
+
   function renderHomeFilterChip(group, value, label, options = {}) {
     const filters = homeCardFilters();
     const active = Array.isArray(filters[group]) && filters[group].includes(value);
@@ -954,7 +971,10 @@
         <div class="deck-filter-grid">
           <label class="field">
             <span>유형</span>
-            <input class="input" type="search" value="${escapeHTML(filters.form)}" placeholder="예: 성기사, 파충류" aria-label="유형 검색" data-home-form-filter autocomplete="off" />
+            <input class="input" type="search" value="${escapeHTML(filters.form)}" placeholder="목록에서 고르거나 입력 (예: 머신형)" aria-label="유형 검색" list="home-form-options" data-home-form-filter autocomplete="off" />
+            <datalist id="home-form-options">
+              ${catalogFormOptions().map((form) => `<option value="${escapeHTML(form)}"></option>`).join("")}
+            </datalist>
           </label>
           <label class="field">
             <span>종류</span>

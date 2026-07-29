@@ -154,6 +154,35 @@ function loadKoreanMeta() {
   }
 }
 
+// 속성/유형은 디지몬 종족 고유값(가트몬=항상 성수형 백신종)이라, 미발매(비공식 번역) 세트처럼
+// 한국 공식 데이터가 없는 카드는 같은 이름의 다른 카드에서 값을 채워 넣는다.
+// 이름이 유일한 신규 디지몬은 여전히 비게 되나, 그건 공식 데이터 공개 전까지 불가피.
+function backfillMetaByName(list) {
+  const known = new Map();
+  list.forEach((card) => {
+    if (!card.name) return;
+    const entry = known.get(card.name) || {};
+    if (card.attribute && !entry.attribute) entry.attribute = card.attribute;
+    if (card.form && !entry.form) entry.form = card.form;
+    known.set(card.name, entry);
+  });
+  let filledAttr = 0;
+  let filledForm = 0;
+  list.forEach((card) => {
+    const entry = known.get(card.name);
+    if (!entry) return;
+    if (!card.attribute && entry.attribute) {
+      card.attribute = entry.attribute;
+      filledAttr += 1;
+    }
+    if (!card.form && entry.form) {
+      card.form = entry.form;
+      filledForm += 1;
+    }
+  });
+  console.log(`이름 기반 백필: 속성 ${filledAttr}장 · 유형 ${filledForm}장`);
+}
+
 async function main() {
   const koreanMeta = loadKoreanMeta();
   console.log(`한글 메타 소스: ${Object.keys(koreanMeta).length}장`);
@@ -193,6 +222,7 @@ async function main() {
   }
 
   const list = [...byNumber.values()];
+  backfillMetaByName(list);
   if (list.length < MIN_EXPECTED_CARDS) {
     throw new Error(
       `카탈로그 카드 수가 비정상적으로 적습니다(${list.length}). ` +

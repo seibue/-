@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260729-form-backfill";
+  const APP_VERSION = "20260729-search-form-text";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -1359,7 +1359,8 @@
   function catalogSearchText(card) {
     const eff = KOREAN_CARD_EFFECTS[card.no] || {};
     const effectText = `${eff.mainEffect || ""} ${eff.sourceEffect || ""} ${eff.securityEffect || ""} ${eff.altEffect || ""}`;
-    return `${card.name} ${cardTypeLabel(card.type)} ${colorLabel(card.color)} ${colorLabel(card.color2)} ${card.rarity} ${effectText}`.toLowerCase();
+    // 속성(백신종 등)·유형(성수형 등)도 메인 검색어로 잡히도록 포함한다.
+    return `${card.name} ${cardTypeLabel(card.type)} ${colorLabel(card.color)} ${colorLabel(card.color2)} ${card.rarity} ${card.attribute || ""} ${card.form || ""} ${effectText}`.toLowerCase();
   }
 
   // 카드명·종류·색·레어도 + 효과 텍스트를 합친 검색 인덱스(번호→{text, compact}).

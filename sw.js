@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260729-form-backfill";
+const CACHE_NAME = "jeonjeokmon-shell-20260729-search-form-text";
 const CORE_ASSETS = [
   "/",
   "/index.html",

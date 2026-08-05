@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260729-search-form-text";
+  const APP_VERSION = "20260729-events-pagination";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2211,12 +2211,22 @@
   async function fetchTournamentEvents() {
     const client = cloudClient || (await ensureCloudClient());
     if (!client) return [];
-    const { data: rows, error } = await client
-      .from("tournament_events")
-      .select("id, title, starts_at, ends_at, location, description")
-      .order("starts_at", { ascending: true });
-    if (error) throw error;
-    return (rows || []).map((row) => ({
+    // PostgREST는 요청당 최대 1000행만 준다. 대회일정이 1000건을 넘으면
+    // 날짜순 뒤쪽(먼 미래)이 잘려 안 보이므로, .range로 페이지네이션해 전부 가져온다.
+    const pageSize = 1000;
+    const rows = [];
+    for (let from = 0; ; from += pageSize) {
+      const { data: batch, error } = await client
+        .from("tournament_events")
+        .select("id, title, starts_at, ends_at, location, description")
+        .order("starts_at", { ascending: true })
+        .range(from, from + pageSize - 1);
+      if (error) throw error;
+      const list = batch || [];
+      rows.push(...list);
+      if (list.length < pageSize) break;
+    }
+    return rows.map((row) => ({
       id: row.id,
       title: row.title || "대회",
       startsAt: row.starts_at,

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260729-search-form-text";
+const CACHE_NAME = "jeonjeokmon-shell-20260729-events-pagination";
 const CORE_ASSETS = [
   "/",
   "/index.html",

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260729-events-pagination";
+  const APP_VERSION = "20260806-neon-header";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2063,11 +2063,23 @@
         <header class="topbar">
           <div class="brand">
             <span class="brand-icon" aria-hidden="true">
-              <span class="pixel-core"></span>
+              <svg class="brand-mark" viewBox="0 0 64 64" focusable="false">
+                <path class="brand-mark-frame" d="M12 5h40l7 7v40l-7 7H12l-7-7V12z" />
+                <path class="brand-mark-plate" d="M15 12h34l3 3v34l-3 3H15l-3-3V15z" />
+                <path class="brand-mark-circuit" d="M20 20h9l4-4h11M20 44h11l5 5h8M44 20v8l5 5v10" />
+                <path class="brand-mark-glyph" fill-rule="evenodd" d="M19 15h16c10 0 17 7 17 17s-7 17-17 17H19V15Zm11 11v12h5c4.4 0 7-2.5 7-6s-2.6-6-7-6h-5Z" />
+                <path class="brand-mark-score" d="M22 24h10M22 32h16M22 40h10" />
+                <circle class="brand-mark-node" cx="44" cy="20" r="2.8" />
+                <circle class="brand-mark-node" cx="49" cy="43" r="2.8" />
+              </svg>
             </span>
             <div class="brand-copy">
               <h1 class="brand-title">전적몬</h1>
-              <span class="brand-subtitle">CARD BATTLE LOG</span>
+              <span class="brand-gauge" aria-hidden="true"></span>
+              <span class="brand-meta">
+                <span class="brand-battlelog">BATTLE LOG</span>
+                <span class="brand-win">WIN 67%</span>
+              </span>
             </div>
           </div>
           ${renderAuthControls()}

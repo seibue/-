@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 160" role="img" aria-labelledby="title desc">
+  <title id="title">전적몬 로고</title>
+  <desc id="desc">카드 백 모양 마크와 전적몬 워드마크로 구성된 가로형 SVG 로고</desc>
+  <defs>
+    <linearGradient id="logoBg" x1="16" y1="8" x2="144" y2="152" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0e2c5f"/>
+      <stop offset="1" stop-color="#06111f"/>
+    </linearGradient>
+    <linearGradient id="logoText" x1="0" y1="42" x2="0" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8ffff"/>
+      <stop offset=".56" stop-color="#19e7ff"/>
+      <stop offset="1" stop-color="#69f4ff"/>
+    </linearGradient>
+    <filter id="markShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="7" dy="7" stdDeviation="0" flood-color="#02050d" flood-opacity="1"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#19e7ff" flood-opacity=".22"/>
+    </filter>
+    <filter id="textGlow" x="-10%" y="-30%" width="120%" height="160%">
+      <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#00101a" flood-opacity="1"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#19e7ff" flood-opacity=".42"/>
+    </filter>
+  </defs>
+
+  <rect width="560" height="160" rx="0" fill="none"/>
+
+  <g filter="url(#markShadow)">
+    <rect x="20" y="20" width="112" height="112" rx="12" fill="url(#logoBg)" stroke="#d9ffe6" stroke-width="5"/>
+    <path d="M24 70 80 20h40c7 0 12 5 12 12v18c-36-3-72 4-108 20Z" fill="#19e7ff" opacity=".1"/>
+    <path d="M38 29h76l17 17v68l-17 17H38l-17-17V46Z" fill="#062e1f" stroke="#d9ffe6" stroke-width="4"/>
+    <path d="M46 40h60l14 14v52l-14 14H46l-14-14V54Z" fill="#0a47a3" stroke="#19e7ff" stroke-width="4"/>
+    <path d="M46 40h60l14 14v52l-14 14H46l-14-14V54Z" fill="none" stroke="#f4ff7a" stroke-width="2" opacity=".72"/>
+    <path d="M49 60h20l9-9h25M49 100h24l9 9h21M100 56v18l13 13v18" fill="none" stroke="#8ff7ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".62"/>
+    <path fill="#ffd21f" stroke="#f8ffff" stroke-width="6" stroke-linejoin="round" paint-order="stroke" fill-rule="evenodd" d="M46 47h37c24 0 40 15 40 33s-16 33-40 33H46V47Zm24 22v22h12c9 0 16-4 16-11s-7-11-16-11H70Z"/>
+    <path d="M52 65h28M52 80h40M52 95h28" fill="none" stroke="#06111f" stroke-width="6" stroke-linecap="round" opacity=".72"/>
+    <circle cx="103" cy="56" r="5" fill="#19e7ff" stroke="#e8f4f8" stroke-width="2"/>
+    <circle cx="113" cy="105" r="5" fill="#19e7ff" stroke="#e8f4f8" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#textGlow)">
+    <text x="160" y="90" font-family="'Noto Sans KR', 'Malgun Gothic', Arial, sans-serif" font-size="58" font-weight="900" fill="url(#logoText)">전적몬</text>
+  </g>
+  <text x="164" y="119" font-family="'Press Start 2P', 'Noto Sans KR', Arial, sans-serif" font-size="14" font-weight="900" fill="#ffe46a" letter-spacing="0">CARD BATTLE LOG</text>
+</svg>

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260729-events-pagination";
+const CACHE_NAME = "jeonjeokmon-shell-20260806-neon-header";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -29,6 +29,7 @@ const CORE_ASSETS = [
   "/js/controller.js",
   "/app.js",
   "/manifest.webmanifest",
+  "/icon.svg",
   "/icon-d-cardback.png"
 ];
 

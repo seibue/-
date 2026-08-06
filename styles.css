@@ -142,42 +142,83 @@ button:disabled {
 }
 
 .brand-icon {
-  width: 38px;
-  height: 38px;
+  position: relative;
+  isolation: isolate;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border: 2px solid var(--accent);
-  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid rgba(217, 255, 230, 0.94);
+  border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(255, 210, 31, 0.32), transparent 42%),
-    #06111f;
-  box-shadow: 4px 4px 0 #02050d, inset 0 0 0 2px rgba(255, 255, 255, 0.06);
-  image-rendering: pixelated;
+    linear-gradient(135deg, rgba(45, 227, 157, 0.34), transparent 40%),
+    linear-gradient(180deg, #0e2c5f 0%, #06111f 100%);
+  box-shadow:
+    4px 4px 0 #02050d,
+    0 0 18px rgba(25, 231, 255, 0.18),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.08);
 }
 
-.pixel-core {
-  width: 5px;
-  height: 5px;
-  background: var(--gold);
-  box-shadow:
-    5px 0 var(--gold),
-    10px 0 var(--gold),
-    -5px 5px var(--accent),
-    0 5px #ffffff,
-    5px 5px var(--hot),
-    10px 5px #ffffff,
-    15px 5px var(--accent),
-    -5px 10px var(--accent),
-    0 10px var(--accent),
-    5px 10px var(--gold),
-    10px 10px var(--gold),
-    15px 10px var(--accent),
-    0 15px var(--hot),
-    5px 15px var(--accent),
-    10px 15px var(--accent),
-    15px 15px var(--hot);
-  transform: translate(-5px, -7px);
+.brand-icon::before {
+  content: "";
+  position: absolute;
+  inset: -18% 42% 24% -22%;
+  z-index: 0;
+  background: rgba(255, 210, 31, 0.32);
+  transform: rotate(28deg);
+}
+
+.brand-mark {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-mark-frame {
+  fill: #062e1f;
+  stroke: #d9ffe6;
+  stroke-width: 2.8;
+}
+
+.brand-mark-plate {
+  fill: #0a47a3;
+  stroke: var(--accent);
+  stroke-width: 2.2;
+}
+
+.brand-mark-circuit {
+  fill: none;
+  stroke: #8ff7ff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.62;
+}
+
+.brand-mark-glyph {
+  fill: var(--gold);
+  stroke: #f8ffff;
+  stroke-width: 2.8;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+.brand-mark-score {
+  fill: none;
+  stroke: #06111f;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  opacity: 0.78;
+}
+
+.brand-mark-node {
+  fill: var(--accent);
+  stroke: #e8f4f8;
+  stroke-width: 1.2;
 }
 
 .brand-copy {
@@ -189,23 +230,61 @@ button:disabled {
 
 .brand-title {
   margin: 0;
-  font-size: 23px;
+  font-size: 24px;
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.02;
   color: var(--accent);
-  text-shadow: 2px 2px 0 #00101a, 0 0 14px rgba(25, 231, 255, 0.45);
+  background: linear-gradient(180deg, #f8ffff 0%, var(--accent) 56%, #69f4ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 0 #00101a, 0 0 16px rgba(25, 231, 255, 0.48);
 }
 
-.brand-subtitle {
-  max-width: 190px;
+.brand-gauge {
+  position: relative;
+  height: 6px;
+  border-radius: 3px;
   overflow: hidden;
-  color: var(--gold);
+  background: linear-gradient(90deg, var(--win) 0 67%, var(--gold) 67% 100%);
+  box-shadow: inset 0 0 0 1px #04111e, 0 0 9px rgba(25, 231, 255, 0.3);
+}
+
+.brand-gauge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 calc(100% / 6 - 1.4px),
+    rgba(4, 7, 15, 0.55) calc(100% / 6 - 1.4px) calc(100% / 6)
+  );
+}
+
+.brand-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.brand-battlelog,
+.brand-win {
   font-family: var(--pixel-font);
   font-size: 7px;
+  font-weight: 900;
   line-height: 1;
-  text-overflow: ellipsis;
   white-space: nowrap;
   text-shadow: 1px 1px 0 #000;
+}
+
+.brand-battlelog {
+  color: #3f9bff;
+  letter-spacing: 0.5px;
+}
+
+.brand-win {
+  color: var(--gold);
 }
 
 .auth-controls {
@@ -4805,21 +4884,14 @@ button:disabled {
   }
 
   .brand-icon {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
     box-shadow: 3px 3px 0 #02050d, inset 0 0 0 2px rgba(255, 255, 255, 0.06);
   }
 
-  .pixel-core {
-    transform: translate(-5px, -7px) scale(0.86);
-  }
-
   .brand-title {
-    font-size: 19px;
-  }
-
-  .brand-subtitle {
-    display: none;
+    font-size: 20px;
   }
 
   .auth-controls {

@@ -28,3 +28,9 @@ preview-err.log
 
 # 홍보 영상 산출물 (tools/make-promo-video.js 로 언제든 재생성, 배포 불필요)
 promo/
+
+# 로컬 도구 설정 · 잡파일 (저장소/배포 무관)
+.claude/
+__pycache__/
+*.xlsx
+icon-preview*.png

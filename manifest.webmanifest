@@ -11,13 +11,13 @@
   "theme_color": "#0a0e1a",
   "icons": [
     {
-      "src": "/icon-d-cardback.png?v=20260528-icon",
+      "src": "/icon-d-cardback.png?v=20260806-app-icon",
       "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-d-cardback.png?v=20260528-icon",
+      "src": "/icon-d-cardback.png?v=20260806-app-icon",
       "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "maskable"

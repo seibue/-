@@ -7,7 +7,9 @@
     "test": "node --test",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium",
-    "check": "node --check app.js && node --check sw.js"
+    "check": "node --check app.js && node --check sw.js",
+    "promo": "node tools/make-promo-video.js --keep-shots",
+    "promo:encode": "node tools/encode-promo-video.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0"

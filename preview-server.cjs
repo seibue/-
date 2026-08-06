@@ -14,6 +14,8 @@ const mimeTypes = {
   ".webmanifest": "application/manifest+json; charset=utf-8",
   ".svg": "image/svg+xml; charset=utf-8",
   ".md": "text/plain; charset=utf-8",
+  ".png": "image/png",
+  ".webm": "video/webm",
 };
 
 http

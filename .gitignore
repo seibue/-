@@ -25,3 +25,6 @@ playwright-report/
 *-iphoneua.png
 preview-out.log
 preview-err.log
+
+# 홍보 영상 산출물 (tools/make-promo-video.js 로 언제든 재생성, 배포 불필요)
+promo/

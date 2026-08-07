@@ -16741,7 +16741,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【등장 시】 자신의 덱 위에서 3장 오픈한다. 그중 특징 「어플몬」을 가진 카드 1장과 특징 「소셜」/「툴」/「재기동」/「창조」를 가진 카드 1장을 패에 추가한다. 나머지는 덱 아래로 되돌린다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 【링크 시】DP3000 이하의 상대 디지몬 1마리를 소멸시킨다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17031,7 +17031,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【시큐리티】 배틀 종료 시, 이 카드를 코스트를 지불하지 않고 등장시킨다. 【등장 시】【진화 시】 자신의 시큐리티를 위에서 1장 패에 추가한다. 그 후, ≪리커버리 +1≫.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】자신의 패에서, 특징 「어플몬」을 가진 카드 1장을 파기하면, 《2 드로우》.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17121,7 +17121,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【자신의 턴】 [턴에 1번] 이 디지몬에 특징 「소셜」/「툴」/「게임」을 가진 카드가 링크할 때, 지불하는 코스트 -1 할 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 【링크 시】상대 디지몬 1마리를 레스트시킨다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17191,7 +17191,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【메인】 [턴에 1번] 자신의 패나 이 디지몬의 진화원에서 특징 「소셜」/「툴」/「게임」을 가진 디지몬 카드 1장을 이 디지몬에 지불하는 코스트 -1로 링크할 수 있다. 【자신의 턴】 [턴에 1번] 이 디지몬이 링크했을 때, 자신의 테이머가 1마리 이하라면, 자신의 패에서 「카즈키&이츠키」 1장을 코스트를 지불하지 않고 등장할 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】상대 디지몬/테이머 1체를 레스트시킨다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17231,7 +17231,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "≪방벽≫ 【등장 시】【진화 시】【어택 시】 자신의 턴이라면, 자신의 패나 이 디지몬의 진화원에서 특징 「소셜」/「툴」/「게임」을 가진 디지몬 카드 1장을 이 디지몬에 지불하는 코스트 -2로 링크할 수 있다. 【서로의 턴】 이 디지몬이 링크했을 때, 상대 디지몬/테이머 1마리를 레스트시킨다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +4000 링크: 특징 「어플몬」: 코스트 3 【링크 시】레스트 상태의 상대 디지몬 1마리를 덱 맨 아래로 되돌린다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17281,7 +17281,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【자신의 메인 페이즈 시작 시】 자신의 패에서 특징 「어플몬」을 가진 카드 1장을 파기하는 것으로, ≪1드로우≫, 메모리 +1.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 【링크 시】상대의 턴 종료까지, 상대 디지몬 1마리는 액티브가 되지 않는다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17371,7 +17371,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【메인】 [턴에 1번] 자신의 트래시나 이 디지몬의 진화원에서 특징 「소셜」/「툴」/「게임」을 가진 디지몬 카드 1장을 이 디지몬에 지불하는 코스트 -1로 링크할 수 있다. 【자신의 턴】 [턴에 1번] 이 디지몬이 링크했을 때, 등장 코스트 4 이하의 상대 디지몬 1마리를 소멸시킨다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】상대의 턴 종료까지, 상대 디지몬/테이머 1체는 액티브가 되지 않는다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17391,7 +17391,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "≪재밍≫ 【등장 시】【진화 시】【어택 시】 자신의 턴이라면, 자신의 트래시나 이 디지몬의 진화원에서 특징 「소셜」/「툴」/「게임」을 가진 디지몬 카드 1장을 이 디지몬에 지불하는 코스트 -2로 링크할 수 있다. 【서로의 턴】 [턴에 1번] 이 디지몬이 링크했을 때, 상대의 턴 종료까지, 상대 디지몬/테이머 1마리는 진화할 수 없다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +4000 링크: 특징 「어플몬」: 코스트 3 【링크 시】상대의 턴 종료까지, 상대 디지몬/테이머 2체는 액티브가 되지 않는다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17601,7 +17601,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "≪사용 조건《특징 「TS」》≫(지정 카드로 색 조건을 무시할 수 있다) 【시큐리티】 이 카드의 【메인】 효과를 발휘한다. 【메인】 DP가 가장 낮은 상대 디지몬 전부를 소멸시킨다. 이 효과로 소멸하지 않았다면, 배틀 에리어의 상대 옵션 카드 1장을 파기한다. 그 후, 이 카드를 에리어의 자신의 디지몬 1마리에 코스트를 지불하지 않고 링크할 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「TS」: 코스트 3 【어택 시】[턴에 1번] 이 디지몬의 DP 이하의 상대 디지몬 1마리를 소멸시킨다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17671,7 +17671,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "≪사용 조건《특징 「TS」》≫(지정 카드로 색 조건을 무시할 수 있다) 【시큐리티】 이 카드의 【메인】 효과를 발휘한다. 【메인】 상대 디지몬 1마리를 ≪퇴화2≫. 그 후, 이 카드를 에리어의 자신의 디지몬 1마리에 코스트를 지불하지 않고 링크할 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「TS」: 코스트 2 《충돌》《관통》",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -17681,7 +17681,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "≪사용 조건《특징 「TS」》≫(지정 카드로 색 조건을 무시할 수 있다) 【시큐리티】 이 카드의 【메인】 효과를 발휘한다. 【메인】 자신의 패에서 특징 「TS」를 가진 카드 1장을 파기하는 것으로, ≪2드로우≫. 게다가, 이 카드나, 자신의 트래시의 특징 「TS」를 가진 카드 1장을 에리어의 자신의 디지몬 1마리에 코스트를 지불하지 않고 링크할 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +4000 링크: 「불카누스몬」: 코스트 3 《S 어택 +1》《재기동》 【서로의 턴】이 「불카누스몬」이 배틀 에어리어를 벗어날 때, 이 디지몬의 링크 카드 1장을 파기하면, 벗어나지 않는다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true
@@ -26741,7 +26741,7 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【등장 시】 자신의 덱 위에서 3장 오픈한다. 그중 「마키나몬」 1장과 「마키나몬」이 기재된 카드 1장을 패에 추가한다. 나머지는 덱 아래로 되돌린다. 그 후, 이 디지몬이나 자신의 패의 「마키나몬」 1장을 다른 자신의 디지몬 1마리에 코스트를 지불하지 않고 링크할 수 있다. 〈룰〉 이 카드와 같은 카드 넘버의 카드는 덱에 50장까지 넣을 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 「마키나몬」 기재: 코스트 2 【서로의 턴】이 디지몬이 배틀 에어리어를 벗어날 때, 이 디지몬의 링크 카드 1장을 이 디지몬의 진화원 아래에 놓으면, 벗어나지 않는다.",
     "securityEffect": "",
     "altEffect": "",
     "unofficial": true

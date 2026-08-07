@@ -12839,9 +12839,10 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=2",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【자신의 턴】[턴 1회]이 디지몬이 링크했을 때, 자신의 테이머가 1명 이하라면, 자신의 패에서 「한바다」 1장을 코스트를 지불하지 않고 등장시킬 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 《돌진》(이 디지몬이 어택했을 때, 어택 대상을 가장 DP가 높은 액티브 상태의 상대 디지몬 1마리로 변경할 수 있다)",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-010": {
     "name": "감마몬",
@@ -12920,9 +12921,10 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=2",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "《속공》《돌진》 【자신의 턴】[턴 1회]이 디지몬이 링크했을 때, 이 디지몬으로 어택할 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】이 디지몬으로 어택할 수 있다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-019": {
     "name": "베텔감마몬",
@@ -12965,9 +12967,10 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=2",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "《S 어택 +1》 【등장 시】【진화 시】자신의 패 또는 이 디지몬의 진화원에서 Lv.4 이하의 디지몬 카드 1장을 이 디지몬에게 코스트를 지불하지 않고 링크할 수 있다. 【자신의 턴】[턴 1회]이 디지몬이 링크했을 때, 이 디지몬의 DP 이하의 상대의 디지몬 1마리를 소멸시킨다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +4000 링크: 특징 「어플몬」: 코스트 3 【링크 시】이 디지몬의 DP 이하의 상대 디지몬 1마리를 소멸시킨다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-024": {
     "name": "사이버드라몬",
@@ -13127,9 +13130,10 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=3",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【시큐리티】배틀 종료 시, 이 카드를 코스트를 지불하지 않고 등장시킨다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 【자신의 턴】상대의 시큐리티 디지몬 전부를 DP-3000.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-042": {
     "name": "지오그레이몬",
@@ -13145,9 +13149,10 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=3",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【시큐리티】배틀 종료 시, 이 카드를 코스트를 지불하지 않고 등장시킨다. 【등장 시】【진화 시】상대의 턴 종료까지 상대의 디지몬 1마리를 DP -2000.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】상대의 턴 종료까지, 상대 디지몬 1마리를 DP-2000.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-044": {
     "name": "라이즈그레이몬",
@@ -13181,9 +13186,10 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=4",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【등장 시】자신의 덱 위에서부터 3장 오픈한다. 그중 특징 「어플몬」을 가진 카드 1장과 특징 「어플리 드라이버」를 가진 카드 1장을 패에 추가한다. 나머지는 덱 아래로 되돌린다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 《관통》(이 디지몬이 어택한 배틀에서 상대 디지몬을 소멸시켰을 때, 어택 종료 전에 체크한다)",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-048": {
     "name": "머슈몬",
@@ -13235,18 +13241,20 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=4",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【등장 시】상대의 턴 종료까지 상대의 디지몬 1마리는 플레이어에게 어택할 수 없다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 【링크 시】상대의 턴 종료까지, 상대 디지몬 1마리는 플레이어에게 어택할 수 없다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-054": {
     "name": "샷몬",
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=4",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【등장 시】자신의 디지몬의 진화원에서 특징 「어플몬」/「3총사」를 가진 카드 1장을 파기하는 것으로, 상대의 디지몬 1마리를 《퇴화 1》.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +2000 링크: 특징 「어플몬」: 코스트 1 【링크 시】등장 코스트 3 이하의 상대 디지몬 1마리를 소멸시킨다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-055": {
     "name": "샌드리자몬",
@@ -13289,9 +13297,10 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=4",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "《블로커》 【자신의 턴】[턴 1회]이 디지몬이 링크했을 때, 상대의 디지몬 1마리를 《퇴화 1》.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】상대 디지몬 1마리를 《퇴화 1》.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-060": {
     "name": "디스트로몬",
@@ -13388,18 +13397,20 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=5",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【시큐리티】배틀 종료 시, 이 카드를 코스트를 지불하지 않고 등장시킨다. 【등장 시】【진화 시】자신의 트래시에서 특징 「어플몬」을 가진 디지몬 카드 1장을 패로 되돌릴 수 있다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】자신의 트래시에서, 특징에 「어플몬」을 가진 디지몬 카드 1장을 패로 되돌릴 수 있다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-071": {
     "name": "스코프몬",
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=5",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【등장 시】【진화 시】자신의 패/트래시에서 특징 「어플몬」/「3총사」를 가진 카드 1장을 자신의 디지몬 1마리의 진화원 아래에 놓는 것으로, 메모리 +1.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +3000 링크: 특징 「어플몬」: 코스트 2 【링크 시】《2 드로우》하고, 자신의 패 2장을 파기한다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-072": {
     "name": "아레스타드라몬: 슈페리올 모드",
@@ -13415,18 +13426,20 @@ window.KOREAN_CARD_EFFECTS = {
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=5",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "《블로커》 【등장 시】【진화 시】자신의 트래시 또는 이 디지몬의 진화원에서 Lv.4 이하의 디지몬 카드 1장을 이 디지몬에게 코스트를 지불하지 않고 링크할 수 있다. 【자신의 턴】[턴 1회]이 디지몬이 링크했을 때, 상대의 턴 종료까지 상대의 디지몬 1마리에게 「【자신의 메인 페이즈 개시 시】이 디지몬으로 어택한다.」의 효과를 준다.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +4000 링크: 특징 「어플몬」: 코스트 3 【서로의 턴】[턴에 1번] 이 디지몬이 배틀 에어리어를 벗어날 때, 이 디지몬의 링크 카드 1장을 파기하면, 벗어나지 않는다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-074": {
     "name": "새틀라몬",
     "sourceUrl": "https://digimoncard.co.kr/index.php?mid=cardlist&category=47744&page=5",
     "fetchedAt": "2026-07-29T17:20:54.770Z",
     "mainEffect": "【등장 시】【진화 시】자신의 패/트래시에서 특징 「어플몬」/「3총사」를 가진 카드 1장을 자신의 디지몬의 진화원 아래에 놓는 것으로, 상대의 턴 종료까지 그 디지몬은 상대의 효과로 패/덱으로 되돌아가지 않고, 《퇴화》의 효과를 받지 않는다. 【진화 시】【어택 시】[턴 1회]자신의 디지몬의 진화원에서 특징 「어플몬」/「3총사」를 가진 카드 1장을 파기하는 것으로, 상대의 디지몬 1마리를 《퇴화 1》.",
-    "sourceEffect": "",
+    "sourceEffect": "DP +4000 링크: 특징 「어플몬」: 코스트 3 【링크 시】Lv.4 이하의 상대 디지몬 1마리를 소멸시킨다.",
     "securityEffect": "",
-    "altEffect": ""
+    "altEffect": "",
+    "unofficial": true
   },
   "BT21-075": {
     "name": "스컬그레이몬",

@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260808-bt25-link";
+const CACHE_NAME = "jeonjeokmon-shell-20260808-bt21-link";
 const CORE_ASSETS = [
   "/",
   "/index.html",

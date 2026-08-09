@@ -234,11 +234,11 @@ button:disabled {
   font-weight: 900;
   line-height: 1.02;
   color: var(--accent);
-  background: linear-gradient(180deg, #f8ffff 0%, var(--accent) 56%, #69f4ff 100%);
+  background: linear-gradient(180deg, #8ffcff 0%, var(--accent) 50%, #67f0ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 0 #00101a, 0 0 16px rgba(25, 231, 255, 0.48);
+  text-shadow: 0 0 18px rgba(25, 231, 255, 0.6);
 }
 
 .brand-gauge {

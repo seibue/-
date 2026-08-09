@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260809-dual-block";
+const CACHE_NAME = "jeonjeokmon-shell-20260806-title-neon";
 const CORE_ASSETS = [
   "/",
   "/index.html",

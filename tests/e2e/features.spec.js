@@ -79,11 +79,11 @@ test("삭제 → undo 토스트 → 되돌리기 복원", async ({ page }) => {
   page.on("dialog", (d) => d.accept()); // confirm 자동 수락
   await page.locator('[data-tab="tournaments"]').first().click();
 
-  // 대회 생성
+  // 대회 생성 (대회 종류는 준비된 목록에서 선택 — 데모 데이터에 없는 종류로 골라 중복 방지)
   await page.locator('[data-action="open-tournament"]').click();
-  await page.locator('#tournament-form input[name="name"]').fill("e2e undo 대회");
+  await page.locator('#tournament-form select[name="name"]').selectOption("에볼루션컵");
   await page.locator('button[type="submit"][form="tournament-form"]').click();
-  const cardWithName = page.locator(".tournament-card", { hasText: "e2e undo 대회" });
+  const cardWithName = page.locator(".tournament-card", { hasText: "에볼루션컵" });
   await expect(cardWithName).toHaveCount(1);
 
   // 삭제 → undo 토스트 (토스트 메시지에도 대회명이 들어가므로 카드 기준으로 검증)

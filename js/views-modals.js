@@ -31,6 +31,8 @@
       ROUND_STAGE_OPTIONS,
       TEAM3_MATCH_TYPE,
       BUILTIN_MATCH_TYPES,
+      BUILTIN_TOURNAMENT_TYPES,
+      TEAM_TOURNAMENT_TYPES,
       TEAM_POSITION_OPTIONS,
       TOURNAMENT_CUT_OPTIONS,
       TOURNAMENT_FORMAT_OPTIONS,
@@ -341,12 +343,26 @@
         const tournament = state.editingTournamentId ? getTournament(state.editingTournamentId) : null;
         const selectedFormat = tournament?.format || "mixed";
         const selectedCut = tournament?.topCut || 4;
+        // 대회 종류는 준비된 목록에서 선택. 편집 중인 기존(자유입력) 이름이 목록에 없으면 보존용으로 앞에 추가한다.
+        const typeOptions = [...BUILTIN_TOURNAMENT_TYPES];
+        if (tournament?.name && !typeOptions.includes(tournament.name)) typeOptions.unshift(tournament.name);
+        const selectedType = tournament?.name || typeOptions[0];
         const body = `
           <form class="form-grid" id="tournament-form">
             <label class="field">
-              <span>대회 이름</span>
-              <input class="input" name="name" value="${escapeHTML(tournament?.name || "")}" placeholder="예: 매장 대표전" autocomplete="off" required />
+              <span>대회 종류</span>
+              <select class="select" name="name" required>
+                ${typeOptions
+                  .map(
+                    (type) =>
+                      `<option value="${escapeHTML(type)}"${selectedAttr(selectedType, type)}>${escapeHTML(type)}${
+                        TEAM_TOURNAMENT_TYPES.includes(type) ? " (팀전)" : ""
+                      }</option>`
+                  )
+                  .join("")}
+              </select>
             </label>
+            <p class="mini-text">팀전 대회를 고르면 이 대회의 전적을 추가할 때 대전 유형이 자동으로 3대3 팀전(내 자리·팀 결과)이 됩니다.</p>
             <div class="form-row">
               <label class="field">
                 <span>날짜</span>
@@ -391,11 +407,13 @@
         const match = state.editingMatchId ? getData().matches.find((item) => item.id === state.editingMatchId) : null;
         const defaults = match ? {} : recentMatchDefaults();
         const selectedDeckId = match?.deckId || defaults.deckId || "";
-        const selectedMatchType = match?.matchType || defaults.matchType || getData().matchTypes[0] || "대전";
-        const defaultOpponent = match ? match.opponent || "" : defaults.opponent || "";
-        const selectedPlayOrder = match?.playOrder || defaults.playOrder || "unknown";
         const selectedTournamentId = match?.tournamentId || state.prefillMatchTournamentId || "";
         const selectedTournament = getTournament(selectedTournamentId);
+        // 팀전 대회에 새 전적을 추가하면 대전 유형을 자동으로 3대3 팀전으로 채운다(내 자리·팀 결과 노출).
+        const selectedMatchType =
+          match?.matchType || (selectedTournament?.team3 ? TEAM3_MATCH_TYPE : defaults.matchType || getData().matchTypes[0] || "대전");
+        const defaultOpponent = match ? match.opponent || "" : defaults.opponent || "";
+        const selectedPlayOrder = match?.playOrder || defaults.playOrder || "unknown";
         const selectedRoundStage =
           match?.roundStage || state.prefillMatchRoundStage || (selectedTournamentId ? suggestedTournamentStage(selectedTournamentId) : "none");
         const selectedMatchFormat =

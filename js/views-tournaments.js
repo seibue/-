@@ -145,7 +145,7 @@
         <span class="result-pill draw">${stats.total ? `${stats.rate}%` : "대회"}</span>
         <div class="match-main">
           <div class="match-title">
-            <span>${escapeHTML(tournament.name)}</span>
+            <span>${escapeHTML(tournament.name)}${tournament.team3 ? ` <span class="team3-badge">팀전</span>` : ""}</span>
             <em class="tournament-final-summary">${escapeHTML(finalSummary)}</em>
           </div>
           <div class="match-meta">

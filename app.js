@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260808-bt21-link";
+  const APP_VERSION = "20260809-tournament-type";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -93,6 +93,18 @@
   // 매치 폼 드롭다운에 항상 노출되는 내장 대전 유형(사용자 목록에 없어도 합류).
   // 공식 대회 유형이라 기존 사용자 데이터에 손대지 않고도 바로 선택 가능하게 한다.
   const BUILTIN_MATCH_TYPES = ["얼티미트컵", TEAM3_MATCH_TYPE];
+  // 대회 추가 폼: 대회 이름을 직접 입력하는 대신 준비된 대회 종류에서 고른다.
+  const BUILTIN_TOURNAMENT_TYPES = [
+    "테이머배틀",
+    "얼티미트컵",
+    "에볼루션컵",
+    "레귤레이션 배틀",
+    "매장 대표전",
+    "WORLD",
+    TEAM3_MATCH_TYPE,
+  ];
+  // 팀전 대회 종류: 선택하면 대회를 팀전으로 표시하고, 그 대회의 매치는 자동으로 3대3 팀전이 된다.
+  const TEAM_TOURNAMENT_TYPES = [TEAM3_MATCH_TYPE];
   const TEAM_POSITION_OPTIONS = ["A", "B", "C"];
   // 트랙 B: 카드번호/카탈로그 정규화 순수 헬퍼는 js/catalog.js 로 이동.
   // 아래 CARD_CATALOG 빌드가 normalizeCatalogCard 를 즉시 호출하므로 그 전에 생성해야 한다
@@ -2650,6 +2662,8 @@
     ROUND_STAGE_OPTIONS,
     TEAM3_MATCH_TYPE,
     BUILTIN_MATCH_TYPES,
+    BUILTIN_TOURNAMENT_TYPES,
+    TEAM_TOURNAMENT_TYPES,
     TEAM_POSITION_OPTIONS,
     TOURNAMENT_CUT_OPTIONS,
     TOURNAMENT_FORMAT_OPTIONS,
@@ -2934,6 +2948,7 @@
     cardTypeLabels,
     ROUND_STAGE_OPTIONS,
     TEAM3_MATCH_TYPE,
+    TEAM_TOURNAMENT_TYPES,
     TOURNAMENT_CUT_OPTIONS,
     TOURNAMENT_FORMAT_OPTIONS,
     uid,
@@ -3206,6 +3221,11 @@
       const noneInput = form?.querySelector('input[name="roundStage"][value="none"]');
       if (tournament && noneInput?.checked && stageInput) stageInput.checked = true;
       if (!tournament && noneInput) noneInput.checked = true;
+      // 팀전 대회를 고르면 대전 유형을 자동으로 3대3 팀전으로 바꿔 자리·팀 결과 필드를 노출한다.
+      const matchTypeSelect = form?.querySelector('[name="matchType"]');
+      if (tournament?.team3 && matchTypeSelect && matchTypeSelect.value !== TEAM3_MATCH_TYPE) {
+        matchTypeSelect.value = TEAM3_MATCH_TYPE;
+      }
       // 3대3 자리(A/B/C)는 대회당 고정 → 대회 바꾸면 그 대회 직전 라운드 자리로 자동 세팅
       const seat = tournament ? suggestedTeamPosition(tournament.id) : "";
       const seatInput = seat ? form?.querySelector(`input[name="teamPosition"][value="${seat}"]`) : null;

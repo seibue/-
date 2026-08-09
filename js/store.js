@@ -90,6 +90,8 @@
       return {
         id: tournament.id || uid("tournament"),
         name: String(tournament.name || "").trim() || "이름 없는 대회",
+        // 팀전 대회 여부(3대3 팀전 종류로 만든 대회). 매치 추가 시 자동으로 3대3 팀전이 된다.
+        team3: Boolean(tournament.team3),
         date: String(tournament.date || fallbackDate),
         format,
         location: String(tournament.location || "").trim(),

@@ -22,6 +22,7 @@
       cardTypeLabels,
       ROUND_STAGE_OPTIONS,
       TEAM3_MATCH_TYPE,
+      TEAM_TOURNAMENT_TYPES,
       TOURNAMENT_CUT_OPTIONS,
       TOURNAMENT_FORMAT_OPTIONS,
       uid,
@@ -884,7 +885,7 @@
         const formData = new FormData(form);
         const name = String(formData.get("name") || "").trim();
         if (!name) {
-          alert("대회 이름을 입력해 주세요.");
+          alert("대회 종류를 선택해 주세요.");
           return;
         }
         const formatValue = String(formData.get("format") || "mixed");
@@ -892,6 +893,8 @@
         const tournament = {
           id: state.editingTournamentId || uid("tournament"),
           name,
+          // 팀전 대회 종류를 고르면 팀전 대회로 표시 → 매치 추가 시 자동으로 3대3 팀전이 된다.
+          team3: TEAM_TOURNAMENT_TYPES.includes(name),
           date: String(formData.get("date") || todayISO()),
           format: TOURNAMENT_FORMAT_OPTIONS.some(([value]) => value === formatValue) ? formatValue : "mixed",
           topCut: TOURNAMENT_CUT_OPTIONS.some(([value]) => value === cutValue) ? cutValue : 4,

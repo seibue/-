@@ -3309,6 +3309,19 @@ button:disabled {
   color: #fbf1dc;
 }
 
+.card-preview-effect.tone-dual {
+  border-left-color: #b98cff;
+  background: rgba(185, 140, 255, 0.09);
+}
+
+.card-preview-effect.tone-dual > span {
+  color: #c8a6ff;
+}
+
+.card-preview-effect.tone-dual p {
+  color: #efe6ff;
+}
+
 .card-preview-effect.tone-alt {
   border-left-color: var(--muted);
   background: rgba(139, 185, 218, 0.07);

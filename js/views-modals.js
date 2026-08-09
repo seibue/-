@@ -259,12 +259,16 @@
         // 진화원 효과가 아니라 링크 효과이므로 라벨·색 톤을 링크용으로 바꾼다.
         const sourceText = remoteEffect.sourceEffect || "";
         const sourceIsLink = /^DP\s*\+?\s*\d+\s+링크:/.test(sourceText.trim());
+        // 듀얼 카드의 듀얼 효과는 altEffect(추가 효과) 자리에 '【듀얼 효과】' 로 시작해 들어간다.
+        // 추가 효과가 아니라 듀얼 효과이므로 라벨·색 톤을 듀얼용으로 바꾼다.
+        const altText = remoteEffect.altEffect || "";
+        const altIsDual = /^【듀얼 효과】/.test(altText.trim());
         // 공식 사이트 관례 용어(상단/하단 텍스트) 대신 직관적 라벨 + 종류별 색 톤
         const blocks = [
           ["효과", remoteEffect.mainEffect, "main"],
           [sourceIsLink ? "링크 효과" : "진화원 효과", sourceText, sourceIsLink ? "link" : "source"],
           ["시큐리티", remoteEffect.securityEffect, "security"],
-          ["추가 효과", remoteEffect.altEffect, "alt"],
+          [altIsDual ? "듀얼 효과" : "추가 효과", altText, altIsDual ? "dual" : "alt"],
         ]
           .filter(([, text]) => text)
           .map(([title, text, tone]) => renderCardEffectBlock(title, text, "", "", tone));

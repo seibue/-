@@ -356,7 +356,7 @@ async function run(page) {
   await quiet(page, 150);
   await tap(page, ".catalog-grid .catalog-image", "카드 미리보기");
   await wait(700);
-  await say(page, "한글 정발 효과 그대로", "일러스트는 스와이프로 패럴렐까지", 1700);
+  await quiet(page, 1700);
   await shot(page, "07-card-preview");
   await quiet(page, 150);
   await page.keyboard.press("Escape");

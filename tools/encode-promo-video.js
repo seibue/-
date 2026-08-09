@@ -158,7 +158,7 @@ if (want("gif")) {
 /* 썸네일 — 업로드 커스텀 썸네일 */
 if (want("thumb")) {
   const out = path.join(OUT_DIR, "전적몬-홍보-썸네일.png");
-  run(["-ss", "1.2", "-i", SRC, "-vframes", "1", "-vf", "scale=1080:1920:flags=lanczos", out]);
+  run(["-ss", "3.5", "-i", SRC, "-vframes", "1", "-vf", "scale=1080:1920:flags=lanczos", out]);
   results.push(["썸네일 1080x1920", out]);
 }
 

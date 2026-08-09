@@ -3296,6 +3296,19 @@ button:disabled {
   color: #ddfbee;
 }
 
+.card-preview-effect.tone-link {
+  border-left-color: var(--gold);
+  background: rgba(255, 196, 87, 0.08);
+}
+
+.card-preview-effect.tone-link > span {
+  color: var(--gold);
+}
+
+.card-preview-effect.tone-link p {
+  color: #fbf1dc;
+}
+
 .card-preview-effect.tone-alt {
   border-left-color: var(--muted);
   background: rgba(139, 185, 218, 0.07);

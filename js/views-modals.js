@@ -255,10 +255,14 @@
         }
         const isKoreanOfficial = remoteEffect.source === "kr";
         if (!isKoreanOfficial) return "";
+        // 링크 카드의 링크 효과는 sourceEffect(하단 텍스트) 자리에 'DP +N 링크:' 형태로 들어간다.
+        // 진화원 효과가 아니라 링크 효과이므로 라벨·색 톤을 링크용으로 바꾼다.
+        const sourceText = remoteEffect.sourceEffect || "";
+        const sourceIsLink = /^DP\s*\+?\s*\d+\s+링크:/.test(sourceText.trim());
         // 공식 사이트 관례 용어(상단/하단 텍스트) 대신 직관적 라벨 + 종류별 색 톤
         const blocks = [
           ["효과", remoteEffect.mainEffect, "main"],
-          ["진화원 효과", remoteEffect.sourceEffect, "source"],
+          [sourceIsLink ? "링크 효과" : "진화원 효과", sourceText, sourceIsLink ? "link" : "source"],
           ["시큐리티", remoteEffect.securityEffect, "security"],
           ["추가 효과", remoteEffect.altEffect, "alt"],
         ]

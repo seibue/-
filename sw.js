@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260809-tournament-type";
+const CACHE_NAME = "jeonjeokmon-shell-20260809-link-label";
 const CORE_ASSETS = [
   "/",
   "/index.html",

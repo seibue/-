@@ -3407,6 +3407,25 @@ button:disabled {
   color: var(--gold);
 }
 
+/* 덱 가져오기: 버전 업 모드에서는 덱 이름칸을 숨기고 버전 업 안내를 노출 */
+.version-up-hint {
+  display: none;
+  border-color: rgba(139, 185, 218, 0.28);
+  background: rgba(139, 185, 218, 0.08);
+}
+
+.version-up-hint strong {
+  color: var(--muted);
+}
+
+.version-up-mode .import-name-field {
+  display: none;
+}
+
+.version-up-mode .version-up-hint {
+  display: block;
+}
+
 .form-grid {
   display: grid;
   gap: 12px;

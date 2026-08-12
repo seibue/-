@@ -18,6 +18,7 @@
   function createDataIO(deps) {
     const {
       APP_VERSION,
+      uid,
       getData,
       setData,
       state,
@@ -159,6 +160,36 @@
       const invalidDeck = importedDecks.find((deck) => deckLimitViolation(deck.cards));
       if (invalidDeck) {
         alert(`${invalidDeck.name}: ${deckLimitViolation(invalidDeck.cards)}`);
+        return;
+      }
+
+      // 버전 업 모드: 기존 덱을 골랐으면 새 덱으로 추가하지 않고, 그 덱의 구성을
+      // 가져온 코드로 교체하고 버전 스냅샷을 남긴다(버튼 '버전' 과 동일한 집계 규칙).
+      const targetId = String(formData.get("importTarget") || "").trim();
+      if (targetId) {
+        const target = getData().decks.find((deck) => deck.id === targetId);
+        if (!target) {
+          alert("버전 업할 덱을 찾을 수 없습니다.");
+          return;
+        }
+        if (importedDecks.length > 1) {
+          alert("여러 덱이 인식되었습니다. 버전 업은 덱 하나만 붙여넣어 주세요.");
+          return;
+        }
+        const newCards = deckCards(importedDecks[0]).map((card) => ({ ...card }));
+        const versionCount = (target.versions?.length || 0) + 1;
+        const snapshot = {
+          id: uid("dver"),
+          label: `v${versionCount}`,
+          cards: newCards.map((card) => ({ ...card })),
+          createdAt: new Date().toISOString(),
+        };
+        target.cards = newCards;
+        target.versions = [...(target.versions || []), snapshot];
+        target.updatedAt = new Date().toISOString();
+        saveData();
+        notifyToast("버전 업 완료", `${target.name} ${snapshot.label} · 가져온 코드로 새 구성을 기록했습니다.`, "success");
+        closeModal();
         return;
       }
 

@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260806-title-neon";
+  const APP_VERSION = "20260810-deck-version-import";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -429,6 +429,7 @@
     downloadCardDataStatus,
   } = window.JJM.dataIO.createDataIO({
     APP_VERSION,
+    uid,
     getData: () => data,
     setData: (next) => {
       data = next;
@@ -3316,6 +3317,14 @@
     const deckImportFile = event.target.closest("[data-deck-import-file]");
     if (deckImportFile) {
       readDeckImportFile(deckImportFile.files[0]);
+    }
+    const deckImportTarget = event.target.closest("[data-deck-import-target]");
+    if (deckImportTarget) {
+      const form = deckImportTarget.closest("#deck-import-form");
+      const isVersionUp = Boolean(deckImportTarget.value);
+      form?.classList.toggle("version-up-mode", isVersionUp);
+      const submitButton = document.querySelector('[form="deck-import-form"]');
+      if (submitButton && !state.importingDecks) submitButton.textContent = isVersionUp ? "버전 업" : "가져오기";
     }
   });
 

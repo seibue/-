@@ -320,9 +320,19 @@
       }
 
       function renderDeckImportModal() {
+        const decks = getData().decks || [];
         const body = `
           <form class="form-grid" id="deck-import-form">
             <label class="field">
+              <span>가져올 위치</span>
+              <select class="select" name="importTarget" data-deck-import-target>
+                <option value="">새 덱으로 추가</option>
+                ${decks
+                  .map((deck) => `<option value="${escapeHTML(deck.id)}">${escapeHTML(deck.name)} 버전 업</option>`)
+                  .join("")}
+              </select>
+            </label>
+            <label class="field import-name-field">
               <span>덱 이름</span>
               <input class="input" name="name" placeholder="비워두면 파일/텍스트 이름을 사용합니다" />
             </label>
@@ -338,6 +348,7 @@
               전적몬 JSON, <strong>매수 (카드번호)</strong>, <strong>매수 카드번호 이름</strong>, 디프로의 <strong>매수 영어카드명 카드번호</strong> 형식을 가져올 수 있습니다.
               내장 DB에 없는 카드번호는 공개 카드 API로 이름, Lv, 종류를 자동 확인합니다.
             </div>
+            <div class="import-hint version-up-hint">기존 덱을 고르면 그 덱의 구성을 이 코드로 교체하고 새 버전(v번호)으로 기록합니다.</div>
           </form>
         `;
         const actions = `

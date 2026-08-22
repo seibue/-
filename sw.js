@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260810-deck-version-import";
+const CACHE_NAME = "jeonjeokmon-shell-20260812-toejikte";
 const CORE_ASSETS = [
   "/",
   "/index.html",

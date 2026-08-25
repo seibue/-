@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260812-toejikte";
+  const APP_VERSION = "20260812-cho-tamer";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -92,7 +92,7 @@
   const TEAM3_MATCH_TYPE = "3대3 팀전";
   // 매치 폼 드롭다운에 항상 노출되는 내장 대전 유형(사용자 목록에 없어도 합류).
   // 공식 대회 유형이라 기존 사용자 데이터에 손대지 않고도 바로 선택 가능하게 한다.
-  const BUILTIN_MATCH_TYPES = ["얼티미트컵", TEAM3_MATCH_TYPE];
+  const BUILTIN_MATCH_TYPES = ["얼티미트컵", "초! 테이머 배틀", TEAM3_MATCH_TYPE];
   // 대회 추가 폼: 대회 이름을 직접 입력하는 대신 준비된 대회 종류에서 고른다.
   const BUILTIN_TOURNAMENT_TYPES = [
     "테이머배틀",

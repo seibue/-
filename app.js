@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260812-regulation-match";
+  const APP_VERSION = "20260812-cho-tamer-tournament";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -96,6 +96,7 @@
   // 대회 추가 폼: 대회 이름을 직접 입력하는 대신 준비된 대회 종류에서 고른다.
   const BUILTIN_TOURNAMENT_TYPES = [
     "테이머배틀",
+    "초! 테이머 배틀",
     "얼티미트컵",
     "에볼루션컵",
     "레귤레이션 배틀",

@@ -41,6 +41,8 @@ body {
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
+  /* 전체 아이콘·글자를 조금 크게(가독성). px 고정 레이아웃을 균일하게 확대. */
+  zoom: 1.1;
 }
 
 /* 모달 열릴 때 배경 스크롤 차단 */

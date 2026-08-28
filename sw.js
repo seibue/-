@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260812-card-meta";
+const CACHE_NAME = "jeonjeokmon-shell-20260812-appmon-form";
 const CORE_ASSETS = [
   "/",
   "/index.html",

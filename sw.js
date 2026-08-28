@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260812-rollback-ui";
+const CACHE_NAME = "jeonjeokmon-shell-20260812-bigger-catalog";
 const CORE_ASSETS = [
   "/",
   "/index.html",

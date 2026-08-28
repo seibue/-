@@ -3785,8 +3785,8 @@ button:disabled {
 .catalog-grid {
   max-height: min(70vh, 760px);
   display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 5px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
   overflow: auto;
   padding: 2px 4px 2px 2px;
   scrollbar-color: var(--accent) rgba(4, 10, 20, 0.6);

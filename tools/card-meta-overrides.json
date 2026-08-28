@@ -1,0 +1,1783 @@
+{
+ "_comment": "미발매 세트 디지몬 속성(속성)/유형(form) 비공식 보강. 일본 공식(digimoncard.com) 属性/タイプ 기반. build-card-catalog-cache.js 및 apply-card-meta.js가 빈 필드에만 채움.",
+ "EX12-001": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX12-002": {
+  "attribute": "",
+  "form": "스모크형"
+ },
+ "EX12-003": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX12-004": {
+  "attribute": "",
+  "form": "고스트형"
+ },
+ "EX12-005": {
+  "attribute": "백신종",
+  "form": "파충류형"
+ },
+ "EX12-006": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "EX12-007": {
+  "attribute": "바이러스종",
+  "form": "각룡형"
+ },
+ "EX12-008": {
+  "attribute": "백신종",
+  "form": "퍼펫형"
+ },
+ "EX12-009": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "EX12-010": {
+  "attribute": "백신종",
+  "form": "공룡형"
+ },
+ "EX12-011": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "EX12-012": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "EX12-013": {
+  "attribute": "백신종",
+  "form": "용인형"
+ },
+ "EX12-014": {
+  "attribute": "백신종",
+  "form": "천룡형"
+ },
+ "EX12-015": {
+  "attribute": "바이러스종",
+  "form": "수인형"
+ },
+ "EX12-016": {
+  "attribute": "백신종",
+  "form": "사이보그형"
+ },
+ "EX12-017": {
+  "attribute": "백신종",
+  "form": "용인형"
+ },
+ "EX12-018": {
+  "attribute": "백신종",
+  "form": "광룡형"
+ },
+ "EX12-019": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "EX12-020": {
+  "attribute": "바이러스종",
+  "form": "연체형"
+ },
+ "EX12-021": {
+  "attribute": "데이터종",
+  "form": "파충류형"
+ },
+ "EX12-022": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "EX12-023": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "EX12-024": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "EX12-025": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "EX12-026": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "EX12-027": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "EX12-028": {
+  "attribute": "백신종",
+  "form": "갑각류형"
+ },
+ "EX12-029": {
+  "attribute": "바이러스종",
+  "form": "마인형"
+ },
+ "EX12-030": {
+  "attribute": "데이터종",
+  "form": "수생수인형"
+ },
+ "EX12-031": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "EX12-032": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "EX12-033": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "EX12-034": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "EX12-035": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "EX12-036": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "EX12-037": {
+  "attribute": "백신종",
+  "form": "성기사형"
+ },
+ "EX12-038": {
+  "attribute": "데이터종",
+  "form": "머신형"
+ },
+ "EX12-039": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "EX12-040": {
+  "attribute": "백신종",
+  "form": "포유류형"
+ },
+ "EX12-041": {
+  "attribute": "데이터종",
+  "form": "돌연변이형"
+ },
+ "EX12-042": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "EX12-043": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "EX12-044": {
+  "attribute": "백신종",
+  "form": "대천사형"
+ },
+ "EX12-045": {
+  "attribute": "백신종",
+  "form": "승려형"
+ },
+ "EX12-046": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "EX12-047": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "EX12-048": {
+  "attribute": "바이러스종",
+  "form": "여래형"
+ },
+ "EX12-049": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "EX12-050": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "EX12-051": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "EX12-052": {
+  "attribute": "백신종",
+  "form": "수기사형"
+ },
+ "EX12-053": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "EX12-054": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "EX12-055": {
+  "attribute": "백신종",
+  "form": "사이보그형"
+ },
+ "EX12-056": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX12-057": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "EX12-058": {
+  "attribute": "백신종",
+  "form": "사이보그형"
+ },
+ "EX12-059": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "EX12-060": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "EX12-061": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX12-062": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX12-063": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX12-064": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX12-065": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX12-076": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "EX12-077": {
+  "attribute": "바이러스종",
+  "form": "특이형"
+ },
+ "BT25-001": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT25-002": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT25-003": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT25-004": {
+  "attribute": "툴",
+  "form": ""
+ },
+ "BT25-005": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT25-006": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT25-007": {
+  "attribute": "소셜",
+  "form": ""
+ },
+ "BT25-008": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT25-009": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT25-010": {
+  "attribute": "프리",
+  "form": "조류형"
+ },
+ "BT25-011": {
+  "attribute": "프리",
+  "form": "거대조형"
+ },
+ "BT25-012": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT25-013": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT25-014": {
+  "attribute": "데이터종",
+  "form": "화염형"
+ },
+ "BT25-015": {
+  "attribute": "백신종",
+  "form": "조인형"
+ },
+ "BT25-016": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "BT25-017": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "BT25-018": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT25-019": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "BT25-020": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT25-021": {
+  "attribute": "데이터종",
+  "form": "짐승형"
+ },
+ "BT25-022": {
+  "attribute": "데이터종",
+  "form": "포유류형"
+ },
+ "BT25-023": {
+  "attribute": "데이터종",
+  "form": "짐승형"
+ },
+ "BT25-024": {
+  "attribute": "데이터종",
+  "form": "수인형"
+ },
+ "BT25-025": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT25-026": {
+  "attribute": "데이터종",
+  "form": "마인형"
+ },
+ "BT25-027": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "BT25-028": {
+  "attribute": "데이터종",
+  "form": "신인형"
+ },
+ "BT25-029": {
+  "attribute": "데이터종",
+  "form": "수기사형"
+ },
+ "BT25-030": {
+  "attribute": "데이터종",
+  "form": "포유류형"
+ },
+ "BT25-031": {
+  "attribute": "데이터종",
+  "form": "포유류형"
+ },
+ "BT25-032": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "BT25-033": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT25-034": {
+  "attribute": "백신종",
+  "form": "천사형"
+ },
+ "BT25-035": {
+  "attribute": "바이러스종",
+  "form": "포유류형"
+ },
+ "BT25-036": {
+  "attribute": "툴",
+  "form": ""
+ },
+ "BT25-037": {
+  "attribute": "프리",
+  "form": "성수형"
+ },
+ "BT25-038": {
+  "attribute": "프리",
+  "form": "돌연변이형"
+ },
+ "BT25-039": {
+  "attribute": "데이터종",
+  "form": "신인형"
+ },
+ "BT25-040": {
+  "attribute": "백신종",
+  "form": "대천사형"
+ },
+ "BT25-041": {
+  "attribute": "바이러스종",
+  "form": "수인형"
+ },
+ "BT25-042": {
+  "attribute": "백신종",
+  "form": "역천사형"
+ },
+ "BT25-043": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "BT25-044": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "BT25-045": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "BT25-046": {
+  "attribute": "데이터종",
+  "form": "파충류형"
+ },
+ "BT25-047": {
+  "attribute": "데이터종",
+  "form": "식물형"
+ },
+ "BT25-048": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT25-049": {
+  "attribute": "데이터종",
+  "form": "파충류형"
+ },
+ "BT25-053": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT25-082": {
+  "attribute": "바이러스종",
+  "form": "마수형"
+ },
+ "BT25-050": {
+  "attribute": "데이터종",
+  "form": "고대조형"
+ },
+ "BT25-051": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT25-052": {
+  "attribute": "소셜",
+  "form": ""
+ },
+ "BT25-054": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "BT25-055": {
+  "attribute": "데이터종",
+  "form": "조류형"
+ },
+ "BT25-056": {
+  "attribute": "툴",
+  "form": ""
+ },
+ "BT25-057": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "BT25-058": {
+  "attribute": "바이러스종",
+  "form": "마수형"
+ },
+ "BT25-059": {
+  "attribute": "데이터종",
+  "form": "신인형"
+ },
+ "BT25-060": {
+  "attribute": "갓",
+  "form": ""
+ },
+ "BT25-061": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "BT25-062": {
+  "attribute": "데이터종",
+  "form": "머신형"
+ },
+ "BT25-063": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT25-064": {
+  "attribute": "백신종",
+  "form": "퍼펫형"
+ },
+ "BT25-065": {
+  "attribute": "백신종",
+  "form": "소룡형"
+ },
+ "BT25-066": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "BT25-067": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT25-068": {
+  "attribute": "바이러스종",
+  "form": "합성형"
+ },
+ "BT25-069": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "BT25-070": {
+  "attribute": "소셜",
+  "form": ""
+ },
+ "BT25-071": {
+  "attribute": "바이러스종",
+  "form": "마룡형"
+ },
+ "BT25-072": {
+  "attribute": "툴",
+  "form": ""
+ },
+ "BT25-073": {
+  "attribute": "바이러스종",
+  "form": "수생수인형"
+ },
+ "BT25-074": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "BT25-075": {
+  "attribute": "데이터종",
+  "form": "신인형"
+ },
+ "BT25-076": {
+  "attribute": "데이터종",
+  "form": "마왕형"
+ },
+ "BT25-077": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "BT25-078": {
+  "attribute": "바이러스종",
+  "form": "포유류형"
+ },
+ "BT25-079": {
+  "attribute": "데이터종",
+  "form": "짐승형"
+ },
+ "BT25-080": {
+  "attribute": "데이터종",
+  "form": "마인형"
+ },
+ "BT25-081": {
+  "attribute": "데이터종",
+  "form": "마수형"
+ },
+ "BT25-083": {
+  "attribute": "바이러스종",
+  "form": "타천사형"
+ },
+ "BT25-084": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "BT25-085": {
+  "attribute": "바이러스종",
+  "form": "마인형"
+ },
+ "BT25-103": {
+  "attribute": "백신종",
+  "form": "은하형"
+ },
+ "BT25-104": {
+  "attribute": "백신종",
+  "form": "광룡형"
+ },
+ "BT24-001": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT24-002": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT24-003": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT24-004": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT24-005": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT24-006": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "BT24-007": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT24-008": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "BT24-009": {
+  "attribute": "바이러스종",
+  "form": "귀인형"
+ },
+ "BT24-010": {
+  "attribute": "바이러스종",
+  "form": "공룡형"
+ },
+ "BT24-011": {
+  "attribute": "바이러스종",
+  "form": "용인형"
+ },
+ "BT24-012": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "BT24-013": {
+  "attribute": "바이러스종",
+  "form": "귀인형"
+ },
+ "BT24-014": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT24-015": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT24-016": {
+  "attribute": "바이러스종",
+  "form": "용인형"
+ },
+ "BT24-017": {
+  "attribute": "바이러스종",
+  "form": "용인형"
+ },
+ "BT24-018": {
+  "attribute": "데이터종",
+  "form": "용인형"
+ },
+ "BT24-019": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "BT24-020": {
+  "attribute": "백신종",
+  "form": "바다짐승형"
+ },
+ "BT24-021": {
+  "attribute": "바이러스종",
+  "form": "귀인형"
+ },
+ "BT24-022": {
+  "attribute": "백신종",
+  "form": "바다짐승형"
+ },
+ "BT24-023": {
+  "attribute": "배리어블종",
+  "form": "수생형"
+ },
+ "BT24-024": {
+  "attribute": "프리",
+  "form": "수생형"
+ },
+ "BT24-025": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "BT24-026": {
+  "attribute": "바이러스종",
+  "form": "빙설형"
+ },
+ "BT24-027": {
+  "attribute": "배리어블종",
+  "form": "요정형"
+ },
+ "BT24-028": {
+  "attribute": "데이터종",
+  "form": "수생수인형"
+ },
+ "BT24-029": {
+  "attribute": "백신종",
+  "form": "수생포유류형"
+ },
+ "BT24-030": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT24-031": {
+  "attribute": "데이터종",
+  "form": "포유류형"
+ },
+ "BT24-032": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "BT24-033": {
+  "attribute": "백신종",
+  "form": "포유류형"
+ },
+ "BT24-034": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT24-035": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "BT24-036": {
+  "attribute": "라이프",
+  "form": ""
+ },
+ "BT24-037": {
+  "attribute": "프리",
+  "form": "수인형"
+ },
+ "BT24-038": {
+  "attribute": "라이프",
+  "form": ""
+ },
+ "BT24-039": {
+  "attribute": "데이터종",
+  "form": "요정형"
+ },
+ "BT24-040": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT24-041": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "BT24-042": {
+  "attribute": "바이러스종",
+  "form": "귀인형"
+ },
+ "BT24-043": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "BT24-044": {
+  "attribute": "데이터종",
+  "form": "조류형"
+ },
+ "BT24-045": {
+  "attribute": "바이러스종",
+  "form": "귀인형"
+ },
+ "BT24-046": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT24-047": {
+  "attribute": "데이터종",
+  "form": "거대조형"
+ },
+ "BT24-048": {
+  "attribute": "데이터종",
+  "form": "조류형"
+ },
+ "BT24-049": {
+  "attribute": "백신종",
+  "form": "거대조형"
+ },
+ "BT24-050": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "BT24-051": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "BT24-052": {
+  "attribute": "불명",
+  "form": ""
+ },
+ "BT24-053": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "BT24-054": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT24-055": {
+  "attribute": "백신종",
+  "form": "수룡형"
+ },
+ "BT24-056": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "BT24-057": {
+  "attribute": "라이프",
+  "form": ""
+ },
+ "BT24-058": {
+  "attribute": "데이터종",
+  "form": "머신형"
+ },
+ "BT24-059": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT24-060": {
+  "attribute": "백신종",
+  "form": "수룡형"
+ },
+ "BT24-061": {
+  "attribute": "바이러스종",
+  "form": "우주인형"
+ },
+ "BT24-062": {
+  "attribute": "데이터종",
+  "form": "머신형"
+ },
+ "BT24-063": {
+  "attribute": "데이터종",
+  "form": "머신형"
+ },
+ "BT24-064": {
+  "attribute": "백신종",
+  "form": "수룡형"
+ },
+ "BT24-065": {
+  "attribute": "불명",
+  "form": ""
+ },
+ "BT24-066": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "BT24-067": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "BT24-068": {
+  "attribute": "바이러스종",
+  "form": "소악마형"
+ },
+ "BT24-069": {
+  "attribute": "바이러스종",
+  "form": "소악마형"
+ },
+ "BT24-070": {
+  "attribute": "바이러스종",
+  "form": "마룡형"
+ },
+ "BT24-071": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "BT24-072": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "BT24-073": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "BT24-074": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "BT24-075": {
+  "attribute": "데이터종",
+  "form": "언데드형"
+ },
+ "BT24-076": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT24-077": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "BT24-078": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "BT24-079": {
+  "attribute": "갓",
+  "form": ""
+ },
+ "BT24-080": {
+  "attribute": "바이러스종",
+  "form": "사룡형"
+ },
+ "BT24-081": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "BT24-101": {
+  "attribute": "백신종",
+  "form": "신인형"
+ },
+ "BT23-001": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "BT23-002": {
+  "attribute": "",
+  "form": "구근형"
+ },
+ "BT23-003": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "BT23-004": {
+  "attribute": "",
+  "form": "화염형"
+ },
+ "BT23-005": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "BT23-006": {
+  "attribute": "데이터종",
+  "form": "소룡형"
+ },
+ "BT23-007": {
+  "attribute": "라이프",
+  "form": ""
+ },
+ "BT23-008": {
+  "attribute": "백신종",
+  "form": "공룡형"
+ },
+ "BT23-009": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "BT23-010": {
+  "attribute": "백신종",
+  "form": "공룡형"
+ },
+ "BT23-011": {
+  "attribute": "백신종",
+  "form": "거대조형"
+ },
+ "BT23-012": {
+  "attribute": "백신종",
+  "form": "조인형"
+ },
+ "BT23-013": {
+  "attribute": "데이터종",
+  "form": "성기사형"
+ },
+ "BT23-014": {
+  "attribute": "바이러스종",
+  "form": "성기사형"
+ },
+ "BT23-015": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "BT23-016": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "BT23-017": {
+  "attribute": "바이러스종",
+  "form": "양서류형"
+ },
+ "BT23-018": {
+  "attribute": "백신종",
+  "form": "짐승형"
+ },
+ "BT23-019": {
+  "attribute": "바이러스종",
+  "form": "양서류형"
+ },
+ "BT23-020": {
+  "attribute": "데이터종",
+  "form": "수생형"
+ },
+ "BT23-021": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "BT23-022": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "BT23-023": {
+  "attribute": "백신종",
+  "form": "수생포유류형"
+ },
+ "BT23-024": {
+  "attribute": "갓",
+  "form": ""
+ },
+ "BT23-025": {
+  "attribute": "백신종",
+  "form": "요정형"
+ },
+ "BT23-026": {
+  "attribute": "데이터종",
+  "form": "짐승형"
+ },
+ "BT23-027": {
+  "attribute": "백신종",
+  "form": "천사형"
+ },
+ "BT23-028": {
+  "attribute": "엔터테인",
+  "form": ""
+ },
+ "BT23-029": {
+  "attribute": "데이터종",
+  "form": "성수형"
+ },
+ "BT23-030": {
+  "attribute": "바이러스종",
+  "form": "퍼펫형"
+ },
+ "BT23-031": {
+  "attribute": "백신종",
+  "form": "대천사형"
+ },
+ "BT23-032": {
+  "attribute": "프리",
+  "form": "돌연변이형"
+ },
+ "BT23-033": {
+  "attribute": "라이프",
+  "form": ""
+ },
+ "BT23-034": {
+  "attribute": "데이터종",
+  "form": "신인형"
+ },
+ "BT23-035": {
+  "attribute": "데이터종",
+  "form": "성기사형"
+ },
+ "BT23-036": {
+  "attribute": "백신종",
+  "form": "수인형"
+ },
+ "BT23-037": {
+  "attribute": "백신종",
+  "form": "곤충형"
+ },
+ "BT23-038": {
+  "attribute": "바이러스종",
+  "form": "곤충형"
+ },
+ "BT23-039": {
+  "attribute": "엔터테인",
+  "form": ""
+ },
+ "BT23-040": {
+  "attribute": "프리",
+  "form": "유충형"
+ },
+ "BT23-041": {
+  "attribute": "백신종",
+  "form": "곤충형"
+ },
+ "BT23-042": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT23-043": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT23-044": {
+  "attribute": "데이터종",
+  "form": "요정형"
+ },
+ "BT23-045": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "BT23-046": {
+  "attribute": "데이터종",
+  "form": "요정형"
+ },
+ "BT23-047": {
+  "attribute": "데이터종",
+  "form": "성기사형"
+ },
+ "BT23-048": {
+  "attribute": "데이터종",
+  "form": "광석형"
+ },
+ "BT23-049": {
+  "attribute": "백신종",
+  "form": "소룡형"
+ },
+ "BT23-050": {
+  "attribute": "프리",
+  "form": "개룡형"
+ },
+ "BT23-051": {
+  "attribute": "바이러스종",
+  "form": "광물형"
+ },
+ "BT23-052": {
+  "attribute": "라이프",
+  "form": ""
+ },
+ "BT23-053": {
+  "attribute": "백신종",
+  "form": "용인형"
+ },
+ "BT23-054": {
+  "attribute": "프리",
+  "form": "성기사형"
+ },
+ "BT23-055": {
+  "attribute": "백신종",
+  "form": "사이보그형"
+ },
+ "BT23-056": {
+  "attribute": "바이러스종",
+  "form": "수인형"
+ },
+ "BT23-057": {
+  "attribute": "데이터종",
+  "form": "성기사형"
+ },
+ "BT23-058": {
+  "attribute": "백신종",
+  "form": "성기사형"
+ },
+ "BT23-059": {
+  "attribute": "백신종",
+  "form": "사이보그형"
+ },
+ "BT23-060": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "BT23-061": {
+  "attribute": "데이터종",
+  "form": "고스트형"
+ },
+ "BT23-062": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "BT23-063": {
+  "attribute": "바이러스종",
+  "form": "마수형"
+ },
+ "BT23-064": {
+  "attribute": "바이러스종",
+  "form": "고스트형"
+ },
+ "BT23-065": {
+  "attribute": "바이러스종",
+  "form": "고스트형"
+ },
+ "BT23-066": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "BT23-067": {
+  "attribute": "바이러스종",
+  "form": "타천사형"
+ },
+ "BT23-068": {
+  "attribute": "바이러스종",
+  "form": "마수형"
+ },
+ "BT23-069": {
+  "attribute": "바이러스종",
+  "form": "고스트형"
+ },
+ "BT23-070": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "BT23-071": {
+  "attribute": "데이터종",
+  "form": "고스트형"
+ },
+ "BT23-072": {
+  "attribute": "불명",
+  "form": "9000형"
+ },
+ "BT23-073": {
+  "attribute": "",
+  "form": ""
+ },
+ "BT23-074": {
+  "attribute": "",
+  "form": ""
+ },
+ "BT23-075": {
+  "attribute": "",
+  "form": ""
+ },
+ "BT23-076": {
+  "attribute": "백신종",
+  "form": "퍼펫형"
+ },
+ "BT23-077": {
+  "attribute": "바이러스종",
+  "form": "퍼펫형"
+ },
+ "BT23-101": {
+  "attribute": "프리",
+  "form": "곤충형"
+ },
+ "BT23-102": {
+  "attribute": "백신종",
+  "form": "천사형"
+ },
+ "EX10-001": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "EX10-002": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX10-003": {
+  "attribute": "",
+  "form": "광석형"
+ },
+ "EX10-004": {
+  "attribute": "",
+  "form": "소천사형"
+ },
+ "EX10-005": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX10-006": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "EX10-007": {
+  "attribute": "바이러스종",
+  "form": "공룡형"
+ },
+ "EX10-008": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX10-009": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX10-010": {
+  "attribute": "바이러스종",
+  "form": "용인형"
+ },
+ "EX10-011": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX10-012": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "EX10-013": {
+  "attribute": "백신종",
+  "form": "천사형"
+ },
+ "EX10-014": {
+  "attribute": "내비",
+  "form": ""
+ },
+ "EX10-015": {
+  "attribute": "데이터종",
+  "form": "파충류형"
+ },
+ "EX10-016": {
+  "attribute": "툴",
+  "form": ""
+ },
+ "EX10-017": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "EX10-018": {
+  "attribute": "바이러스종",
+  "form": "마인형"
+ },
+ "EX10-019": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "EX10-020": {
+  "attribute": "바이러스종",
+  "form": "퍼펫형"
+ },
+ "EX10-021": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX10-022": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX10-023": {
+  "attribute": "불명",
+  "form": ""
+ },
+ "EX10-024": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "EX10-025": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "EX10-026": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "EX10-027": {
+  "attribute": "바이러스종",
+  "form": "마수형"
+ },
+ "EX10-028": {
+  "attribute": "바이러스종",
+  "form": "광물형"
+ },
+ "EX10-029": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "EX10-030": {
+  "attribute": "내비",
+  "form": ""
+ },
+ "EX10-031": {
+  "attribute": "바이러스종",
+  "form": "암흑기사형"
+ },
+ "EX10-032": {
+  "attribute": "바이러스종",
+  "form": "광물형"
+ },
+ "EX10-033": {
+  "attribute": "바이러스종",
+  "form": "광물형"
+ },
+ "EX10-034": {
+  "attribute": "백신종",
+  "form": "광물형"
+ },
+ "EX10-035": {
+  "attribute": "바이러스종",
+  "form": "머신형"
+ },
+ "EX10-036": {
+  "attribute": "바이러스종",
+  "form": "암룡형"
+ },
+ "EX10-037": {
+  "attribute": "바이러스종",
+  "form": "소악마형"
+ },
+ "EX10-038": {
+  "attribute": "시스템",
+  "form": ""
+ },
+ "EX10-039": {
+  "attribute": "바이러스종",
+  "form": "짐승형"
+ },
+ "EX10-040": {
+  "attribute": "바이러스종",
+  "form": "소악마형"
+ },
+ "EX10-041": {
+  "attribute": "데이터종",
+  "form": "마인형"
+ },
+ "EX10-042": {
+  "attribute": "바이러스종",
+  "form": "용인형"
+ },
+ "EX10-043": {
+  "attribute": "게임",
+  "form": ""
+ },
+ "EX10-044": {
+  "attribute": "바이러스종",
+  "form": "돌연변이형"
+ },
+ "EX10-045": {
+  "attribute": "바이러스종",
+  "form": "돌연변이형"
+ },
+ "EX10-046": {
+  "attribute": "바이러스종",
+  "form": "타천사형"
+ },
+ "EX10-047": {
+  "attribute": "바이러스종",
+  "form": "마수형"
+ },
+ "EX10-048": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "EX10-049": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "EX10-050": {
+  "attribute": "프리",
+  "form": "마인형"
+ },
+ "EX10-051": {
+  "attribute": "바이러스종",
+  "form": "언데드형"
+ },
+ "EX10-052": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX10-053": {
+  "attribute": "바이러스종",
+  "form": "사룡형"
+ },
+ "EX10-054": {
+  "attribute": "바이러스종",
+  "form": "마수형"
+ },
+ "EX10-055": {
+  "attribute": "데이터종",
+  "form": "마인형"
+ },
+ "EX10-056": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX10-057": {
+  "attribute": "바이러스종",
+  "form": "마인형"
+ },
+ "EX10-058": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX10-059": {
+  "attribute": "바이러스종",
+  "form": "합성형"
+ },
+ "EX10-060": {
+  "attribute": "바이러스종",
+  "form": "마신형"
+ },
+ "EX10-061": {
+  "attribute": "불명",
+  "form": ""
+ },
+ "EX10-073": {
+  "attribute": "갓",
+  "form": ""
+ },
+ "EX10-074": {
+  "attribute": "바이러스종",
+  "form": "마왕형"
+ },
+ "EX11-001": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX11-002": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX11-003": {
+  "attribute": "",
+  "form": "유충형"
+ },
+ "EX11-004": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX11-005": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "EX11-006": {
+  "attribute": "툴",
+  "form": ""
+ },
+ "EX11-007": {
+  "attribute": "백신종",
+  "form": "파충류형"
+ },
+ "EX11-008": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "EX11-009": {
+  "attribute": "데이터종",
+  "form": "공룡형"
+ },
+ "EX11-010": {
+  "attribute": "백신종",
+  "form": "공룡형"
+ },
+ "EX11-011": {
+  "attribute": "백신종",
+  "form": "공룡형"
+ },
+ "EX11-012": {
+  "attribute": "바이러스종",
+  "form": "용인형"
+ },
+ "EX11-013": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "EX11-014": {
+  "attribute": "백신종",
+  "form": "조류형"
+ },
+ "EX11-015": {
+  "attribute": "백신종",
+  "form": "빙설형"
+ },
+ "EX11-016": {
+  "attribute": "백신종",
+  "form": "빙설형"
+ },
+ "EX11-017": {
+  "attribute": "백신종",
+  "form": "빙설형"
+ },
+ "EX11-018": {
+  "attribute": "데이터종",
+  "form": "연체형"
+ },
+ "EX11-019": {
+  "attribute": "바이러스종",
+  "form": "퍼펫형"
+ },
+ "EX11-020": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX11-021": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX11-022": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX11-023": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX11-024": {
+  "attribute": "바이러스종",
+  "form": "퍼펫형"
+ },
+ "EX11-025": {
+  "attribute": "바이러스종",
+  "form": "곤충형"
+ },
+ "EX11-026": {
+  "attribute": "데이터종",
+  "form": "조룡형"
+ },
+ "EX11-027": {
+  "attribute": "데이터종",
+  "form": "합성형"
+ },
+ "EX11-028": {
+  "attribute": "데이터종",
+  "form": "조룡형"
+ },
+ "EX11-029": {
+  "attribute": "바이러스종",
+  "form": "짐승형"
+ },
+ "EX11-030": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-031": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-032": {
+  "attribute": "데이터종",
+  "form": "조룡형"
+ },
+ "EX11-033": {
+  "attribute": "바이러스종",
+  "form": "짐승형"
+ },
+ "EX11-034": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-035": {
+  "attribute": "데이터종",
+  "form": "마법기사형"
+ },
+ "EX11-036": {
+  "attribute": "바이러스종",
+  "form": "짐승형"
+ },
+ "EX11-037": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-038": {
+  "attribute": "바이러스종",
+  "form": "파충류형"
+ },
+ "EX11-039": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-040": {
+  "attribute": "백신종",
+  "form": "머신형"
+ },
+ "EX11-041": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-042": {
+  "attribute": "백신종",
+  "form": "머신형"
+ },
+ "EX11-043": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-044": {
+  "attribute": "바이러스종",
+  "form": "광물형"
+ },
+ "EX11-045": {
+  "attribute": "백신종",
+  "form": "머신형"
+ },
+ "EX11-046": {
+  "attribute": "불명",
+  "form": ""
+ },
+ "EX11-047": {
+  "attribute": "바이러스종",
+  "form": "소악마형"
+ },
+ "EX11-048": {
+  "attribute": "데이터종",
+  "form": "고스트형"
+ },
+ "EX11-049": {
+  "attribute": "바이러스종",
+  "form": "마룡형"
+ },
+ "EX11-050": {
+  "attribute": "바이러스종",
+  "form": "사이보그형"
+ },
+ "EX11-051": {
+  "attribute": "바이러스종",
+  "form": "고스트형"
+ },
+ "EX11-052": {
+  "attribute": "바이러스종",
+  "form": "사룡형"
+ },
+ "EX11-053": {
+  "attribute": "데이터종",
+  "form": "퍼펫형"
+ },
+ "EX11-073": {
+  "attribute": "데이터종",
+  "form": "특이형"
+ },
+ "EX11-074": {
+  "attribute": "데이터종",
+  "form": "조룡형"
+ },
+ "ST23-01": {
+  "attribute": "",
+  "form": "레서형"
+ },
+ "ST23-02": {
+  "attribute": "백신종",
+  "form": "성수형"
+ },
+ "ST23-03": {
+  "attribute": "바이러스종",
+  "form": "포유류형"
+ },
+ "ST23-04": {
+  "attribute": "바이러스종",
+  "form": "수인형"
+ },
+ "ST23-05": {
+  "attribute": "바이러스종",
+  "form": "신인형"
+ },
+ "ST23-06": {
+  "attribute": "데이터종",
+  "form": "파충류형"
+ },
+ "ST23-07": {
+  "attribute": "데이터종",
+  "form": "파충류형"
+ },
+ "ST23-08": {
+  "attribute": "데이터종",
+  "form": "사이보그형"
+ },
+ "ST23-09": {
+  "attribute": "데이터종",
+  "form": "돌연변이형"
+ },
+ "ST23-10": {
+  "attribute": "백신종",
+  "form": "퍼펫형"
+ },
+ "ST23-11": {
+  "attribute": "백신종",
+  "form": "사이보그형"
+ },
+ "ST23-12": {
+  "attribute": "바이러스종",
+  "form": "포유류형"
+ }
+}

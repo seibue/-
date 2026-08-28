@@ -18,6 +18,13 @@ const tasks = [
     script: path.join(root, "tools", "build-card-catalog-cache.js"),
     flag: "--catalog-only",
   },
+  {
+    // 미발매 세트 등 공식이 비운 속성/유형을 tools/card-meta-overrides.json 로 보강(빈 필드만).
+    name: "card meta overrides",
+    label: "속성/유형 보강",
+    script: path.join(root, "tools", "apply-card-meta.js"),
+    flag: "--catalog-only",
+  },
 ];
 
 function selectedTasks() {

@@ -3062,7 +3062,7 @@ button:disabled {
 
 .card-preview-panel {
   position: relative;
-  width: min(92vw, 430px);
+  width: min(94vw, 560px);
   max-height: calc(100vh - 36px);
   display: grid;
   gap: 12px;
@@ -3081,8 +3081,8 @@ button:disabled {
 
 .card-preview-image {
   position: relative;
-  /* 효과(특히 하단/진화원)가 접힘 없이 보이도록 52vh→46vh 소폭 축소 */
-  height: min(46vh, 380px);
+  /* 미리보기 전체 확대 요청 반영: 이미지 크게(패널이 스크롤되므로 효과는 아래로) */
+  height: min(58vh, 520px);
   aspect-ratio: 5 / 7;
   width: auto;
   max-width: 100%;
@@ -3201,7 +3201,7 @@ button:disabled {
 
 .card-preview-korean-head strong {
   color: var(--gold);
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .card-preview-korean dl {
@@ -3227,7 +3227,7 @@ button:disabled {
 .card-preview-korean dd {
   margin: 0;
   color: #fff;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
 }
 
@@ -3244,7 +3244,7 @@ button:disabled {
   align-items: center;
   gap: 7px;
   color: var(--gold);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 900;
 }
 
@@ -3260,8 +3260,8 @@ button:disabled {
 .card-preview-effect p {
   margin: 0;
   color: #fff7d6;
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .card-preview-effect.loading p,

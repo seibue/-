@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260812-appmon-form";
+  const APP_VERSION = "20260919-release-type";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -101,6 +101,7 @@
     "에볼루션컵",
     "레귤레이션 배틀",
     "매장 대표전",
+    "발매기념",
     "퇴직테",
     "WORLD",
     TEAM3_MATCH_TYPE,

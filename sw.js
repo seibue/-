@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20260812-appmon-form";
+const CACHE_NAME = "jeonjeokmon-shell-20260919-release-type";
 const CORE_ASSETS = [
   "/",
   "/index.html",

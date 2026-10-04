@@ -429,8 +429,14 @@
         const selectedTournamentId = match?.tournamentId || state.prefillMatchTournamentId || "";
         const selectedTournament = getTournament(selectedTournamentId);
         // 팀전 대회에 새 전적을 추가하면 대전 유형을 자동으로 3대3 팀전으로 채운다(내 자리·팀 결과 노출).
+        // 그 외 대회는 대회 추가 시 고른 종류(tournament.name)를 대전 유형 기본값으로 이어받는다(내장 종류일 때만).
+        const tournamentMatchType =
+          selectedTournament && !selectedTournament.team3 && BUILTIN_TOURNAMENT_TYPES.includes(selectedTournament.name)
+            ? selectedTournament.name
+            : "";
         const selectedMatchType =
-          match?.matchType || (selectedTournament?.team3 ? TEAM3_MATCH_TYPE : defaults.matchType || getData().matchTypes[0] || "대전");
+          match?.matchType ||
+          (selectedTournament?.team3 ? TEAM3_MATCH_TYPE : tournamentMatchType || defaults.matchType || getData().matchTypes[0] || "대전");
         const defaultOpponent = match ? match.opponent || "" : defaults.opponent || "";
         const selectedPlayOrder = match?.playOrder || defaults.playOrder || "unknown";
         const selectedRoundStage =
@@ -450,6 +456,8 @@
         BUILTIN_MATCH_TYPES.forEach((type) => {
           if (!matchTypeOptions.includes(type)) matchTypeOptions.push(type);
         });
+        // 대회 종류가 대전 유형 목록에 없으면(예: 에볼루션컵·발매기념) 추가해 기본 선택이 표시되게 한다.
+        if (selectedMatchType && !matchTypeOptions.includes(selectedMatchType)) matchTypeOptions.push(selectedMatchType);
         const selectedTeamResult = match?.teamResult || "win";
         const selectedTeamPosition = match?.teamPosition || suggestedTeamPosition(selectedTournamentId) || "A";
         const hasQuickDefaults = !match && Boolean(getData().settings?.quickMatchDefaults || getData().matches[0]);

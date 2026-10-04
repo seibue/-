@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20260920-bt26-ex13-full";
+  const APP_VERSION = "20261005-match-type-from-tournament";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3225,10 +3225,20 @@
       const noneInput = form?.querySelector('input[name="roundStage"][value="none"]');
       if (tournament && noneInput?.checked && stageInput) stageInput.checked = true;
       if (!tournament && noneInput) noneInput.checked = true;
-      // 팀전 대회를 고르면 대전 유형을 자동으로 3대3 팀전으로 바꿔 자리·팀 결과 필드를 노출한다.
+      // 대회를 고르면 대전 유형을 그 대회 종류로 맞춘다(팀전→3대3, 그 외→고른 종류). 필드 노출은 아래 sync에서 처리.
       const matchTypeSelect = form?.querySelector('[name="matchType"]');
-      if (tournament?.team3 && matchTypeSelect && matchTypeSelect.value !== TEAM3_MATCH_TYPE) {
-        matchTypeSelect.value = TEAM3_MATCH_TYPE;
+      if (matchTypeSelect) {
+        if (tournament?.team3) {
+          if (matchTypeSelect.value !== TEAM3_MATCH_TYPE) matchTypeSelect.value = TEAM3_MATCH_TYPE;
+        } else if (tournament && BUILTIN_TOURNAMENT_TYPES.includes(tournament.name)) {
+          if (!Array.from(matchTypeSelect.options).some((option) => option.value === tournament.name)) {
+            const option = document.createElement("option");
+            option.value = tournament.name;
+            option.textContent = tournament.name;
+            matchTypeSelect.appendChild(option);
+          }
+          matchTypeSelect.value = tournament.name;
+        }
       }
       // 3대3 자리(A/B/C)는 대회당 고정 → 대회 바꾸면 그 대회 직전 라운드 자리로 자동 세팅
       const seat = tournament ? suggestedTeamPosition(tournament.id) : "";

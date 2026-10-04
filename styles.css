@@ -1410,12 +1410,12 @@ button:disabled {
 }
 
 .tournament-card {
-  grid-template-columns: auto minmax(0, 1fr) minmax(280px, auto);
+  grid-template-columns: auto minmax(0, 1fr) minmax(320px, auto);
   column-gap: 12px;
 }
 
 .tournament-card .card-actions {
-  max-width: 360px;
+  max-width: 420px;
 }
 
 .tournament-final-summary {
@@ -1512,6 +1512,63 @@ button:disabled {
 .tournament-round-action.gold {
   border-color: rgba(255, 210, 31, 0.5);
   color: var(--gold);
+}
+
+/* 대회 기록 탭 — 카드 내부 글자·요소 크기 키움 (.tournament-card 한정, 전적 카드엔 영향 없음) */
+.tournament-card .match-title {
+  font-size: 19px;
+  gap: 8px;
+}
+.tournament-card .match-meta {
+  font-size: 15px;
+}
+.tournament-card .result-pill {
+  min-width: 58px;
+  height: 38px;
+  font-size: 16px;
+}
+.tournament-card .tournament-final-summary {
+  font-size: 15px;
+  min-height: 32px;
+  padding: 5px 12px;
+}
+.tournament-card .tournament-summary {
+  gap: 9px;
+  margin-top: 11px;
+}
+.tournament-card .tournament-summary strong,
+.tournament-card .tournament-summary span,
+.tournament-card .tournament-round-item {
+  font-size: 15px;
+  min-height: 32px;
+  padding: 5px 12px;
+}
+.tournament-card .tournament-round-list {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 8px;
+  margin-top: 11px;
+}
+.tournament-card .tournament-round-item {
+  gap: 8px;
+}
+.tournament-card .tournament-round-item .round-item-edit {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+}
+.tournament-card .card-actions .icon-button {
+  width: 42px;
+  min-height: 42px;
+  font-size: 16px;
+}
+.tournament-card .card-actions .icon-button.text-icon {
+  width: auto;
+  min-width: 64px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+.tournament-card .tournament-round-action {
+  min-width: 136px;
 }
 
 .match-memo {

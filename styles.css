@@ -800,6 +800,42 @@ button:disabled {
   margin-top: 0;
 }
 
+/* 대회 기록 흐름 카드 — 전체 크기 키움 (.tournament-flow-card 한정, 홈 스타터 카드엔 영향 없음) */
+.tournament-flow-card h2 {
+  font-size: 23px;
+}
+.tournament-flow-card .mini-text {
+  font-size: 15px;
+}
+.tournament-flow-card .home-chip {
+  font-size: 15px;
+  min-height: 34px;
+  padding: 6px 13px;
+}
+.tournament-flow-card .starter-steps {
+  gap: 10px;
+}
+.tournament-flow-card .starter-steps span {
+  font-size: 15px;
+  gap: 9px;
+  padding: 11px;
+}
+.tournament-flow-card .starter-steps strong {
+  width: 30px;
+  height: 30px;
+  font-size: 11px;
+}
+.tournament-flow-card .starter-actions .primary-action.compact {
+  padding: 9px 16px;
+  font-size: 15px;
+}
+.tournament-flow-card .starter-actions .icon-button.text-icon {
+  min-width: 72px;
+  min-height: 42px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
 .home-chip {
   display: inline-flex;
   align-items: center;

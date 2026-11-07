@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20261005-flow-card-bigger";
+const CACHE_NAME = "jeonjeokmon-shell-20261108-promo-p239-250";
 const CORE_ASSETS = [
   "/",
   "/index.html",

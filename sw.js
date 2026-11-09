@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20261108-promo-translit";
+const CACHE_NAME = "jeonjeokmon-shell-20261110-aegis-sync-mvp";
 const CORE_ASSETS = [
   "/",
   "/index.html",

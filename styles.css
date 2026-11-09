@@ -6229,3 +6229,34 @@ button:disabled {
     font-size: 16px;
   }
 }
+
+/* Aegis 연동 — 토큰 표시/단계 */
+.aegis-token-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0 6px;
+}
+.aegis-token {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 8px 10px;
+  border: 1px solid rgba(119, 160, 201, 0.3);
+  border-radius: 6px;
+  background: rgba(4, 10, 20, 0.5);
+  color: var(--accent);
+  font-family: var(--pixel-font, monospace);
+  font-size: 12px;
+}
+.aegis-steps {
+  margin: 6px 0 10px;
+  padding-left: 18px;
+  display: grid;
+  gap: 3px;
+}
+.aegis-steps a {
+  color: var(--accent);
+  font-weight: 800;
+}

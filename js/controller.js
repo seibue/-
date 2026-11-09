@@ -207,6 +207,34 @@
           else saveCloudData({ notify: true });
           return;
         }
+        if (action === "generate-aegis-token") {
+          if (!state.authUser) {
+            loginWithGoogle();
+            return;
+          }
+          const random =
+            typeof crypto !== "undefined" && crypto.randomUUID
+              ? crypto.randomUUID().replace(/-/g, "")
+              : (uid("aegis") + uid("tk") + uid("tk")).replace(/[^a-z0-9]/gi, "");
+          const token = "jjm_" + random;
+          getData().settings = { ...(getData().settings || {}), aegisToken: token };
+          saveData();
+          saveCloudData({ notify: false }); // 엔드포인트가 토큰으로 사용자를 찾으려면 클라우드에 올려야 함
+          notifyToast("Aegis 연동 토큰 발급", "토큰을 복사해 연동 스크립트에 붙여넣으세요.", "success");
+          render();
+          return;
+        }
+        if (action === "copy-aegis-token") {
+          const token = (getData().settings || {}).aegisToken || "";
+          if (!token) return;
+          try {
+            navigator.clipboard.writeText(token);
+            notifyToast("복사됨", "연동 토큰을 클립보드에 복사했습니다.", "success", 1600);
+          } catch (_) {
+            notifyToast("복사 실패", "토큰을 길게 눌러 직접 복사하세요.", "warning");
+          }
+          return;
+        }
         if (action === "load-cloud-now") {
           loadCloudNow();
           return;

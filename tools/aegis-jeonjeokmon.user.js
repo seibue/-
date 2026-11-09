@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Aegis → 전적몬 자동 전적 기록
 // @namespace    https://jeonjeokmon.vercel.app/
-// @version      1.0.0
+// @version      1.0.1
 // @description  Aegis(aegis-digi.online) 매치 결과를 전적몬에 자동 기록합니다. (승/패 + 상대 아키타입)
 // @match        https://aegis-digi.online/*
 // @run-at       document-idle
-// @grant        none
+// @grant        GM_xmlhttpRequest
+// @connect      jeonjeokmon.vercel.app
 // ==/UserScript==
 (function () {
   "use strict";
@@ -35,19 +36,24 @@
   }
 
   function setStatus(text, color) {
-    let el = document.getElementById("jjm-aegis-status");
-    if (!el) {
-      el = document.createElement("div");
-      el.id = "jjm-aegis-status";
-      el.style.cssText =
-        "position:fixed;right:10px;bottom:10px;z-index:99999;font:12px/1.4 sans-serif;" +
-        "padding:6px 10px;border-radius:8px;background:rgba(10,15,25,.85);color:#cfe;" +
-        "border:1px solid rgba(120,200,255,.4);pointer-events:none;max-width:260px";
-      document.body.appendChild(el);
-    }
-    el.textContent = "전적몬: " + text;
-    el.style.color = color || "#cfe";
+    try {
+      let el = document.getElementById("jjm-aegis-status");
+      if (!el) {
+        el = document.createElement("div");
+        el.id = "jjm-aegis-status";
+        el.style.cssText =
+          "position:fixed;right:10px;bottom:10px;z-index:2147483647;font:12px/1.4 sans-serif;" +
+          "padding:6px 10px;border-radius:8px;background:rgba(10,15,25,.9);color:#cfe;" +
+          "border:1px solid rgba(120,200,255,.5);pointer-events:none;max-width:260px";
+        (document.body || document.documentElement).appendChild(el);
+      }
+      el.textContent = "전적몬: " + text;
+      el.style.color = color || "#cfe";
+    } catch (_) {}
   }
+
+  // 스크립트가 실행되는 즉시 배지를 띄운다(주입 여부를 바로 확인할 수 있게).
+  setStatus("시작 중…");
 
   async function getJson(path) {
     const r = await fetch(API + path, { credentials: "same-origin", headers: { Accept: "application/json" } });
@@ -55,7 +61,6 @@
     return { ok: true, data: await r.json() };
   }
 
-  // 상대 덱(공유 설정일 때만 제공) → mainDeck + 덱이름. 없으면 빈 값.
   async function fetchOpponentDeck(matchId) {
     const res = await getJson(`/account/matches/${encodeURIComponent(matchId)}/opponent-deck`);
     if (!res.ok) return {};
@@ -63,15 +68,26 @@
     return { opponentMainDeck: Array.isArray(d.mainDeck) ? d.mainDeck : [], opponentDeckName: d.deckName || "" };
   }
 
-  async function postMatches(matches) {
-    const r = await fetch(INGEST_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: TOKEN, matches }),
+  // 크로스오리진 POST는 GM_xmlhttpRequest로(페이지 CSP/CORS 우회).
+  function postMatches(matches) {
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({
+        method: "POST",
+        url: INGEST_URL,
+        headers: { "Content-Type": "application/json" },
+        data: JSON.stringify({ token: TOKEN, matches }),
+        onload: (resp) => {
+          let body = {};
+          try {
+            body = JSON.parse(resp.responseText || "{}");
+          } catch (_) {}
+          if (resp.status >= 200 && resp.status < 300) resolve(body);
+          else reject(new Error((body && body.error) || `HTTP ${resp.status}`));
+        },
+        onerror: () => reject(new Error("network")),
+        ontimeout: () => reject(new Error("timeout")),
+      });
     });
-    const body = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error((body && body.error) || `HTTP ${r.status}`);
-    return body;
   }
 
   let running = false;
@@ -81,7 +97,6 @@
     try {
       const exp = await getJson("/account/matches/export");
       if (!exp.ok) {
-        // 401/403 = 로그인 안 됨
         setStatus(exp.status === 401 || exp.status === 403 ? "Aegis 로그인 필요" : `조회 실패(${exp.status})`, "#fda");
         return;
       }
@@ -93,7 +108,6 @@
         return;
       }
       setStatus(`새 전적 ${fresh.length}건 처리 중…`);
-      // 새 매치마다 상대 덱 조회(병렬, 과하지 않게 상한)
       const BATCH = fresh.slice(0, 25);
       const payload = [];
       for (const m of BATCH) {

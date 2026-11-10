@@ -1,26 +1,37 @@
 // ==UserScript==
 // @name         Aegis → 전적몬 자동 전적 기록
 // @namespace    https://jeonjeokmon.vercel.app/
-// @version      1.0.2
+// @version      1.0.4
 // @description  Aegis(aegis-digi.online) 매치 결과를 전적몬에 자동 기록합니다. (승/패 + 상대 덱 + 내 덱 자동 등록)
 // @match        https://aegis-digi.online/*
 // @run-at       document-idle
 // @grant        GM_xmlhttpRequest
 // @connect      jeonjeokmon.vercel.app
 // ==/UserScript==
-(function () {
+(function aegisUserscriptBody() {
   "use strict";
-
-  // ───────────────────────────────────────────────────────────────────
-  // 설정: 전적몬 설정 > "Aegis 연동"에서 발급한 토큰을 아래에 붙여넣으세요.
   const TOKEN = "여기에_전적몬_연동_토큰_붙여넣기";
   const INGEST_URL = "https://jeonjeokmon.vercel.app/api/aegis-ingest";
   const POLL_SECONDS = 60; // export는 분당 3회 제한이라 60초 권장
-  // ───────────────────────────────────────────────────────────────────
 
-  const API = "/api/green";
-  const SEEN_KEY = "jjm_aegis_seen_ids_v2"; // v2: 내 덱 자동등록 반영 위해 과거 전적 1회 재동기화
+  // Aegis는 베타라 API prefix(색)를 버전마다 바꾼다(green→red 등). 하드코딩 대신 자동 감지.
+  const PREFIXES = ["red", "green", "blue", "yellow", "purple", "orange", "teal", "pink", "black", "white"];
+  let API = "/api/red";
+  const SEEN_KEY = "jjm_aegis_seen_ids_v2";
   const log = (...a) => console.log("[전적몬]", ...a);
+
+  async function detectApi() {
+    for (const c of PREFIXES) {
+      try {
+        const r = await fetch(`/api/${c}/spectate/live?limit=1`, { credentials: "same-origin" });
+        if (r.ok) {
+          API = `/api/${c}`;
+          return true;
+        }
+      } catch (_) {}
+    }
+    return false;
+  }
 
   function loadSeen() {
     try {
@@ -52,7 +63,6 @@
     } catch (_) {}
   }
 
-  // 스크립트가 실행되는 즉시 배지를 띄운다(주입 여부를 바로 확인할 수 있게).
   setStatus("시작 중…");
 
   async function getJson(path) {
@@ -68,7 +78,6 @@
     return { opponentMainDeck: Array.isArray(d.mainDeck) ? d.mainDeck : [], opponentDeckName: d.deckName || "" };
   }
 
-  // 내 덱(ownDeck): Aegis 덱ID + 이름 + 카드리스트 → 전적몬 덱 자동 등록용
   async function fetchOwnDeck(matchId) {
     const res = await getJson(`/account/matches/${encodeURIComponent(matchId)}/own-deck`);
     if (!res.ok) return null;
@@ -81,7 +90,6 @@
     };
   }
 
-  // 크로스오리진 POST는 GM_xmlhttpRequest로(페이지 CSP/CORS 우회).
   function postMatches(matches) {
     return new Promise((resolve, reject) => {
       GM_xmlhttpRequest({
@@ -108,7 +116,13 @@
     if (running) return;
     running = true;
     try {
-      const exp = await getJson("/account/matches/export");
+      let exp = await getJson("/account/matches/export");
+      if (exp.status === 410 || exp.status === 404) {
+        // Aegis가 API prefix를 바꿈 → 재감지 후 1회 재시도
+        setStatus("API 주소 재감지 중…");
+        await detectApi();
+        exp = await getJson("/account/matches/export");
+      }
       if (!exp.ok) {
         setStatus(exp.status === 401 || exp.status === 403 ? "Aegis 로그인 필요" : `조회 실패(${exp.status})`, "#fda");
         return;
@@ -153,11 +167,14 @@
     }
   }
 
-  if (!TOKEN || TOKEN.startsWith("여기에")) {
-    setStatus("토큰 미설정 — 스크립트 상단 TOKEN 입력", "#fda");
+  if (!TOKEN || TOKEN.indexOf("__TOKEN") === 0 || TOKEN.indexOf("여기에") === 0) {
+    setStatus("토큰 미설정 — 전적몬에서 '연동 스크립트 설치'로 다시 설치하세요", "#fda");
     return;
   }
   log("Aegis 연동 시작");
-  tick();
+  (async () => {
+    await detectApi();
+    tick();
+  })();
   setInterval(tick, POLL_SECONDS * 1000);
 })();

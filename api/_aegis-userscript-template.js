@@ -5,7 +5,7 @@
 //
 // tools/aegis-jeonjeokmon.user.js(수동 설치본)와 내용이 동일해야 한다. 바꿀 때 양쪽 같이.
 
-const VERSION = "1.0.3";
+const VERSION = "1.0.4";
 
 function aegisUserscriptBody() {
   "use strict";
@@ -13,9 +13,24 @@ function aegisUserscriptBody() {
   const INGEST_URL = "https://jeonjeokmon.vercel.app/api/aegis-ingest";
   const POLL_SECONDS = 60; // export는 분당 3회 제한이라 60초 권장
 
-  const API = "/api/green";
+  // Aegis는 베타라 API prefix(색)를 버전마다 바꾼다(green→red 등). 하드코딩 대신 자동 감지.
+  const PREFIXES = ["red", "green", "blue", "yellow", "purple", "orange", "teal", "pink", "black", "white"];
+  let API = "/api/red";
   const SEEN_KEY = "jjm_aegis_seen_ids_v2";
   const log = (...a) => console.log("[전적몬]", ...a);
+
+  async function detectApi() {
+    for (const c of PREFIXES) {
+      try {
+        const r = await fetch(`/api/${c}/spectate/live?limit=1`, { credentials: "same-origin" });
+        if (r.ok) {
+          API = `/api/${c}`;
+          return true;
+        }
+      } catch (_) {}
+    }
+    return false;
+  }
 
   function loadSeen() {
     try {
@@ -100,7 +115,13 @@ function aegisUserscriptBody() {
     if (running) return;
     running = true;
     try {
-      const exp = await getJson("/account/matches/export");
+      let exp = await getJson("/account/matches/export");
+      if (exp.status === 410 || exp.status === 404) {
+        // Aegis가 API prefix를 바꿈 → 재감지 후 1회 재시도
+        setStatus("API 주소 재감지 중…");
+        await detectApi();
+        exp = await getJson("/account/matches/export");
+      }
       if (!exp.ok) {
         setStatus(exp.status === 401 || exp.status === 403 ? "Aegis 로그인 필요" : `조회 실패(${exp.status})`, "#fda");
         return;
@@ -150,7 +171,10 @@ function aegisUserscriptBody() {
     return;
   }
   log("Aegis 연동 시작");
-  tick();
+  (async () => {
+    await detectApi();
+    tick();
+  })();
   setInterval(tick, POLL_SECONDS * 1000);
 }
 

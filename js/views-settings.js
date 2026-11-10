@@ -271,9 +271,10 @@
   function renderAegisSyncCard() {
     const signedIn = Boolean(state.authUser);
     const token = (getData().settings && getData().settings.aegisToken) || "";
-    // 토큰이 박힌 개인화 설치 링크(붙여넣기 불필요) + 자동 업데이트
+    // 토큰이 박힌 개인화 설치 링크(붙여넣기 불필요) + 자동 업데이트.
+    // 토큰은 경로에 넣어 URL이 .user.js 로 끝나게 → Tampermonkey 클릭 설치 인식.
     const scriptUrl = token
-      ? `https://jeonjeokmon.vercel.app/aegis-connect.user.js?token=${encodeURIComponent(token)}`
+      ? `https://jeonjeokmon.vercel.app/aegis-connect/${encodeURIComponent(token)}/script.user.js`
       : "https://jeonjeokmon.vercel.app/aegis-connect.user.js";
     // Aegis 덱 이름 → 전적몬 덱 매핑 UI (기록된 Aegis 전적에서 덱 이름 수집)
     const aegisDeckNameOf = (m) => {

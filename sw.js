@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20261111-aegis-easy-install";
+const CACHE_NAME = "jeonjeokmon-shell-20261111-aegis-pathinstall";
 const CORE_ASSETS = [
   "/",
   "/index.html",

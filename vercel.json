@@ -1,6 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [{ "source": "/aegis-connect.user.js", "destination": "/api/aegis-userscript" }],
+  "rewrites": [
+    { "source": "/aegis-connect/:token/script.user.js", "destination": "/api/aegis-userscript?token=:token" },
+    { "source": "/aegis-connect.user.js", "destination": "/api/aegis-userscript" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -3,11 +3,17 @@
 // 설치 URL은 vercel.json 리라이트로 /aegis-connect.user.js?token=... (Tampermonkey는 .user.js 로 인식).
 const { VERSION, aegisUserscriptBody } = require("./_aegis-userscript-template.js");
 
-const SELF = "https://jeonjeokmon.vercel.app/aegis-connect.user.js";
+const BASE = "https://jeonjeokmon.vercel.app";
 const TOKEN_RE = /^[A-Za-z0-9_-]{8,128}$/;
 
+// 설치 URL은 반드시 ".user.js"로 끝나야 Tampermonkey가 클릭 설치로 인식한다.
+// 토큰은 쿼리(?token=) 대신 경로 세그먼트로 넣는다: /aegis-connect/<token>/script.user.js
+function installUrlFor(token) {
+  return token ? `${BASE}/aegis-connect/${encodeURIComponent(token)}/script.user.js` : `${BASE}/aegis-connect.user.js`;
+}
+
 function buildScript(token) {
-  const installUrl = token ? `${SELF}?token=${encodeURIComponent(token)}` : SELF;
+  const installUrl = installUrlFor(token);
   const header = [
     "// ==UserScript==",
     "// @name         Aegis → 전적몬 자동 전적 기록",
@@ -41,3 +47,4 @@ module.exports = function handler(request, response) {
 };
 
 module.exports.buildScript = buildScript;
+module.exports.installUrlFor = installUrlFor;

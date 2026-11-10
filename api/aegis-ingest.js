@@ -14,7 +14,7 @@ const { rateLimit, clientKey, tooMany, reportError } = require("./_ops.js");
 global.window = global.window || {};
 require("../card-catalog.js");
 
-const API_VERSION = "aegis-ingest-2";
+const API_VERSION = "aegis-ingest-3";
 const RATE_LIMIT_PER_MIN = 120; // 토큰/IP 조합당
 const ALLOWED_ORIGIN = "https://aegis-digi.online";
 const TABLE = "jeonjeokmon_user_data";
@@ -44,7 +44,14 @@ function loadCatalog() {
   _catalog = new Map();
   try {
     for (const c of (global.window && global.window.DIGIMON_CARD_CATALOG) || []) {
-      _catalog.set(c.no, { lv: Number(c.lv) || 0, name: c.name || "", type: c.type || "" });
+      _catalog.set(c.no, {
+        no: c.no,
+        lv: Number(c.lv) || 0,
+        name: c.name || "",
+        type: c.type || "",
+        color: c.color || "",
+        color2: c.color2 || "",
+      });
     }
   } catch (error) {
     reportError("aegis-ingest:catalog", error);
@@ -67,22 +74,51 @@ function opponentArchetypeName(mainDeck) {
   return top && top.name ? top.name : "";
 }
 
-// Aegis 매치 1건 → 전적몬 match 객체. 상대는 1단계에선 닉네임(opponentName)으로 저장.
-function toJjmMatch(m, deckByName, deckMap, validDeckIds) {
-  deckMap = deckMap || {};
-  validDeckIds = validDeckIds || new Set();
+// Aegis 기본 덱 이름("새 덱"/"New Deck")은 의미없는 이름으로 취급.
+const DEFAULT_DECK_NAMES = new Set(["새 덱", "새덱", "new deck", "newdeck", "", "deck"]);
+function isMeaningfulName(name) {
+  const t = String(name || "").trim();
+  return t && !DEFAULT_DECK_NAMES.has(t.toLowerCase());
+}
+
+const COLOR_ORDER = ["red", "blue", "yellow", "green", "black", "purple", "white"];
+// Aegis ownDeck(mainDeck/eggDeck 카드번호 배열) → 전적몬 덱 {name, colors, cards}
+function buildDeckFromAegis(ownDeck) {
+  const cat = loadCatalog();
+  const counts = new Map(); // no -> count
+  for (const no of [...(ownDeck.mainDeck || []), ...(ownDeck.eggDeck || [])]) {
+    const k = String(no);
+    counts.set(k, (counts.get(k) || 0) + 1);
+  }
+  const cards = [];
+  const colorSet = new Set();
+  for (const [no, count] of counts) {
+    const c = cat.get(no);
+    if (!c) continue;
+    cards.push({ cardNumber: no, name: c.name || no, level: c.lv ? String(c.lv) : "", type: c.type || "digimon", count });
+    if (c.color) colorSet.add(c.color);
+    if (c.color2) colorSet.add(c.color2);
+  }
+  const colors = COLOR_ORDER.filter((x) => colorSet.has(x));
+  return {
+    name: isMeaningfulName(ownDeck.deckName) ? String(ownDeck.deckName).trim() : "Aegis 덱",
+    colors: colors.length ? colors : ["blue"],
+    cards,
+  };
+}
+
+// Aegis 매치 1건 → 전적몬 match 객체. deckId는 핸들러가 미리 해석(자동 덱 생성 포함)해서 전달.
+function toJjmMatch(m, deckId) {
+  deckId = deckId || "";
   const result = ["win", "loss", "draw"].includes(m.result) ? m.result : "win";
   const finishedAt = Number(m.finishedAt) || Date.now();
   const date = new Date(finishedAt).toISOString().slice(0, 10);
   const deckName = typeof m.deckName === "string" ? m.deckName.trim() : "";
-  // 내 덱: 사용자가 지정한 Aegis 덱 매핑(settings.aegisDeckMap) 우선, 없으면 이름 일치
-  const mapped = deckName && deckMap[deckName];
-  const deckId = mapped && validDeckIds.has(mapped) ? mapped : deckName && deckByName.get(deckName) ? deckByName.get(deckName) : "";
-  // 상대: 2단계 — 상대 덱 대표카드(아키타입) > 상대 덱이름 > 닉네임
-  const archetype = opponentArchetypeName(m.opponentMainDeck);
+  // 상대(사용자 선택: 상대 덱이름 우선 > 대표카드 아키타입 > 닉네임)
   const oppDeckName = typeof m.opponentDeckName === "string" ? m.opponentDeckName.trim() : "";
+  const archetype = opponentArchetypeName(m.opponentMainDeck);
   const nick = typeof m.opponentName === "string" ? m.opponentName.trim() : "";
-  const opponent = archetype || oppDeckName || nick || "상대 미기록";
+  const opponent = (isMeaningfulName(oppDeckName) ? oppDeckName : "") || archetype || nick || "상대 미기록";
   const nowIso = new Date().toISOString();
   return {
     id: `aegis_${String(m.id)}`,
@@ -186,30 +222,78 @@ module.exports = async function handler(request, response) {
         return;
       }
       const data = row.data && typeof row.data === "object" ? row.data : {};
-      const existing = Array.isArray(data.matches) ? data.matches : [];
-      const seen = new Set(existing.filter((x) => x && x.source === "aegis" && x.externalId).map((x) => String(x.externalId)));
-      const decks = Array.isArray(data.decks) ? data.decks : [];
+      const matchesArr = Array.isArray(data.matches) ? data.matches.slice() : [];
+      const byExt = new Map(
+        matchesArr.filter((x) => x && x.source === "aegis" && x.externalId).map((x) => [String(x.externalId), x])
+      );
+      const decks = Array.isArray(data.decks) ? data.decks.slice() : [];
       const deckByName = new Map(decks.map((d) => [String(d.name || "").trim(), d.id]));
       const validDeckIds = new Set(decks.map((d) => d.id));
-      const deckMap = data.settings && typeof data.settings.aegisDeckMap === "object" ? data.settings.aegisDeckMap : {};
+      const nameMap = data.settings && typeof data.settings.aegisDeckMap === "object" ? data.settings.aegisDeckMap : {};
+      const idMap = data.settings && typeof data.settings.aegisDeckIdMap === "object" ? { ...data.settings.aegisDeckIdMap } : {};
 
-      const toAdd = [];
+      let decksCreated = 0;
+      // Aegis 덱 → 전적몬 deckId. 사용자 이름매핑 > ownDeck.deckId 자동등록 > 이름일치.
+      const resolveDeckId = (m) => {
+        const dName = typeof m.deckName === "string" ? m.deckName.trim() : "";
+        if (dName && nameMap[dName] && validDeckIds.has(nameMap[dName])) return nameMap[dName];
+        const od = m.ownDeck;
+        const aId = od && od.deckId ? String(od.deckId) : "";
+        if (aId) {
+          if (idMap[aId] && validDeckIds.has(idMap[aId])) return idMap[aId];
+          const built = buildDeckFromAegis(od);
+          if (built.cards.length) {
+            const nowIso = new Date().toISOString();
+            const newDeck = {
+              id: `aegisdeck_${aId}`,
+              name: built.name,
+              colors: built.colors,
+              note: "Aegis에서 가져온 덱",
+              cards: built.cards,
+              versions: [],
+              createdAt: nowIso,
+              updatedAt: nowIso,
+            };
+            decks.push(newDeck);
+            validDeckIds.add(newDeck.id);
+            idMap[aId] = newDeck.id;
+            decksCreated += 1;
+            return newDeck.id;
+          }
+        }
+        if (dName && deckByName.get(dName)) return deckByName.get(dName);
+        return "";
+      };
+
+      let added = 0;
+      let updated = 0;
       for (const m of matches) {
         if (!m || m.id == null) continue;
         const ext = String(m.id);
-        if (seen.has(ext)) continue;
-        seen.add(ext);
-        toAdd.push(toJjmMatch(m, deckByName, deckMap, validDeckIds));
+        const deckId = resolveDeckId(m);
+        const prior = byExt.get(ext);
+        if (prior) {
+          if (deckId && !prior.deckId) {
+            prior.deckId = deckId;
+            updated += 1;
+          }
+          continue;
+        }
+        const jm = toJjmMatch(m, deckId);
+        matchesArr.unshift(jm);
+        byExt.set(ext, jm);
+        added += 1;
       }
-      if (toAdd.length === 0) {
-        send(response, 200, { added: 0, skipped: matches.length });
+      if (added === 0 && updated === 0 && decksCreated === 0) {
+        send(response, 200, { added: 0, updated: 0, decksCreated: 0, skipped: matches.length });
         return;
       }
-      const nextData = { ...data, matches: [...toAdd, ...existing] };
+      const nextSettings = { ...(data.settings || {}), aegisDeckIdMap: idMap };
+      const nextData = { ...data, decks, matches: matchesArr, settings: nextSettings };
       const nextUpdatedAt = new Date().toISOString();
       const ok = await patchIfUnchanged(url, key, row.user_id, row.updated_at, nextData, nextUpdatedAt);
       if (ok) {
-        send(response, 200, { added: toAdd.length, skipped: matches.length - toAdd.length });
+        send(response, 200, { added, updated, decksCreated, skipped: matches.length - added });
         return;
       }
       // updated_at 바뀜(사용자가 그 사이 저장) → 재조회 후 재시도
@@ -222,3 +306,5 @@ module.exports = async function handler(request, response) {
 };
 
 module.exports.toJjmMatch = toJjmMatch;
+
+module.exports.buildDeckFromAegis = buildDeckFromAegis;

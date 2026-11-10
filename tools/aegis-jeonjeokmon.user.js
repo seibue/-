@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Aegis → 전적몬 자동 전적 기록
 // @namespace    https://jeonjeokmon.vercel.app/
-// @version      1.0.1
-// @description  Aegis(aegis-digi.online) 매치 결과를 전적몬에 자동 기록합니다. (승/패 + 상대 아키타입)
+// @version      1.0.2
+// @description  Aegis(aegis-digi.online) 매치 결과를 전적몬에 자동 기록합니다. (승/패 + 상대 덱 + 내 덱 자동 등록)
 // @match        https://aegis-digi.online/*
 // @run-at       document-idle
 // @grant        GM_xmlhttpRequest
@@ -19,7 +19,7 @@
   // ───────────────────────────────────────────────────────────────────
 
   const API = "/api/green";
-  const SEEN_KEY = "jjm_aegis_seen_ids";
+  const SEEN_KEY = "jjm_aegis_seen_ids_v2"; // v2: 내 덱 자동등록 반영 위해 과거 전적 1회 재동기화
   const log = (...a) => console.log("[전적몬]", ...a);
 
   function loadSeen() {
@@ -68,6 +68,19 @@
     return { opponentMainDeck: Array.isArray(d.mainDeck) ? d.mainDeck : [], opponentDeckName: d.deckName || "" };
   }
 
+  // 내 덱(ownDeck): Aegis 덱ID + 이름 + 카드리스트 → 전적몬 덱 자동 등록용
+  async function fetchOwnDeck(matchId) {
+    const res = await getJson(`/account/matches/${encodeURIComponent(matchId)}/own-deck`);
+    if (!res.ok) return null;
+    const d = res.data || {};
+    return {
+      deckId: d.deckId || "",
+      deckName: d.deckName || "",
+      mainDeck: Array.isArray(d.mainDeck) ? d.mainDeck : [],
+      eggDeck: Array.isArray(d.eggDeck) ? d.eggDeck : [],
+    };
+  }
+
   // 크로스오리진 POST는 GM_xmlhttpRequest로(페이지 CSP/CORS 우회).
   function postMatches(matches) {
     return new Promise((resolve, reject) => {
@@ -112,6 +125,7 @@
       const payload = [];
       for (const m of BATCH) {
         const opp = await fetchOpponentDeck(m.id);
+        const ownDeck = await fetchOwnDeck(m.id);
         payload.push({
           id: m.id,
           result: m.result,
@@ -120,13 +134,17 @@
           finishedAt: m.finishedAt,
           mode: m.mode || "",
           ...opp,
+          ...(ownDeck ? { ownDeck } : {}),
         });
       }
       const res = await postMatches(payload);
       BATCH.forEach((m) => seen.add(String(m.id)));
       saveSeen(seen);
       log("전송 완료", res);
-      setStatus(`추가 ${res.added || 0}건 완료 ✓`, "#9f9");
+      const parts = [`추가 ${res.added || 0}`];
+      if (res.updated) parts.push(`보강 ${res.updated}`);
+      if (res.decksCreated) parts.push(`덱 ${res.decksCreated}`);
+      setStatus(`${parts.join(" · ")} 완료 ✓`, "#9f9");
     } catch (e) {
       log("오류", e);
       setStatus("전송 오류: " + (e.message || e), "#f99");

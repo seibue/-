@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20261110-aegis-sync-mvp";
+  const APP_VERSION = "20261110-aegis-deckmap";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -3266,6 +3266,31 @@
       data.settings = { ...(data.settings || {}), deckImageLayout: state.deckImageLayout };
       saveData();
       render();
+      return;
+    }
+    const aegisDeckMap = event.target.closest("[data-aegis-deck-map]");
+    if (aegisDeckMap) {
+      // Aegis 덱 이름 → 전적몬 덱 매핑 지정 + 기존 Aegis 전적에 즉시 재적용
+      const aegisName = aegisDeckMap.getAttribute("data-aegis-deck-map") || "";
+      const deckId = aegisDeckMap.value || "";
+      data.settings = { ...(data.settings || {}), aegisDeckMap: { ...(data.settings?.aegisDeckMap || {}) } };
+      if (deckId) data.settings.aegisDeckMap[aegisName] = deckId;
+      else delete data.settings.aegisDeckMap[aegisName];
+      const deckNameOf = (m) => {
+        if (m.aegisDeckName) return String(m.aegisDeckName).trim();
+        const mm = String(m.memo || "").match(/덱:\s*([^·]+?)(?:\s*·|$)/);
+        return mm ? mm[1].trim() : "";
+      };
+      let applied = 0;
+      data.matches.forEach((m) => {
+        if (m.source === "aegis" && deckNameOf(m) === aegisName && m.deckId !== deckId) {
+          m.deckId = deckId;
+          applied += 1;
+        }
+      });
+      saveData();
+      render();
+      notifyToast("Aegis 덱 매핑", deckId ? `전적 ${applied}건에 덱을 적용했습니다.` : "매핑을 해제했습니다.", "success", 1800);
       return;
     }
     const cardField = event.target.closest("[data-card-field]");

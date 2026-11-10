@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20261110-aegis-sync-mvp";
+const CACHE_NAME = "jeonjeokmon-shell-20261110-aegis-deckmap";
 const CORE_ASSETS = [
   "/",
   "/index.html",

@@ -6260,3 +6260,24 @@ button:disabled {
   color: var(--accent);
   font-weight: 800;
 }
+
+/* Aegis 덱 매핑 */
+.aegis-map {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0 10px;
+}
+.aegis-map-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 8px;
+  align-items: center;
+}
+.aegis-map-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}

@@ -68,12 +68,16 @@ function opponentArchetypeName(mainDeck) {
 }
 
 // Aegis 매치 1건 → 전적몬 match 객체. 상대는 1단계에선 닉네임(opponentName)으로 저장.
-function toJjmMatch(m, deckByName) {
+function toJjmMatch(m, deckByName, deckMap, validDeckIds) {
+  deckMap = deckMap || {};
+  validDeckIds = validDeckIds || new Set();
   const result = ["win", "loss", "draw"].includes(m.result) ? m.result : "win";
   const finishedAt = Number(m.finishedAt) || Date.now();
   const date = new Date(finishedAt).toISOString().slice(0, 10);
   const deckName = typeof m.deckName === "string" ? m.deckName.trim() : "";
-  const deckId = deckName && deckByName.get(deckName) ? deckByName.get(deckName) : "";
+  // 내 덱: 사용자가 지정한 Aegis 덱 매핑(settings.aegisDeckMap) 우선, 없으면 이름 일치
+  const mapped = deckName && deckMap[deckName];
+  const deckId = mapped && validDeckIds.has(mapped) ? mapped : deckName && deckByName.get(deckName) ? deckByName.get(deckName) : "";
   // 상대: 2단계 — 상대 덱 대표카드(아키타입) > 상대 덱이름 > 닉네임
   const archetype = opponentArchetypeName(m.opponentMainDeck);
   const oppDeckName = typeof m.opponentDeckName === "string" ? m.opponentDeckName.trim() : "";
@@ -85,6 +89,7 @@ function toJjmMatch(m, deckByName) {
     source: "aegis",
     externalId: String(m.id),
     deckId,
+    aegisDeckName: deckName, // 덱 매핑/재적용용 — Aegis에서의 내 덱 이름 보존
     date,
     matchType: "Aegis",
     opponent,
@@ -183,7 +188,10 @@ module.exports = async function handler(request, response) {
       const data = row.data && typeof row.data === "object" ? row.data : {};
       const existing = Array.isArray(data.matches) ? data.matches : [];
       const seen = new Set(existing.filter((x) => x && x.source === "aegis" && x.externalId).map((x) => String(x.externalId)));
-      const deckByName = new Map((Array.isArray(data.decks) ? data.decks : []).map((d) => [String(d.name || "").trim(), d.id]));
+      const decks = Array.isArray(data.decks) ? data.decks : [];
+      const deckByName = new Map(decks.map((d) => [String(d.name || "").trim(), d.id]));
+      const validDeckIds = new Set(decks.map((d) => d.id));
+      const deckMap = data.settings && typeof data.settings.aegisDeckMap === "object" ? data.settings.aegisDeckMap : {};
 
       const toAdd = [];
       for (const m of matches) {
@@ -191,7 +199,7 @@ module.exports = async function handler(request, response) {
         const ext = String(m.id);
         if (seen.has(ext)) continue;
         seen.add(ext);
-        toAdd.push(toJjmMatch(m, deckByName));
+        toAdd.push(toJjmMatch(m, deckByName, deckMap, validDeckIds));
       }
       if (toAdd.length === 0) {
         send(response, 200, { added: 0, skipped: matches.length });

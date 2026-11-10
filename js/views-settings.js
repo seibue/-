@@ -272,6 +272,35 @@
     const signedIn = Boolean(state.authUser);
     const token = (getData().settings && getData().settings.aegisToken) || "";
     const scriptUrl = "https://jeonjeokmon.vercel.app/tools/aegis-jeonjeokmon.user.js";
+    // Aegis 덱 이름 → 전적몬 덱 매핑 UI (기록된 Aegis 전적에서 덱 이름 수집)
+    const aegisDeckNameOf = (m) => {
+      if (m.aegisDeckName) return String(m.aegisDeckName).trim();
+      const mm = String(m.memo || "").match(/덱:\s*([^·]+?)(?:\s*·|$)/);
+      return mm ? mm[1].trim() : "";
+    };
+    const aegisDeckNames = [...new Set(getData().matches.filter((m) => m.source === "aegis").map(aegisDeckNameOf).filter(Boolean))];
+    const deckMap = (getData().settings && getData().settings.aegisDeckMap) || {};
+    const myDecks = getData().decks;
+    const mappingHtml =
+      aegisDeckNames.length && myDecks.length
+        ? `<div class="aegis-map">
+            <div class="mini-text" style="margin-top:8px"><strong>내 덱 연결</strong> — Aegis 덱을 전적몬 덱에 연결하면 기존·앞으로의 전적에 자동 적용됩니다.</div>
+            ${aegisDeckNames
+              .map(
+                (name) => `
+                <div class="aegis-map-row">
+                  <span class="aegis-map-name">${escapeHTML(name)}</span>
+                  <select class="select" data-aegis-deck-map="${escapeHTML(name)}">
+                    <option value="">(연결 안 함)</option>
+                    ${myDecks
+                      .map((d) => `<option value="${escapeHTML(d.id)}"${deckMap[name] === d.id ? " selected" : ""}>${escapeHTML(d.name)}</option>`)
+                      .join("")}
+                  </select>
+                </div>`
+              )
+              .join("")}
+          </div>`
+        : "";
     return `
       <article class="settings-card">
         <div class="settings-title-row">
@@ -292,6 +321,7 @@
                    <li>스크립트 상단 <code>TOKEN</code> 에 위 토큰을 붙여넣고 저장</li>
                    <li>Aegis에 로그인한 채로 두면 끝 — 매치가 자동 기록됩니다</li>
                  </ol>
+                 ${mappingHtml}
                  <div class="backup-row"><button class="control-button" type="button" data-action="generate-aegis-token">토큰 재발급(기존 무효화)</button></div>`
               : `<div class="backup-row"><button class="primary-action compact" type="button" data-action="generate-aegis-token">연동 토큰 발급</button></div>`
             : `<div class="mini-text">먼저 위에서 <strong>Google 로그인</strong>을 하면 연동 토큰을 발급할 수 있습니다.</div>`

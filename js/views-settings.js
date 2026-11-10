@@ -271,7 +271,10 @@
   function renderAegisSyncCard() {
     const signedIn = Boolean(state.authUser);
     const token = (getData().settings && getData().settings.aegisToken) || "";
-    const scriptUrl = "https://jeonjeokmon.vercel.app/tools/aegis-jeonjeokmon.user.js";
+    // 토큰이 박힌 개인화 설치 링크(붙여넣기 불필요) + 자동 업데이트
+    const scriptUrl = token
+      ? `https://jeonjeokmon.vercel.app/aegis-connect.user.js?token=${encodeURIComponent(token)}`
+      : "https://jeonjeokmon.vercel.app/aegis-connect.user.js";
     // Aegis 덱 이름 → 전적몬 덱 매핑 UI (기록된 Aegis 전적에서 덱 이름 수집)
     const aegisDeckNameOf = (m) => {
       if (m.aegisDeckName) return String(m.aegisDeckName).trim();
@@ -316,11 +319,12 @@
                    <button class="control-button" type="button" data-action="copy-aegis-token">토큰 복사</button>
                  </div>
                  <ol class="aegis-steps mini-text">
-                   <li>크롬에 <strong>Tampermonkey</strong> 확장 설치</li>
-                   <li><a href="${scriptUrl}" target="_blank" rel="noopener">연동 스크립트 설치</a> (Tampermonkey 설치창에서 "설치")</li>
-                   <li>스크립트 상단 <code>TOKEN</code> 에 위 토큰을 붙여넣고 저장</li>
+                   <li><a href="https://www.tampermonkey.net/" target="_blank" rel="noopener">Tampermonkey</a> 확장 설치 (크롬)</li>
+                   <li>크롬 <code>chrome://extensions</code> → <strong>개발자 모드</strong> ON → Tampermonkey <strong>세부정보 → "사용자 스크립트 허용"</strong> ON</li>
+                   <li><a href="${scriptUrl}" target="_blank" rel="noopener"><strong>연동 스크립트 설치</strong></a> (토큰 자동 포함 · 붙여넣기 불필요) → Tampermonkey 설치창에서 "설치"</li>
                    <li>Aegis에 로그인한 채로 두면 끝 — 매치가 자동 기록됩니다</li>
                  </ol>
+                 <div class="mini-text" style="color:var(--muted-2)">※ 설치 링크에 본인 토큰이 포함돼 있어요(본인 전용). 이후 스크립트는 자동 업데이트됩니다.</div>
                  ${mappingHtml}
                  <div class="backup-row"><button class="control-button" type="button" data-action="generate-aegis-token">토큰 재발급(기존 무효화)</button></div>`
               : `<div class="backup-row"><button class="primary-action compact" type="button" data-action="generate-aegis-token">연동 토큰 발급</button></div>`

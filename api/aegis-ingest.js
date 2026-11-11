@@ -75,6 +75,11 @@ function opponentArchetypeName(mainDeck) {
 }
 
 // Aegis 기본 덱 이름("새 덱"/"New Deck")은 의미없는 이름으로 취급.
+// 전적몬 날짜는 한국(KST) 로컬 기준(todayISO). 서버리스는 UTC라 +9h 보정해 KST 날짜로.
+function kstDate(ms) {
+  return new Date(Number(ms) + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+
 const DEFAULT_DECK_NAMES = new Set(["새 덱", "새덱", "new deck", "newdeck", "", "deck"]);
 function isMeaningfulName(name) {
   const t = String(name || "").trim();
@@ -112,7 +117,7 @@ function toJjmMatch(m, deckId) {
   deckId = deckId || "";
   const result = ["win", "loss", "draw"].includes(m.result) ? m.result : "win";
   const finishedAt = Number(m.finishedAt) || Date.now();
-  const date = new Date(finishedAt).toISOString().slice(0, 10);
+  const date = kstDate(finishedAt);
   const deckName = typeof m.deckName === "string" ? m.deckName.trim() : "";
   // 상대(사용자 선택: 상대 덱이름 우선 > 대표카드 아키타입 > 닉네임)
   const oppDeckName = typeof m.opponentDeckName === "string" ? m.opponentDeckName.trim() : "";
@@ -273,10 +278,20 @@ module.exports = async function handler(request, response) {
         const deckId = resolveDeckId(m);
         const prior = byExt.get(ext);
         if (prior) {
+          let touched = false;
           if (deckId && !prior.deckId) {
             prior.deckId = deckId;
-            updated += 1;
+            touched = true;
           }
+          // UTC로 넣었던 과거 날짜를 KST로 교정(재동기화 시)
+          if (m.finishedAt) {
+            const kd = kstDate(m.finishedAt);
+            if (prior.date !== kd) {
+              prior.date = kd;
+              touched = true;
+            }
+          }
+          if (touched) updated += 1;
           continue;
         }
         const jm = toJjmMatch(m, deckId);

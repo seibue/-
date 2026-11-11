@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Aegis → 전적몬 자동 전적 기록
 // @namespace    https://jeonjeokmon.vercel.app/
-// @version      1.0.4
+// @version      1.0.5
 // @description  Aegis(aegis-digi.online) 매치 결과를 전적몬에 자동 기록합니다. (승/패 + 상대 덱 + 내 덱 자동 등록)
 // @match        https://aegis-digi.online/*
 // @run-at       document-idle
@@ -17,7 +17,7 @@
   // Aegis는 베타라 API prefix(색)를 버전마다 바꾼다(green→red 등). 하드코딩 대신 자동 감지.
   const PREFIXES = ["red", "green", "blue", "yellow", "purple", "orange", "teal", "pink", "black", "white"];
   let API = "/api/red";
-  const SEEN_KEY = "jjm_aegis_seen_ids_v2";
+  const SEEN_KEY = "jjm_aegis_seen_ids_v3"; // v3: 날짜 KST 교정 위해 1회 재동기화
   const log = (...a) => console.log("[전적몬]", ...a);
 
   async function detectApi() {

@@ -5,7 +5,7 @@
 //
 // tools/aegis-jeonjeokmon.user.js(수동 설치본)와 내용이 동일해야 한다. 바꿀 때 양쪽 같이.
 
-const VERSION = "1.0.4";
+const VERSION = "1.0.5";
 
 function aegisUserscriptBody() {
   "use strict";
@@ -16,7 +16,7 @@ function aegisUserscriptBody() {
   // Aegis는 베타라 API prefix(색)를 버전마다 바꾼다(green→red 등). 하드코딩 대신 자동 감지.
   const PREFIXES = ["red", "green", "blue", "yellow", "purple", "orange", "teal", "pink", "black", "white"];
   let API = "/api/red";
-  const SEEN_KEY = "jjm_aegis_seen_ids_v2";
+  const SEEN_KEY = "jjm_aegis_seen_ids_v3"; // v3: 날짜 KST 교정 위해 1회 재동기화
   const log = (...a) => console.log("[전적몬]", ...a);
 
   async function detectApi() {

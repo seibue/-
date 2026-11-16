@@ -4303,7 +4303,9 @@ button:disabled {
 
 .deck-thumb-grid {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  /* 고정 8열은 좁은 패널(폴드 펼침 등)에서 카드가 42px까지 작아져 +/- 버튼이 카드를 덮는다.
+     카드 최소폭을 보장해 패널 폭에 맞춰 열 수가 자동 조정되게 한다(데스크톱 ~8열 유지). */
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
   gap: 4px;
 }
 

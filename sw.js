@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20261111-aegis-pathinstall";
+const CACHE_NAME = "jeonjeokmon-shell-20261117-deck-thumb-grid";
 const CORE_ASSETS = [
   "/",
   "/index.html",

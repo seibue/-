@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20261117-catalog-perf";
+  const APP_VERSION = "20261117-header-stats-ui";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -2095,6 +2095,8 @@
     });
   let lastRenderedDialog = "";
   function render() {
+    // 헤더의 WIN 수치는 전체 전적 기준 실제 승률(통계 탭 '전체 승률'과 동일 계산). 기록 없으면 숨김.
+    const overallRecord = statsFromMatches(data.matches);
     root.innerHTML = `
       <div class="app-shell">
         <header class="topbar">
@@ -2115,7 +2117,7 @@
               <span class="brand-gauge" aria-hidden="true"></span>
               <span class="brand-meta">
                 <span class="brand-battlelog">BATTLE LOG</span>
-                <span class="brand-win">WIN 67%</span>
+                ${overallRecord.total ? `<span class="brand-win">WIN ${overallRecord.rate}%</span>` : ""}
               </span>
             </div>
           </div>

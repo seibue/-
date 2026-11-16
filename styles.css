@@ -5245,7 +5245,6 @@ button:disabled {
 
   .filter-grid,
   .form-row,
-  .stats-grid,
   .home-hero-grid,
   .home-grid,
   .home-today-body,
@@ -5829,10 +5828,6 @@ button:disabled {
   .builder-add .wide-field,
   .builder-card-row .wide-field {
     grid-column: 1 / -1;
-  }
-
-  .rate-card {
-    grid-column: auto;
   }
 
   .matchup-card-head {

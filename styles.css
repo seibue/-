@@ -5891,7 +5891,15 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+  /* 모바일에서도 데스크톱처럼 승패 배지(좌)·내용·액션(우)을 한 줄 그리드로.
+     1fr 단일열은 배지를 전체폭 배너로 쌓아 카드가 ~1.7배 길어졌다(한 화면 2장 → 4장). */
   .match-card {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  /* 대회 카드(.match-card.tournament-card)는 라운드 목록 등 하위요소가 grid-column:1 전제라
+     단일열을 유지한다(아래 .tournament-card 규칙들과 짝). */
+  .match-card.tournament-card {
     grid-template-columns: 1fr;
   }
 

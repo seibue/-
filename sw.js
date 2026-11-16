@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20261117-header-stats-ui";
+const CACHE_NAME = "jeonjeokmon-shell-20261117-match-card-density";
 const CORE_ASSETS = [
   "/",
   "/index.html",

@@ -3878,7 +3878,10 @@ button:disabled {
 .catalog-grid {
   max-height: min(70vh, 760px);
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* 고정 5열은 뷰포트 기준이라, 덱 빌더가 분할패널(hub-layout 1fr 1fr)로 열리는
+     폴드 펼침(884px)·중간폭에서 패널이 뷰포트 절반이라 카드가 ~75px로 찌그러진다.
+     카드 최소폭을 보장해 '패널' 폭에 맞춰 열 수가 자동 조정되게 한다(모바일 2열은 아래 미디어쿼리가 유지). */
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
   gap: 10px;
   overflow: auto;
   padding: 2px 4px 2px 2px;

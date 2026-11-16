@@ -1,4 +1,4 @@
-const CACHE_NAME = "jeonjeokmon-shell-20261117-deck-thumb-grid";
+const CACHE_NAME = "jeonjeokmon-shell-20261117-catalog-perf";
 const CORE_ASSETS = [
   "/",
   "/index.html",

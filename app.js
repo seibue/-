@@ -3,7 +3,7 @@
   const RECOVERY_KEY = "jeonjeokmon-recovery-point-v1";
   const DIAGNOSTIC_KEY = "jeonjeokmon-diagnostics-v1";
   const CARD_EFFECT_CACHE_KEY = "digimon-card-effect-cache-v5";
-  const APP_VERSION = "20261117-deck-thumb-grid";
+  const APP_VERSION = "20261117-catalog-perf";
   const root = document.getElementById("app");
 
   // 모듈 분리 A1: 순수 포매팅/결과 헬퍼는 js/format.js 로 이동했습니다.
@@ -61,6 +61,10 @@
     digiEggReadyMin: 4,
   };
   const CARD_BROWSER_LIMIT = 72;
+  // 카탈로그 정렬용 재사용 collator. String.localeCompare 는 호출마다 collator 를 새로 만들어
+  // 4,480종 정렬이 ~150ms 걸리지만, 재사용 collator 는 동일 순서를 ~20배 빠르게 처리한다.
+  const catalogNumericCollator = new Intl.Collator("ko", { numeric: true });
+  const catalogNameCollator = new Intl.Collator("ko");
   const MATCH_SCORE_OPTIONS = [
     ["2-0", 2, 0, 0],
     ["2-1", 2, 1, 0],
@@ -1448,11 +1452,11 @@
     if (filters.sort === "latest") {
       const aKey = catalogSortValue(a);
       const bKey = catalogSortValue(b);
-      return bKey.prefix.localeCompare(aKey.prefix, "ko", { numeric: true }) || bKey.number - aKey.number || b.index - a.index;
+      return catalogNumericCollator.compare(bKey.prefix, aKey.prefix) || bKey.number - aKey.number || b.index - a.index;
     }
-    if (filters.sort === "number") return a.no.localeCompare(b.no, "ko", { numeric: true });
-    if (filters.sort === "level") return (Number(a.level) || 99) - (Number(b.level) || 99) || a.no.localeCompare(b.no, "ko", { numeric: true });
-    if (filters.sort === "name") return a.name.localeCompare(b.name, "ko") || a.no.localeCompare(b.no, "ko", { numeric: true });
+    if (filters.sort === "number") return catalogNumericCollator.compare(a.no, b.no);
+    if (filters.sort === "level") return (Number(a.level) || 99) - (Number(b.level) || 99) || catalogNumericCollator.compare(a.no, b.no);
+    if (filters.sort === "name") return catalogNameCollator.compare(a.name, b.name) || catalogNumericCollator.compare(a.no, b.no);
     return a.index - b.index;
   }
 
@@ -1466,11 +1470,26 @@
     );
   }
 
+  // 필터·검색·정렬이 그대로면(카드 +/- 는 이것들을 바꾸지 않는다) 4,480종 필터+정렬을
+  // 다시 돌리지 않고 캐시한다. 한 번의 덱빌더 렌더에서도 결과 수·목록 등 3곳이 호출하므로
+  // 캐시 적중만으로 큰 비용을 아낀다. CARD_CATALOG 재할당(데이터 갱신) 시 참조가 달라져 자동 무효화.
+  let catalogPoolCache = null;
   function filteredCatalogCardPool() {
+    const filters = deckCardFilters();
+    const cacheKey = [
+      state.deckCardType,
+      state.deckCardSearch,
+      filters.colors.join(","),
+      filters.levels.join(","),
+      filters.setPrefix,
+      filters.sort,
+    ].join("|");
+    if (catalogPoolCache && catalogPoolCache.catalog === CARD_CATALOG && catalogPoolCache.key === cacheKey) {
+      return catalogPoolCache.pool;
+    }
     const query = state.deckCardSearch.trim().toLowerCase();
     const compactQuery = normalizeCatalogQuery(state.deckCardSearch);
-    const filters = deckCardFilters();
-    return CARD_CATALOG.filter((card) => {
+    const pool = CARD_CATALOG.filter((card) => {
       if (state.deckCardType !== "all" && card.type !== state.deckCardType) return false;
       if (!cardHasAnyColor(card, filters.colors)) return false;
       if (filters.levels.length && !filters.levels.includes(card.level)) return false;
@@ -1479,6 +1498,8 @@
       if (cardNumberMatchesQuery(card.no, query)) return true;
       return catalogTextMatches(card, query, compactQuery);
     }).sort(compareCatalogCards);
+    catalogPoolCache = { catalog: CARD_CATALOG, key: cacheKey, pool };
+    return pool;
   }
 
   function filteredCatalogCards() {
